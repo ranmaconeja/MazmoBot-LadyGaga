@@ -11,7 +11,7 @@
 !compatibilidadAstral @usuario1 @usuario2 - Lectura astral cómica según el "Signo Zodiacal Mazmorrero (Broma)"
 
 [PING]
-🏓 Pong! {BOT_NAME} está activo y funcionando.
+🏓 Ra-ra-ah-ah-ah - Roma-roma-ma Lady Gaga llego al Chat!
 
 [VERSION]
 🤖 {BOT_NAME} v{VERSION}
@@ -65,6 +65,15 @@ Me conocen: {ME_CONOCEN} | Eventos: {EVENTOS}{ID_LINE}
 
 [PUNTOS]
 ✨ Tenés {POINTS} puntos. Cada comando cuesta {COST} puntos. Se renuevan a 20 cada 24hs.
+
+[PUNTOS_OTRO]
+✨ "{USERNAME}" tiene {POINTS} puntos. Cada comando cuesta {COST} puntos.
+
+[PUNTOS_OTRO_EXENTO]
+✨ "{USERNAME}" es moderador/a, no gasta puntos al usar comandos.
+
+[PUNTOS_USUARIO_NO_ENCONTRADO]
+No pude encontrar a ese usuario.
 
 [PUNTOS_EXENTO]
 ✨ Sos moderador/a, no gastás puntos al usar comandos.

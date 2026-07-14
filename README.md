@@ -23,7 +23,7 @@ rifas ni playlist con historial.
 - `!bienvenida` — Vuelve a mostrar el mensaje de bienvenida
 - `!reglas` — Muestra las reglas del canal
 - `!filosofia` — Muestra el texto de "filosofía" del canal
-- `!puntos` — Consulta tu saldo de puntos (ver sección "Sistema de puntos" abajo)
+- `!puntos` / `!puntos @usuario` — Consulta tu saldo de puntos o el de otro usuario (ver sección "Sistema de puntos" abajo)
 - `!sumarpuntos @usuario <cantidad>` — (solo moderadores/owner) suma puntos a un usuario
 - `!compatibilidad @usuario1 @usuario2` — La IA calcula un % de compatibilidad "real" entre dos perfiles según sus etiquetas
 - `!compatibilidadastral @usuario1 @usuario2` — Versión satírica, basada en el signo zodiacal por fecha de registro
