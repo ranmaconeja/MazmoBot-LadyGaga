@@ -1,0 +1,6 @@
+# Un ID de usuario de mazmo por línea. Podés usar # para comentarios.
+# Ejemplo:
+# 41001
+151150
+176384
+186183

@@ -1,0 +1,5 @@
+{
+  "_comentario": "Mazmo devuelve las etiquetas como códigos en inglés (ej: SLAVE, PODOPHYLLUM), no con el nombre que se ve en la interfaz. Completá acá la traducción a medida que las vayas viendo aparecer; si un código no está en esta lista, se muestra tal cual viene.",
+  "SLAVE": "Sumiso/a",
+  "PODOPHYLLUM": "Podofilia (pies)"
+}

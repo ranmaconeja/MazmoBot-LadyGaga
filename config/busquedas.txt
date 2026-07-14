@@ -1,0 +1,13 @@
+# Detecta mensajes tipo "busco Dominante", "busco una Sumisa", "necesito un Amo", etc.
+# SIN usar IA: dispara si el mensaje contiene AL MENOS UNA palabra de DISPARADORES
+# Y AL MENOS UNA de ROLES, sin importar el orden ni que estén pegadas.
+# Así "busco una Dominante" dispara (tiene "busco" + "dominante"), pero
+# "busco una página de anime" no (tiene "busco" pero ningún rol de la lista).
+#
+# Todo en minúsculas, separado por comas. Agregá o sacá palabras sin tocar código.
+
+DISPARADORES: busco, buscando, busca, necesito, quiero, alguien que
+
+ROLES: dominante, dominatrix, sumis, esclav, amo, ama, dueñ, spank, azot, primal, switch, presa, depredador, bottom, findom, maledom, femdom, petplay, pet play, mascota
+
+RESPUESTA: Están Prohibidas las búsquedas, por favor lean las !reglas o nuestra !filosofia

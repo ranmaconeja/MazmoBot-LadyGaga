@@ -1,0 +1,113 @@
+[AYUDA]
+📋 Comandos disponibles de {BOT_NAME}:
+!ayuda - Lista de Comandos para Usuarios de LadyGaga Bot
+!ping - Verifica si el Bot funciona, su Spam sera penalizado
+!creador - Información del creador del bot
+!perfil - Muestra informacion general del usuario (EJ: !perfil @Ranma_Coneja)
+!reglas - Muestra las reglas del canal
+!filosofia - Muestra la filosofía del canal
+!puntos - Muestra cuántos puntos tenés acumulados
+!compatibilidad @usuario1 @usuario2 - La IA calcula un % de compatibilidad entre dos perfiles
+!compatibilidadAstral @usuario1 @usuario2 - Lectura astral cómica según el "Signo Zodiacal Mazmorrero (Broma)"
+
+[PING]
+🏓 Pong! {BOT_NAME} está activo y funcionando.
+
+[VERSION]
+🤖 {BOT_NAME} v{VERSION}
+
+[STAFF]
+👮 Moderadores de {CHANNEL_NAME}:
+{MODERATORS}
+
+[CREADOR]
+👑 {BOT_NAME} fue creado por Ranma Coneja, usuaria de Mazmorra desde hace mas de 15 Años, no dudes en Contactarla si hay problemas en la Sala.
+
+[FILOSOFIA]
+Filosofía del Canal
+En Femdom Argentina creemos que las relaciones BDSM nacen de la confianza y de un vínculo sano. Esto se construye de manera lenta, casual y natural.
+Por eso, en este canal está permitido el offtopic: para que primero puedan conocer a la persona antes que al rol. Prohibimos las búsquedas y los mensajes privados porque saltean por completo ese proceso.
+Un mensaje privado debería surgir cuando dos personas se siguen mutuamente. Si la otra persona no te devolvió el Follow, probablemente tuvo sus motivos: la notificación le llegó. No insistan.
+Sean amables, respétense entre ustedes y disfruten del canal.
+
+[REGLAS]
+Reglas del Canal
+Sistema de 3 Advertencias
+1. Está prohibido realizar búsquedas de personas. Para ello recomendamos utilizar el sector "Contactos BDSM".
+1.B. Si la búsqueda proviene de un Dominante Masculino, será expulsado sin previo aviso.
+2. No está permitido solicitar mensajes privados ni pedir seguimientos mutuos.
+3. No está permitido el FINDOM, ni la venta de packs o cualquier otro tipo de contenido. Para ello recomendamos utilizar el sector "Relaciones con intercambio de dinero".
+4. Ningún usuario está obligado a rolear. Recomendamos que cualquier dinámica de rol sea previamente acordada entre las partes.
+Ejemplo: Una DOM tratando a otros usuarios de "basura" o un sumiso arrastrándose por todas las Doms sin que exista un acuerdo previo.
+5. No realizar reclamos sobre aspectos técnicos de la página. No administramos Sades ni tenemos control sobre sus funciones, límites de mensajes u otras características.
+6. Compórtense como personas. (Sabemos que no haría falta aclararlo, pero nunca falta el pejelagarto).
+7. Las imágenes NSFW están permitidas únicamente si tienen contexto dentro de la conversación. Publicarlas sin relación con el tema tratado será considerada una falta.
+Ejemplo: Se está hablando de spank y, de repente, aparece una "fotopija" salvaje sin ningún contexto.
+Las reglas no exigen nada extraordinario. No están sujetas a discusión y se basan en la filosofía del canal.
+
+[PERFIL]
+👤 Perfil de @{USERNAME}
+Nombre: {DISPLAYNAME}
+Género: {GENERO}
+Ubicación: {COUNTRY}
+Miembro desde: {REGDATE}
+Etiquetas: {TAGS}
+Me conocen: {ME_CONOCEN} | Eventos: {EVENTOS}{ID_LINE}
+
+[PERFIL_ERROR]
+😕 No pude obtener tu perfil en este momento, intentá de nuevo más tarde.
+
+[BIENVENIDA]
+🎉 Bienvenid@s a este canal, nuestra filosofia del canal es conocer primero a la Persona y por ultimo el Rol, dado que las mejores experiencias BDSM, nacen de la confianza. Fomentamos el Offtopic en la Charla para que las personas puedan conocerse y las tematicas BDSM son debatidas desde el punto de vista FEMDOM. Recomendamos leer las !reglas , !ayuda , !filosofia
+
+[SIN_PUNTOS]
+"{USERNAME}" no tiene los puntos suficientes para ejecutar este comando (tiene {POINTS}, necesita {COST})
+
+[PUNTOS]
+✨ Tenés {POINTS} puntos. Cada comando cuesta {COST} puntos. Se renuevan a 20 cada 24hs.
+
+[PUNTOS_EXENTO]
+✨ Sos moderador/a, no gastás puntos al usar comandos.
+
+[SUMARPUNTOS_USAGE]
+⚠️ Uso: !sumarpuntos @usuario cantidad (la cantidad debe ser un número entero positivo)
+
+[SUMARPUNTOS_ERROR]
+😕 No pude encontrar a ese usuario.
+
+[SUMARPUNTOS_OK]
+✅ Se le sumaron {AMOUNT} puntos a @{USERNAME}. Ahora tiene {TOTAL} puntos.
+
+[NOT_MODERATOR]
+🚫 No tenés permisos de moderador para usar este comando.
+
+[YOUTUBE_INFO]
+📺 **{TITLE}**
+{DESCRIPTION}
+![miniatura]({THUMBNAIL_URL})
+
+[COMPATIBILIDAD_USAGE]
+ℹ️ Uso: !compatibilidad @usuario1 @usuario2
+
+[COMPATIBILIDAD_ERROR]
+😕 No pude obtener los perfiles de uno o ambos usuarios, intentá de nuevo más tarde.
+
+[COMPATIBILIDAD_IA_ERROR]
+🤖 No pude calcular la compatibilidad en este momento (falta configurar la IA o se agotó la cuota gratuita del día).
+
+[COMPATIBILIDAD_RESULT]
+💞 Compatibilidad entre @{USERNAME1} y @{USERNAME2}: {PORCENTAJE}%
+{DESCRIPCION}
+
+[COMPATIBILIDAD_ASTRAL_RESULT]
+🔮 Lectura Astral Mazmorrera de @{USERNAME1} y @{USERNAME2} — {PORCENTAJE}% de compatibilidad cósmica
+{DESCRIPCION}
+
+[REPRODUCIR_OK]
+🎵 Mandado a reproducir: {LINK}
+
+[REPRODUCIR_SIN_CLIENTE]
+⚠️ No hay ningún reproductor conectado en este momento.
+
+[REPRODUCIR_LINK_INVALIDO]
+😕 Ese no parece ser un link válido de YouTube.
