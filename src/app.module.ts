@@ -1,7 +1,6 @@
 import { HttpModule, MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { BotService } from './services/bot.service';
-import { ConfigModule } from '@nestjs/config';
 import { BotRequestMiddleware } from './middleware/botRequest';
 import { CommandService } from './services/command.service';
 
@@ -45,7 +44,6 @@ import { ReproducirHandler } from './commands/reproducir';
 
 @Module({
     imports: [
-        ConfigModule.forRoot(),
         HttpModule
     ],
     controllers: [

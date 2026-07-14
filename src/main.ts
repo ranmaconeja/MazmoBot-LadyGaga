@@ -1,3 +1,9 @@
+// tiene que ser el primer import: carga el .env a process.env antes de que
+// cualquier otro módulo (que lea process.env en su constructor) se importe.
+// Solo hace falta acá (desarrollo local con main.ts) — en Vercel (api/index.ts)
+// las variables ya llegan puestas por el propio dashboard, no por un archivo.
+import 'dotenv/config';
+
 import { NestFactory } from '@nestjs/core';
 import { json, urlencoded } from 'express';
 import { AppModule } from './app.module';
