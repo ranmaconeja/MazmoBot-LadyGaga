@@ -24,7 +24,7 @@ rifas ni playlist con historial.
 - `!reglas` — Muestra las reglas del canal
 - `!filosofia` — Muestra el texto de "filosofía" del canal
 - `!puntos` / `!puntos @usuario` — Consulta tu saldo de puntos o el de otro usuario (ver sección "Sistema de puntos" abajo)
-- `!sumarpuntos @usuario <cantidad>` — (solo moderadores/owner) suma puntos a un usuario
+- `!addPuntos @usuario <cantidad>` — (solo moderadores/owner) suma puntos a un usuario
 - `!lazo @usuario1 @usuario2` — La IA calcula un % de compatibilidad "real" entre dos perfiles según sus etiquetas
 - `!astral @usuario1 @usuario2` — Versión satírica, basada en el signo zodiacal por fecha de registro
 - `!practica <nombre>` — La IA evalúa si es una práctica BDSM y te da una descripción, o te avisa que no tiene nada que ver
@@ -144,7 +144,7 @@ Cada usuario arranca con 20 puntos, que se renuevan automáticamente a 20 (sin a
 cada 24hs. Ejecutar la mayoría de los comandos cuesta 5 puntos; si no tiene suficientes,
 el comando no se ejecuta y se le avisa por privado. Moderadores y el owner del bot están
 exentos: para ellos todos los comandos son siempre gratis. `!puntos`, `!ayuda`,
-`!sumarpuntos` y `!lazotest` son gratis para todo el mundo (los últimos dos ya
+`!addPuntos` y `!lazotest` son gratis para todo el mundo (los últimos dos ya
 tienen su propio chequeo de permisos adentro). Se persiste en Turso (`PointsRepository`),
 no en memoria — necesario porque las funciones serverless no mantienen estado entre
 invocaciones.
@@ -156,7 +156,7 @@ api/index.ts        → entry point real en Vercel (funciones serverless, cachea
 src/main.ts          → entry point tradicional (app.listen()), para desarrollo local
 config/              → config.json, mensajes.txt, moderadores.txt, autofrases.txt, busquedas.txt, tags.json
 src/
-  commands/          → un archivo por comando (!ayuda, !ping, !sumarpuntos, M!p, etc.)
+  commands/          → un archivo por comando (!ayuda, !ping, !addPuntos, M!p, etc.)
   modules/
     welcome/         → mensaje de bienvenida
     autofrases/      → respuestas automáticas por palabra clave

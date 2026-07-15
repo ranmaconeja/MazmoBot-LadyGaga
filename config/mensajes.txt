@@ -25,7 +25,7 @@
 !astral @usuario1 @usuario2 - Lectura astral cómica según el "Signo Zodiacal Mazmorrero (Broma)"
 !horoscopo <signo> - Horóscopo combinado con tus etiquetas de perfil
 M!p <link de YouTube> - Encola una canción para el reproductor
-!sumarpuntos @usuario cantidad - Suma puntos manualmente a un usuario
+!addPuntos @usuario cantidad - Suma puntos manualmente a un usuario
 
 [PING]
 🏓 Ra-ra-ah-ah-ah - Roma-roma-ma Lady Gaga llego al Chat!
@@ -96,7 +96,7 @@ No pude encontrar a ese usuario.
 ✨ Sos moderador/a, no gastás puntos al usar comandos.
 
 [SUMARPUNTOS_USAGE]
-⚠️ Uso: !sumarpuntos @usuario cantidad (la cantidad debe ser un número entero positivo)
+⚠️ Uso: !addPuntos @usuario cantidad (la cantidad debe ser un número entero positivo)
 
 [SUMARPUNTOS_ERROR]
 😕 No pude encontrar a ese usuario.

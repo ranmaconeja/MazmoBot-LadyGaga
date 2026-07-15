@@ -7,7 +7,7 @@ import { ModeratorsService } from '../services/moderators.service';
 import { PointsService } from '../services/points.service';
 
 /**
- * Uso: !sumarpuntos @usuario <cantidad>
+ * Uso: !addPuntos @usuario <cantidad>
  * Solo moderadores y el owner del bot (ver ModeratorsService) pueden usar este comando.
  * Acepta @menciones reales, IDs numéricos, o usernames como texto plano.
  */
@@ -22,7 +22,7 @@ export class SumarPuntosHandler implements CommandHandler {
     }
 
     getSignature(): string {
-        return '!sumarpuntos';
+        return '!addPuntos';
     }
 
     /**

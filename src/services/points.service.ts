@@ -38,7 +38,7 @@ export class PointsService {
     }
 
     /**
-     * Suma puntos manualmente a un usuario (usado por !sumarpuntos). No aplica ninguna
+     * Suma puntos manualmente a un usuario (usado por !addPuntos). No aplica ninguna
      * exención: se puede sumar puntos a cualquier usuario, sea o no moderador.
      */
     async addPointsManually(userId: number | string, amount: number): Promise<number> {

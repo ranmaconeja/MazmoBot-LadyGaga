@@ -46,12 +46,12 @@ export class CommandService {
      * no sea moderador/owner. Se guardan en minúsculas.
      *
      * Incluye tanto comandos de consulta libre (!puntos, !ayuda) como comandos
-     * exclusivos de moderadores/owner (!sumarpuntos, !lazotest):
+     * exclusivos de moderadores/owner (!addPuntos, !lazotest):
      * estos últimos ya tienen su propio chequeo de permisos adentro del handler,
      * así que cobrarle puntos a un usuario común que los intenta usar (y que de
      * todos modos va a ser rechazado con "no tenés permisos") no tendría sentido.
      */
-    private readonly freeCommands = new Set(['!puntos', '!ayuda', '!sumarpuntos', '!lazotest']);
+    private readonly freeCommands = new Set(['!puntos', '!ayuda', '!addpuntos', '!lazotest']);
 
     constructor(
         private readonly ayudaHandler: AyudaHandler,

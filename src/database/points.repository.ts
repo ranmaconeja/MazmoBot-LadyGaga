@@ -59,7 +59,7 @@ export class PointsRepository {
     }
 
     /**
-     * Suma una cantidad arbitraria de puntos (usado por !sumarpuntos), por encima
+     * Suma una cantidad arbitraria de puntos (usado por !addPuntos), por encima
      * de lo que tenga en ese momento (ya renovado si correspondía).
      */
     async addPoints(userId: number | string, amount: number): Promise<number> {
