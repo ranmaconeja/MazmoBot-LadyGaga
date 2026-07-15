@@ -34,6 +34,7 @@ import { PlayerQueueService } from './modules/player/player-queue.service';
 import { PlayerController } from './player.controller';
 
 import { AyudaHandler } from './commands/ayuda';
+import { AyudaModsHandler } from './commands/ayudamods';
 import { PingHandler } from './commands/ping';
 import { VersionHandler } from './commands/version';
 import { StaffHandler } from './commands/staff';
@@ -97,6 +98,7 @@ import { DiaHandler } from './commands/dia';
 
         // comandos
         AyudaHandler,
+        AyudaModsHandler,
         PingHandler,
         VersionHandler,
         StaffHandler,

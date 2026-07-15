@@ -3,27 +3,37 @@ import { Request, Response } from 'express';
 import { Injectable } from '@nestjs/common';
 import { BotService } from '../services/bot.service';
 import { MessagesService } from '../services/messages.service';
+import { ModeratorsService } from '../services/moderators.service';
 
 /**
- * Lista corta de comandos, igual para cualquier usuario, siempre pública.
- * La versión completa para moderadores/owner es un comando aparte: !ayudaMods.
+ * Versión completa de !ayuda (incluye comandos de moderador/owner). Solo
+ * responde si quien lo pide es moderador/owner; para cualquier otra persona
+ * el bot no contesta nada (mismo patrón que !lazotest, no delata que existe).
  */
 @Injectable()
-export class AyudaHandler implements CommandHandler {
+export class AyudaModsHandler implements CommandHandler {
     constructor(
         private readonly botService: BotService,
         private readonly messagesService: MessagesService,
+        private readonly moderatorsService: ModeratorsService,
     ) {
     }
 
     getSignature(): string {
-        return '!ayuda';
+        return '!ayudamods';
     }
 
     async handleCommand(req: Request, res: Response, message: string): Promise<void> {
         const body = req.body as RoomMessage;
         const channelId = body.message.channel.id;
-        const text = this.messagesService.get('AYUDA');
+        const authorId = body.message.author.id;
+
+        const esModerador = this.moderatorsService.isModerator(authorId);
+        if (!esModerador) {
+            return;
+        }
+
+        const text = this.messagesService.get('AYUDA_MOD');
         await this.botService.sendReply(body.key, channelId, text);
     }
 }

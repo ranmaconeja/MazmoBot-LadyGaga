@@ -16,7 +16,8 @@ LadyPanel, rifas ni playlist con historial.
 
 ## Comandos
 
-- `!ayuda` — Lista los comandos disponibles
+- `!ayuda` — Lista los comandos disponibles para cualquier usuario
+- `!ayudaMods` — Lista completa de comandos (incluye los de moderador/owner). Solo responde si quien lo pide es moderador/owner; para cualquier otra persona el bot no contesta nada
 - `!ping` — Verifica que el bot esté activo
 - `!version` — Muestra la versión del bot
 - `!staff` — Lista de moderadores del canal

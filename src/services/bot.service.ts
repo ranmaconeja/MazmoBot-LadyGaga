@@ -87,7 +87,9 @@ export class BotService {
 
     /**
      * Envía una notificación a un canal para un usuario específico.
-     * Solo el usuario destinatario podrá ver el mensaje.
+     * Solo el usuario destinatario podrá ver el mensaje (confirmado en
+     * producción el 15/07/2026: Mazmo lo muestra con la etiqueta "Sólo vos
+     * podés ver este mensaje", visible solo para el destinatario).
      * @param replyKey
      * @param channelId
      * @param toUserId

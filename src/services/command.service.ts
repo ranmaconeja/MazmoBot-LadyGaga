@@ -2,6 +2,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { CommandHandler } from '../types';
 import { AyudaHandler } from '../commands/ayuda';
+import { AyudaModsHandler } from '../commands/ayudamods';
 import { PingHandler } from '../commands/ping';
 import { VersionHandler } from '../commands/version';
 import { StaffHandler } from '../commands/staff';
@@ -53,10 +54,11 @@ export class CommandService {
      * así que cobrarle puntos a un usuario común que los intenta usar (y que de
      * todos modos va a ser rechazado con "no tenés permisos") no tendría sentido.
      */
-    private readonly freeCommands = new Set(['!puntos', '!ayuda', '!puntosextra', '!lazotest']);
+    private readonly freeCommands = new Set(['!puntos', '!ayuda', '!puntosextra', '!lazotest', '!ayudamods']);
 
     constructor(
         private readonly ayudaHandler: AyudaHandler,
+        private readonly ayudaModsHandler: AyudaModsHandler,
         private readonly pingHandler: PingHandler,
         private readonly versionHandler: VersionHandler,
         private readonly staffHandler: StaffHandler,
@@ -80,6 +82,7 @@ export class CommandService {
         private readonly messagesService: MessagesService,
     ) {
         this.registerHandler(ayudaHandler)
+        this.registerHandler(ayudaModsHandler)
         this.registerHandler(pingHandler)
         this.registerHandler(versionHandler)
         this.registerHandler(staffHandler)
