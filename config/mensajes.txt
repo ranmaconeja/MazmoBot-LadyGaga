@@ -7,6 +7,7 @@
 !lazo @usuario1 @usuario2 - La IA calcula un % de compatibilidad entre dos perfiles
 !astral @usuario1 @usuario2 - Lectura astral cómica según el "Signo Zodiacal Mazmorrero (Broma)"
 !horoscopo @usuario <signo> - Horóscopo combinado con las etiquetas del usuario
+!musica - La IA sugiere una canción de YouTube para el canal
 
 [AYUDA_MOD]
 📋 Comandos disponibles de {BOT_NAME} (vista completa - moderador/owner):
@@ -24,6 +25,7 @@
 !lazo @usuario1 @usuario2 - La IA calcula un % de compatibilidad entre dos perfiles
 !astral @usuario1 @usuario2 - Lectura astral cómica según el "Signo Zodiacal Mazmorrero (Broma)"
 !horoscopo @usuario <signo> - Horóscopo combinado con las etiquetas del usuario
+!musica - La IA sugiere una canción de YouTube para el canal
 M!p <link de YouTube> - Encola una canción para el reproductor
 !addPuntos @usuario cantidad - Suma puntos manualmente a un usuario
 
@@ -81,7 +83,7 @@ Me conocen: {ME_CONOCEN} | Eventos: {EVENTOS}{ID_LINE}
 "{USERNAME}" no tiene los puntos suficientes para ejecutar este comando (tiene {POINTS}, necesita {COST})
 
 [PUNTOS]
-✨ Tenés {POINTS} puntos. Cada comando cuesta {COST} puntos. Se renuevan a 20 cada 24hs.
+✨ Tenés {POINTS} puntos. Cada comando cuesta {COST} puntos. Se suman 5 puntos por día, acumulables.
 
 [PUNTOS_OTRO]
 ✨ "{USERNAME}" tiene {POINTS} puntos. Cada comando cuesta {COST} puntos.
@@ -161,3 +163,6 @@ No pude encontrar a ese usuario.
 
 [HOROSCOPO_IA_ERROR]
 🤖 No pude calcular tu horóscopo en este momento (falta configurar la IA o se agotó la cuota gratuita del día).
+
+[MUSICA_IA_ERROR]
+🤖 No pude conseguir una sugerencia de música en este momento (falta configurar la IA, se agotó la cuota gratuita del día, o no pude confirmar que el video sugerido existe de verdad).

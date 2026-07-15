@@ -53,7 +53,7 @@ Primero confirmá si "${signo}" corresponde a uno de esos 12 signos — aceptá 
 
 Si NO es uno de los 12 signos: dejá el campo del horóscopo como un string vacío, no inventes nada.
 
-Si SÍ es un signo válido: escribí un horóscopo breve (3 a 4 líneas) que combine los rasgos típicos de ese signo con las etiquetas/roles del usuario de forma ingeniosa y con humor (ej: si es Leo y tiene la etiqueta Dominante, jugá con que a un Leo ya de por sí le gusta ser el centro de atención, y el rol de Dominante lo potencia). Tono informal, voseo rioplatense natural, picante pero sin ser ofensivo con nadie real.
+Si SÍ es un signo válido: escribí un horóscopo breve (3 a 4 líneas) que combine los rasgos típicos de ese signo con las etiquetas/roles del usuario de forma ingeniosa y con humor (ej: si es Leo y tiene la etiqueta Dominante, jugá con que a un Leo ya de por sí le gusta ser el centro de atención, y el rol de Dominante lo potencia). Tono informal, voseo rioplatense natural ("tenés", "sos", "podés"), picante pero sin ser ofensivo con nadie real. NO uses modismos marcados (nada de "che", "posta", "de una", "boludo/a") ni arranques la respuesta con una interjección — la idea es que suene natural y cotidiano, no como una caricatura de argentino.
 
 Respondé ÚNICAMENTE con un JSON válido, sin texto adicional, sin markdown, con este formato exacto:
 {"esSignoValido": <true o false>, "horoscopo": "<el horóscopo si el signo es válido, o "" si no lo es>"}`;

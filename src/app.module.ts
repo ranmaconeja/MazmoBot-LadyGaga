@@ -25,6 +25,7 @@ import { CompatibilityService } from './modules/ai/compatibility.service';
 import { AstralCompatibilityService } from './modules/ai/astral-compatibility.service';
 import { PracticeService } from './modules/ai/practice.service';
 import { HoroscopeService } from './modules/ai/horoscope.service';
+import { MusicService } from './modules/ai/music.service';
 import { PlayerQueueService } from './modules/player/player-queue.service';
 import { PlayerController } from './player.controller';
 
@@ -45,6 +46,7 @@ import { CompatibilidadAstralHandler } from './commands/compatibilidadastral';
 import { ReproducirHandler } from './commands/reproducir';
 import { PracticaHandler } from './commands/practica';
 import { HoroscopoHandler } from './commands/horoscopo';
+import { MusicaHandler } from './commands/musica';
 
 @Module({
     imports: [
@@ -81,6 +83,7 @@ import { HoroscopoHandler } from './commands/horoscopo';
         AstralCompatibilityService,
         PracticeService,
         HoroscopeService,
+        MusicService,
         PlayerQueueService,
 
         // comandos
@@ -101,6 +104,7 @@ import { HoroscopoHandler } from './commands/horoscopo';
         ReproducirHandler,
         PracticaHandler,
         HoroscopoHandler,
+        MusicaHandler,
     ],
 })
 export class AppModule implements NestModule {

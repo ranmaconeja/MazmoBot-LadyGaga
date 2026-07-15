@@ -18,6 +18,7 @@ import { CompatibilidadAstralHandler } from '../commands/compatibilidadastral';
 import { ReproducirHandler } from '../commands/reproducir';
 import { PracticaHandler } from '../commands/practica';
 import { HoroscopoHandler } from '../commands/horoscopo';
+import { MusicaHandler } from '../commands/musica';
 import { PointsService } from './points.service';
 import { BotService } from './bot.service';
 import { MessagesService } from './messages.service';
@@ -71,6 +72,7 @@ export class CommandService {
         private readonly reproducirHandler: ReproducirHandler,
         private readonly practicaHandler: PracticaHandler,
         private readonly horoscopoHandler: HoroscopoHandler,
+        private readonly musicaHandler: MusicaHandler,
         private readonly pointsService: PointsService,
         private readonly botService: BotService,
         private readonly messagesService: MessagesService,
@@ -92,6 +94,7 @@ export class CommandService {
         this.registerHandler(reproducirHandler)
         this.registerHandler(practicaHandler)
         this.registerHandler(horoscopoHandler)
+        this.registerHandler(musicaHandler)
     }
 
     private registerHandler(handler: CommandHandler) {

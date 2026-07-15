@@ -3,9 +3,9 @@ import { PointsRepository } from '../database/points.repository';
 import { ModeratorsService } from './moderators.service';
 
 /**
- * Sistema anti-spam: cada usuario arranca con 20 puntos, que se renuevan
- * automáticamente a 20 (sin acumular) cada 24hs. Ejecutar un comando cuesta
- * COMMAND_COST puntos. Si no tiene suficientes, el comando no se ejecuta.
+ * Sistema anti-spam: cada usuario arranca con 20 puntos, y se le suman 5 más
+ * por cada día que pasa (acumulables, no se resetean). Ejecutar un comando
+ * cuesta COMMAND_COST puntos. Si no tiene suficientes, el comando no se ejecuta.
  * Moderadores y el owner del bot quedan excluidos: para ellos los comandos
  * son siempre gratis.
  *

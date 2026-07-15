@@ -28,6 +28,8 @@ rifas ni playlist con historial.
 - `!lazo @usuario1 @usuario2` — La IA calcula un % de compatibilidad "real" entre dos perfiles según sus etiquetas
 - `!astral @usuario1 @usuario2` — Versión satírica, basada en el signo zodiacal por fecha de registro
 - `!practica <nombre>` — La IA evalúa si es una práctica BDSM y te da una descripción, o te avisa que no tiene nada que ver
+- `!horoscopo @usuario <signo>` — La IA arma un horóscopo combinando el signo con las etiquetas del perfil indicado
+- `!musica` — La IA sugiere una canción de YouTube (mínimo 10M de vistas, según la IA) para el canal
 - `M!p <link de YouTube>` — Encola la canción para el cliente de reproducción (ver sección abajo)
 
 ## Configuración
@@ -123,6 +125,23 @@ lo indica la documentación de Botleirplate sobre `rawContent`). Probalo una vez
 si el chat no soporta imágenes embebidas, vas a ver la URL como texto plano en vez de la
 miniatura — avisame y lo resuelvo de otra forma (por ejemplo enviándola como link aparte).
 
+## Sugerencia de música (`!musica`)
+
+Le pide a la IA una canción de YouTube "ideal para BDSM" (según criterio de la IA, con
+mínimo 10 millones de vistas) y publica **solo la URL** en el canal — la idea es que el
+detector automático de links de YouTube (sección de arriba) se dispare con el propio
+mensaje del bot y agregue el título/miniatura, como si lo hubiera pegado un usuario.
+
+⚠️ Dos cosas a tener en cuenta:
+- La IA no tiene acceso a YouTube en tiempo real, así que "10 millones de reproducciones"
+  es lo que la IA cree recordar, no un dato verificado. Antes de publicar, `!musica` chequea
+  que el video **exista de verdad** (mismo mecanismo que la detección de links), para evitar
+  publicar un ID inventado — pero esto no confirma la cantidad real de vistas.
+- Que la miniatura aparezca automáticamente **depende de que Mazmo mande el webhook
+  `/message` también para los mensajes que publica el propio bot** — esto no está
+  confirmado todavía. Si en la práctica no pasa, avisen y se cambia para que `!musica`
+  publique la info completa directamente, sin depender de esta "auto-lectura".
+
 ## Autofrases (respuestas automáticas por palabra clave)
 
 Cuando alguien escribe un mensaje que contiene alguna de las palabras clave configuradas
@@ -140,8 +159,9 @@ palabra_clave_1|palabra_clave_2 = respuesta del bot
 
 ## Sistema de puntos (anti-spam)
 
-Cada usuario arranca con 20 puntos, que se renuevan automáticamente a 20 (sin acumular)
-cada 24hs. Ejecutar la mayoría de los comandos cuesta 5 puntos; si no tiene suficientes,
+Cada usuario arranca con 20 puntos, y se le suman 5 más por cada día que pasa —
+acumulables, no se resetean (antes sí se reseteaban a un valor fijo cada 24hs).
+Ejecutar la mayoría de los comandos cuesta 5 puntos; si no tiene suficientes,
 el comando no se ejecuta y se le avisa por privado. Moderadores y el owner del bot están
 exentos: para ellos todos los comandos son siempre gratis. `!puntos`, `!ayuda`,
 `!addPuntos` y `!lazotest` son gratis para todo el mundo (los últimos dos ya
