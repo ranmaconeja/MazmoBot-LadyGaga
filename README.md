@@ -27,6 +27,7 @@ rifas ni playlist con historial.
 - `!sumarpuntos @usuario <cantidad>` — (solo moderadores/owner) suma puntos a un usuario
 - `!compatibilidad @usuario1 @usuario2` — La IA calcula un % de compatibilidad "real" entre dos perfiles según sus etiquetas
 - `!compatibilidadastral @usuario1 @usuario2` — Versión satírica, basada en el signo zodiacal por fecha de registro
+- `!botellita` — Sortea dos participantes del canal para un juego de roles (ver sección abajo)
 - `M!p <link de YouTube>` — Encola la canción para el cliente de reproducción (ver sección abajo)
 
 ## Configuración
@@ -121,6 +122,16 @@ del mensaje, asumiendo que el chat de Mazmo renderiza imágenes embebidas en mar
 lo indica la documentación de Botleirplate sobre `rawContent`). Probalo una vez desplegado:
 si el chat no soporta imágenes embebidas, vas a ver la URL como texto plano en vez de la
 miniatura — avisame y lo resuelvo de otra forma (por ejemplo enviándola como link aparte).
+
+## Juego de roles (`!botellita`)
+
+Sortea dos participantes del canal:
+- **Lado A**: tiene que tener la etiqueta Switch o Dominante, y género femenino (`FEMALE`, `WOMAN_CIS`, `FEMALE_TRANS` o `FEMALE_TRANSGENDER`).
+- **Lado B**: tiene que tener la etiqueta Switch o Sumiso/a, de cualquier género.
+
+Los candidatos salen de `body.message.channel.participants`, que Mazmo manda en cada webhook — no hay ningún endpoint que devuelva "todos los usuarios con tag X" de una, así que el comando revisa perfiles al azar (hasta 40 por intento) en vez de pedir el perfil de todo el canal.
+
+⚠️ **Sin confirmar todavía:** no sabemos si `participants` trae realmente a TODOS los miembros del canal, o solo a un subconjunto (ej: los últimos activos). Probalo en el canal real y fijate si los resultados te parecen representativos de todo el canal o siempre salen las mismas caras — si es lo segundo, avisame y lo resolvemos de otra forma (por ejemplo, manteniendo nuestra propia lista de miembros en Turso a medida que entran/salen, en vez de depender de este campo).
 
 ## Autofrases (respuestas automáticas por palabra clave)
 

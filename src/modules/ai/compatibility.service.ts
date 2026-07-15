@@ -58,7 +58,7 @@ El porcentaje final tiene que reflejar ese balance: si encontrás varios obstác
 
 Escribí la descripción con tono informal y relajado, como comentándoselo a un amigo. Usá voseo natural ("tenés", "sos", "podés") porque así habla la gente acá, pero NO uses modismos ni jerga marcada (nada de "che", "posta", "de una", "picante", "buena onda" ni cosas por el estilo) — la idea es que suene natural y cotidiano, no como una caricatura de argentino. Que sea un párrafo de 5 a 7 oraciones (ahora hay más cosas para cubrir: etiquetas, obstáculos/puntos a favor, y el comentario de qué tan conocido es cada uno), explayándote en por qué le pusiste ese porcentaje.
 
-IMPORTANTE sobre las etiquetas: usá criterio al nombrarlas en español, no traducción literal forzada. Hay términos de la jerga BDSM que la comunidad hispanohablante ya usa tal cual en inglés porque suena natural y es como se conocen (por ejemplo: "Switch", "Petplay", "Bondage", "Roleplay") — esos dejalos en inglés, sin traducir. Otros sí tienen una traducción directa y natural que se usa normalmente en español (por ejemplo: "Dominant" → "Dominante", "Submissive" → "Sumiso/a") — esos traducilos. La regla es: si al traducirlo suena forzado o raro, dejalo en inglés; si suena natural, traducilo.
+IMPORTANTE sobre las etiquetas: las etiquetas que te paso ya vienen traducidas al español (o dejadas en inglés cuando así se usan naturalmente en la jerga BDSM hispanohablante) — usalas tal cual te las doy, no las vuelvas a traducir ni le cambies el idioma.
 
 Respondé ÚNICAMENTE con un JSON válido, sin texto adicional, sin markdown, con este formato exacto:
 {"porcentaje": <número entero de 0 a 100>, "descripcion": "<párrafo de 5 a 7 oraciones en el tono descripto arriba, en español rioplatense>"}`;

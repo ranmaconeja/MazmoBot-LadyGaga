@@ -41,6 +41,7 @@ import { CompatibilidadHandler } from './commands/compatibilidad';
 import { CompatibilidadTestHandler } from './commands/compatibilidadtest';
 import { CompatibilidadAstralHandler } from './commands/compatibilidadastral';
 import { ReproducirHandler } from './commands/reproducir';
+import { BotellitaHandler } from './commands/botellita';
 
 @Module({
     imports: [
@@ -93,6 +94,7 @@ import { ReproducirHandler } from './commands/reproducir';
         CompatibilidadTestHandler,
         CompatibilidadAstralHandler,
         ReproducirHandler,
+        BotellitaHandler,
     ],
 })
 export class AppModule implements NestModule {
