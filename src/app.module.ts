@@ -11,6 +11,7 @@ import { TagsService } from './services/tags.service';
 
 import { DatabaseService } from './database/database.service';
 import { PointsRepository } from './database/points.repository';
+import { QuestionOfDayRepository } from './database/question-of-day.repository';
 import { PointsService } from './services/points.service';
 
 import { WelcomeService } from './modules/welcome/welcome.service';
@@ -26,6 +27,7 @@ import { AstralCompatibilityService } from './modules/ai/astral-compatibility.se
 import { PracticeService } from './modules/ai/practice.service';
 import { HoroscopeService } from './modules/ai/horoscope.service';
 import { MusicService } from './modules/ai/music.service';
+import { QuestionOfDayService } from './modules/ai/question-of-day.service';
 import { PlayerQueueService } from './modules/player/player-queue.service';
 import { PlayerController } from './player.controller';
 
@@ -47,6 +49,7 @@ import { ReproducirHandler } from './commands/reproducir';
 import { PracticaHandler } from './commands/practica';
 import { HoroscopoHandler } from './commands/horoscopo';
 import { MusicaHandler } from './commands/musica';
+import { DiaHandler } from './commands/dia';
 
 @Module({
     imports: [
@@ -69,6 +72,7 @@ import { MusicaHandler } from './commands/musica';
         // base de datos
         DatabaseService,
         PointsRepository,
+        QuestionOfDayRepository,
         PointsService,
 
         // módulos
@@ -84,6 +88,7 @@ import { MusicaHandler } from './commands/musica';
         PracticeService,
         HoroscopeService,
         MusicService,
+        QuestionOfDayService,
         PlayerQueueService,
 
         // comandos
@@ -105,6 +110,7 @@ import { MusicaHandler } from './commands/musica';
         PracticaHandler,
         HoroscopoHandler,
         MusicaHandler,
+        DiaHandler,
     ],
 })
 export class AppModule implements NestModule {

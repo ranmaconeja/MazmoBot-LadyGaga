@@ -21,8 +21,9 @@ export class MusicService {
     }
 
     private buildPrompt(): string {
-        return `Sos un DJ que recomienda música para un canal de rol Femdom/BDSM. Recomendá UNA sola canción real que exista en YouTube, con como mínimo 10 millones de reproducciones, cuyo tono, letra o clima quede bien con la temática del canal (sensual, intenso, dominante, oscuro, etc. — no hace falta que sea literalmente sobre BDSM, usá criterio).
+        return `Sos un DJ que recomienda música para un canal de rol Femdom/BDSM. Recomendá UNA sola canción real y conocida, con como mínimo 10 millones de reproducciones en YouTube, cuyo tono, letra o clima quede bien con la temática del canal (sensual, intenso, dominante, oscuro, etc. — no hace falta que sea literalmente sobre BDSM, usá criterio).
 
-Respondé ÚNICAMENTE con la URL completa del video de YouTube (formato https://www.youtube.com/watch?v=XXXXXXXXXXX o https://youtu.be/XXXXXXXXXXX). Sin texto adicional, sin comillas, sin markdown, sin explicación — solo la URL, nada más.`;
+Respondé ÚNICAMENTE con el nombre del artista y el título de la canción, en el formato exacto: Artista - Título de la canción
+Sin URL, sin comillas, sin markdown, sin explicación — solo esa línea, nada más.`;
     }
 }

@@ -30,6 +30,7 @@ rifas ni playlist con historial.
 - `!practica <nombre>` — La IA evalúa si es una práctica BDSM y te da una descripción, o te avisa que no tiene nada que ver
 - `!horoscopo @usuario <signo>` — La IA arma un horóscopo combinando el signo con las etiquetas del perfil indicado
 - `!musica` — La IA sugiere una canción de YouTube (mínimo 10M de vistas, según la IA) para el canal
+- `!dia` — Pregunta del día generada por la IA, se mantiene fija hasta las 00hs (hora Argentina)
 - `M!p <link de YouTube>` — Encola la canción para el cliente de reproducción (ver sección abajo)
 
 ## Configuración
@@ -53,7 +54,7 @@ TURSO_DATABASE_URL=<url de tu base en Turso>
 TURSO_AUTH_TOKEN=<token de autenticación de Turso>
 GEMINI_API_KEY=<opcional, para !lazo y !astral>
 GROQ_API_KEY=<opcional, respaldo/carrera con Gemini>
-YOUTUBE_API_KEY=<opcional, sin ella la info de YouTube funciona pero sin descripción>
+YOUTUBE_API_KEY=<opcional para la detección pasiva de links, OBLIGATORIA para que funcione !musica>
 PLAYER_SECRET_KEY=<autentica al programa de Windows contra GET /player/next>
 ```
 
@@ -127,20 +128,43 @@ miniatura — avisame y lo resuelvo de otra forma (por ejemplo enviándola como 
 
 ## Sugerencia de música (`!musica`)
 
-Le pide a la IA una canción de YouTube "ideal para BDSM" (según criterio de la IA, con
-mínimo 10 millones de vistas) y publica **solo la URL** en el canal — la idea es que el
-detector automático de links de YouTube (sección de arriba) se dispare con el propio
-mensaje del bot y agregue el título/miniatura, como si lo hubiera pegado un usuario.
+Le pide a la IA el **nombre** de una canción "ideal para BDSM" (según criterio de la IA,
+con mínimo 10 millones de vistas) y busca el video **real** en YouTube a partir de ese
+nombre (`YoutubeService.searchVideo`, YouTube Data API v3) — publica solo la URL que
+devuelve esa búsqueda real. La idea es que el detector automático de links de YouTube
+(sección de arriba) se dispare con el propio mensaje del bot y agregue el título/miniatura,
+como si lo hubiera pegado un usuario.
+
+**Por qué no le pedimos la URL directo a la IA:** al principio se hacía así, y la IA
+terminaba "alucinando" IDs de video que no existen — un ID de YouTube es un string
+arbitrario de 11 caracteres que un modelo de lenguaje no tiene forma de memorizar bien,
+a diferencia de nombres de canciones/artistas reales. Por eso ahora la IA solo sugiere el
+nombre, y la búsqueda real en la Data API es la que decide el video final.
 
 ⚠️ Dos cosas a tener en cuenta:
-- La IA no tiene acceso a YouTube en tiempo real, así que "10 millones de reproducciones"
-  es lo que la IA cree recordar, no un dato verificado. Antes de publicar, `!musica` chequea
-  que el video **exista de verdad** (mismo mecanismo que la detección de links), para evitar
-  publicar un ID inventado — pero esto no confirma la cantidad real de vistas.
+- **Requiere `YOUTUBE_API_KEY` configurada, sin excepción** — a diferencia de la detección
+  de links pegados por usuarios (que tiene respaldo por oEmbed si no tenés la key), la
+  búsqueda por texto solo la ofrece la Data API. Sin la key, `!musica` no va a funcionar.
 - Que la miniatura aparezca automáticamente **depende de que Mazmo mande el webhook
   `/message` también para los mensajes que publica el propio bot** — esto no está
   confirmado todavía. Si en la práctica no pasa, avisen y se cambia para que `!musica`
   publique la info completa directamente, sin depender de esta "auto-lectura".
+
+## Pregunta del día (`!dia`)
+
+Es un comando, no algo programado — no depende de cron ni de que el bot publique nada
+por su cuenta (dos cosas que hoy no tenemos forma de hacer en este proyecto sin más
+investigación: Vercel Hobby limita los cron jobs a 1 vez por día, y no está confirmado si
+existe una forma de que el bot publique un mensaje sin que antes haya llegado un webhook
+real de Mazmo con una `key` válida).
+
+En cambio, `!dia` funciona así: guarda en Turso (`question_of_day`, una fila por fecha
+calendario argentina) la pregunta generada por la IA. La primera vez que alguien escribe
+`!dia` en el día, se genera una pregunta nueva y se guarda; todas las veces siguientes ese
+mismo día, se devuelve la misma pregunta guardada, sin volver a llamar a la IA. Al cambiar
+la fecha (00hs hora Argentina, calculado restando 3hs al UTC — Argentina no tiene horario
+de verano, así que alcanza con esa resta fija), el primer `!dia` del nuevo día genera una
+pregunta nueva.
 
 ## Autofrases (respuestas automáticas por palabra clave)
 

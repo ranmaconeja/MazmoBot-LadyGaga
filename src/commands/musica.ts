@@ -8,26 +8,28 @@ import { YoutubeService } from '../modules/youtube/youtube.service';
 
 /**
  * Uso: !musica (sin argumentos).
- * Le pide a la IA una canción de YouTube "ideal para BDSM" con mínimo 10
- * millones de vistas (según la IA — no verificado en tiempo real, ver nota
- * abajo) y publica SOLO la URL en el canal.
+ * Le pide a la IA el nombre de una canción "ideal para BDSM" con mínimo 10
+ * millones de vistas (según la IA — no verificado, ver nota abajo) y busca el
+ * video REAL en YouTube a partir de ese nombre, en vez de confiarle a la IA
+ * la URL/ID directamente.
  *
- * La idea es que el detector automático de links de YouTube (ver
- * app.controller.ts, se dispara en cualquier mensaje que traiga un link) se
- * active solo con el propio mensaje que publica el bot, agregando el
- * título/miniatura como si lo hubiera pegado un usuario cualquiera.
+ * Por qué el cambio: al principio le pedíamos la URL completa a la IA, y
+ * terminaba "alucinando" IDs de video que no existen (los IDs de YouTube son
+ * strings arbitrarios de 11 caracteres que un modelo de lenguaje no tiene
+ * forma de memorizar bien, a diferencia de nombres de canciones/artistas
+ * reales, que sí forman parte de lo que aprendió). Ahora la IA solo sugiere
+ * el nombre, y youtubeService.searchVideo() lo busca de verdad en la Data API
+ * — así el ID siempre sale de una búsqueda real, nunca de la IA.
  *
- * OJO — dos limitaciones reales:
- * 1. La IA no tiene acceso a YouTube en tiempo real, así que "10 millones de
- *    reproducciones" es lo que la IA cree recordar, no un dato confirmado.
- *    Para evitar publicar un video inventado, se verifica que el ID exista de
- *    verdad (getVideoInfo) antes de publicarlo — eso confirma que el video
- *    existe, pero NO confirma la cantidad real de vistas.
- * 2. Que la miniatura/título aparezcan automáticamente depende de que Mazmo
- *    mande el webhook /message también para los mensajes que publica el
- *    propio bot — esto no está confirmado. Si no pasa en la práctica, avisen
- *    y se cambia para que !musica publique la info completa directamente, sin
- *    depender de este "auto-lectura".
+ * Requiere YOUTUBE_API_KEY configurada (a diferencia de la detección de links
+ * pegados por usuarios, que tiene respaldo por oEmbed, la búsqueda por texto
+ * solo la ofrece la Data API — oEmbed no busca, solo consulta un ID ya conocido).
+ *
+ * OJO: que la miniatura/título aparezcan automáticamente en el canal (además
+ * de la URL que publica este comando) depende de que Mazmo mande el webhook
+ * /message también para los mensajes que publica el propio bot — esto no está
+ * confirmado. Si no pasa en la práctica, avisen y se cambia para que !musica
+ * publique la info completa directamente, sin depender de esta "auto-lectura".
  */
 @Injectable()
 export class MusicaHandler implements CommandHandler {
@@ -55,23 +57,14 @@ export class MusicaHandler implements CommandHandler {
             return;
         }
 
-        const videoId = this.youtubeService.extractVideoId(suggestion);
-        if (!videoId) {
-            this.logger.warn(`!musica: la IA no devolvió una URL de YouTube reconocible: "${suggestion}"`);
+        const result = await this.youtubeService.searchVideo(suggestion);
+        if (!result) {
+            this.logger.warn(`!musica: no se encontró un video real para la sugerencia de la IA: "${suggestion}" (¿falta YOUTUBE_API_KEY?)`);
             await this.botService.sendReply(body.key, channelId, this.messagesService.get('MUSICA_IA_ERROR'));
             return;
         }
 
-        // confirma que el video exista de verdad, ya que la IA puede
-        // "alucinar" un ID inexistente al no tener acceso real a YouTube
-        const videoInfo = await this.youtubeService.getVideoInfo(videoId);
-        if (!videoInfo) {
-            this.logger.warn(`!musica: la IA sugirió un video que no existe o no se pudo verificar (id: ${videoId})`);
-            await this.botService.sendReply(body.key, channelId, this.messagesService.get('MUSICA_IA_ERROR'));
-            return;
-        }
-
-        const url = `https://www.youtube.com/watch?v=${videoId}`;
+        const url = `https://www.youtube.com/watch?v=${result.videoId}`;
         await this.botService.sendReply(body.key, channelId, url);
     }
 }

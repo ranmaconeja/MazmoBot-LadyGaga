@@ -46,6 +46,11 @@ export class DatabaseService implements OnModuleInit {
                 id INTEGER PRIMARY KEY CHECK (id = 1),
                 lastPollAt TEXT
             )`,
+            `CREATE TABLE IF NOT EXISTS question_of_day (
+                date TEXT PRIMARY KEY,
+                question TEXT NOT NULL,
+                createdAt TEXT NOT NULL
+            )`,
         ], 'write');
     }
 

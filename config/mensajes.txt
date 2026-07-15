@@ -8,6 +8,7 @@
 !astral @usuario1 @usuario2 - Lectura astral cómica según el "Signo Zodiacal Mazmorrero (Broma)"
 !horoscopo @usuario <signo> - Horóscopo combinado con las etiquetas del usuario
 !musica - La IA sugiere una canción de YouTube para el canal
+!dia - Pregunta del día generada por la IA (se mantiene fija hasta las 00hs)
 
 [AYUDA_MOD]
 📋 Comandos disponibles de {BOT_NAME} (vista completa - moderador/owner):
@@ -26,6 +27,7 @@
 !astral @usuario1 @usuario2 - Lectura astral cómica según el "Signo Zodiacal Mazmorrero (Broma)"
 !horoscopo @usuario <signo> - Horóscopo combinado con las etiquetas del usuario
 !musica - La IA sugiere una canción de YouTube para el canal
+!dia - Pregunta del día generada por la IA (se mantiene fija hasta las 00hs)
 M!p <link de YouTube> - Encola una canción para el reproductor
 !addPuntos @usuario cantidad - Suma puntos manualmente a un usuario
 
@@ -165,4 +167,10 @@ No pude encontrar a ese usuario.
 🤖 No pude calcular tu horóscopo en este momento (falta configurar la IA o se agotó la cuota gratuita del día).
 
 [MUSICA_IA_ERROR]
-🤖 No pude conseguir una sugerencia de música en este momento (falta configurar la IA, se agotó la cuota gratuita del día, o no pude confirmar que el video sugerido existe de verdad).
+🤖 No pude conseguir una sugerencia de música en este momento (falta configurar la IA, falta YOUTUBE_API_KEY para poder buscar el video real, o no encontré ningún video que coincida).
+
+[DIA_RESULT]
+❓ Pregunta del día: {PREGUNTA}
+
+[DIA_IA_ERROR]
+🤖 No pude generar la pregunta del día en este momento (falta configurar la IA o se agotó la cuota gratuita del día).
