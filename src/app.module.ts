@@ -30,6 +30,7 @@ import { PracticeService } from './modules/ai/practice.service';
 import { HoroscopeService } from './modules/ai/horoscope.service';
 import { MusicService } from './modules/ai/music.service';
 import { QuestionOfDayService } from './modules/ai/question-of-day.service';
+import { FactService } from './modules/ai/fact.service';
 import { PlayerQueueService } from './modules/player/player-queue.service';
 import { PlayerController } from './player.controller';
 
@@ -53,6 +54,7 @@ import { PracticaHandler } from './commands/practica';
 import { HoroscopoHandler } from './commands/horoscopo';
 import { MusicaHandler } from './commands/musica';
 import { DiaHandler } from './commands/dia';
+import { DatoHandler } from './commands/dato';
 
 @Module({
     imports: [
@@ -94,6 +96,7 @@ import { DiaHandler } from './commands/dia';
         HoroscopeService,
         MusicService,
         QuestionOfDayService,
+        FactService,
         PlayerQueueService,
 
         // comandos
@@ -117,6 +120,7 @@ import { DiaHandler } from './commands/dia';
         HoroscopoHandler,
         MusicaHandler,
         DiaHandler,
+        DatoHandler,
     ],
 })
 export class AppModule implements NestModule {

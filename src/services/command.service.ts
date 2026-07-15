@@ -21,6 +21,7 @@ import { PracticaHandler } from '../commands/practica';
 import { HoroscopoHandler } from '../commands/horoscopo';
 import { MusicaHandler } from '../commands/musica';
 import { DiaHandler } from '../commands/dia';
+import { DatoHandler } from '../commands/dato';
 import { PointsService } from './points.service';
 import { BotService } from './bot.service';
 import { MessagesService } from './messages.service';
@@ -77,6 +78,7 @@ export class CommandService {
         private readonly horoscopoHandler: HoroscopoHandler,
         private readonly musicaHandler: MusicaHandler,
         private readonly diaHandler: DiaHandler,
+        private readonly datoHandler: DatoHandler,
         private readonly pointsService: PointsService,
         private readonly botService: BotService,
         private readonly messagesService: MessagesService,
@@ -101,6 +103,7 @@ export class CommandService {
         this.registerHandler(horoscopoHandler)
         this.registerHandler(musicaHandler)
         this.registerHandler(diaHandler)
+        this.registerHandler(datoHandler)
     }
 
     private registerHandler(handler: CommandHandler) {

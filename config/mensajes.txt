@@ -9,6 +9,7 @@
 !Astral (A) (B) -  Bromea sobre 2 usuarios
 !Horoscopo - Prediccion Diaria sobre aspectos BDSM
 !Musica - Recomendacion al Azar de musica para Sesionar
+!Dato - Un dato curioso sobre el mundo Femdom/BDSM
 
 [AYUDA_MOD]
 📋 Comandos disponibles de {BOT_NAME} (vista completa - moderador/owner):
@@ -28,6 +29,7 @@
 !Astral (A) (B) -  Bromea sobre 2 usuarios
 !Horoscopo - Prediccion Diaria sobre aspectos BDSM
 !Musica - Recomendacion al Azar de musica para Sesionar
+!Dato - Un dato curioso sobre el mundo Femdom/BDSM
 M!p <link de YouTube> - Encola una canción para el reproductor
 !PuntosExtra @usuario cantidad - Suma puntos manualmente a un usuario
 
@@ -177,9 +179,16 @@ No pude encontrar a ese usuario.
 
 [DIA_RESULT]
 ❓ Pregunta del día: {PREGUNTA}
+(Faltan {TIEMPO_RESTANTE} para la próxima pregunta)
 
 [DIA_IA_ERROR]
 🤖 No pude generar la pregunta del día en este momento (falta configurar la IA o se agotó la cuota gratuita del día).
 
 [COOLDOWN_ERROR]
 ⏳ Ya usaste este comando hace poco. Podés volver a usarlo en {MINUTOS} minutos.
+
+[DATO_RESULT]
+🧠 ¿Sabías que...? {DATO}
+
+[DATO_IA_ERROR]
+🤖 No pude conseguir un dato curioso en este momento (falta configurar la IA o se agotó la cuota gratuita del día).

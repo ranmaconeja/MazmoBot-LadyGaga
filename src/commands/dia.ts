@@ -5,7 +5,7 @@ import { BotService } from '../services/bot.service';
 import { MessagesService } from '../services/messages.service';
 import { QuestionOfDayService } from '../modules/ai/question-of-day.service';
 import { QuestionOfDayRepository } from '../database/question-of-day.repository';
-import { getArgentinaDateString } from '../util/argentina-date';
+import { getArgentinaDateString, formatTimeUntilNextArgentinaMidnight } from '../util/argentina-date';
 
 /**
  * Uso: !dia (sin argumentos).
@@ -48,7 +48,8 @@ export class DiaHandler implements CommandHandler {
             question = generated;
         }
 
-        const text = this.messagesService.get('DIA_RESULT', { PREGUNTA: question });
+        const tiempoRestante = formatTimeUntilNextArgentinaMidnight();
+        const text = this.messagesService.get('DIA_RESULT', { PREGUNTA: question, TIEMPO_RESTANTE: tiempoRestante });
         await this.botService.sendReply(body.key, channelId, text);
     }
 }
