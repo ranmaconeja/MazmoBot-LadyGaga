@@ -1,14 +1,14 @@
 [AYUDA]
 📋 Comandos disponibles de {BOT_NAME}:
-!reglas - Muestra las reglas del canal
-!filosofia - Muestra la filosofía del canal
-!puntos - Muestra cuántos puntos tenés acumulados
-!practica <nombre> - La IA te dice si es una práctica BDSM y te la explica
-!lazo @usuario1 @usuario2 - La IA calcula un % de compatibilidad entre dos perfiles
-!astral @usuario1 @usuario2 - Lectura astral cómica según el "Signo Zodiacal Mazmorrero (Broma)"
-!horoscopo @usuario <signo> - Horóscopo combinado con las etiquetas del usuario
-!musica - La IA sugiere una canción de YouTube para el canal
-!dia - Pregunta del día generada por la IA (se mantiene fija hasta las 00hs)
+!Reglas - Muestra las Reglas del Canal
+!Filosofia - Conoce la Filosofia de Femdom Argentina
+!Dia - Pregunta del Dia del Canal
+!Puntos - Cantidad de Puntos para Ejecutar Comandos
+!Enciclopedia - Informacion sobre Practicas BDSM
+!Lazo (A) (B) - Calcula la compatibilidad entre 2 usuarios
+!Astral (A) (B) -  Bromea sobre 2 usuarios
+!Horoscopo - Prediccion Diaria sobre aspectos BDSM
+!Musica - Recomendacion al Azar de musica para Sesionar
 
 [AYUDA_MOD]
 📋 Comandos disponibles de {BOT_NAME} (vista completa - moderador/owner):
@@ -19,17 +19,17 @@
 !creador - Información del creador del bot
 !perfil @usuario - Muestra información general de un usuario
 !bienvenida - Vuelve a mostrar el mensaje de bienvenida
-!reglas - Muestra las reglas del canal
-!filosofia - Muestra la filosofía del canal
-!puntos @usuario - Consulta tu saldo de puntos o el de otro usuario
-!practica <nombre> - La IA te dice si es una práctica BDSM y te la explica
-!lazo @usuario1 @usuario2 - La IA calcula un % de compatibilidad entre dos perfiles
-!astral @usuario1 @usuario2 - Lectura astral cómica según el "Signo Zodiacal Mazmorrero (Broma)"
-!horoscopo @usuario <signo> - Horóscopo combinado con las etiquetas del usuario
-!musica - La IA sugiere una canción de YouTube para el canal
-!dia - Pregunta del día generada por la IA (se mantiene fija hasta las 00hs)
+!Reglas - Muestra las Reglas del Canal
+!Filosofia - Conoce la Filosofia de Femdom Argentina
+!Dia - Pregunta del Dia del Canal
+!Puntos - Cantidad de Puntos para Ejecutar Comandos
+!Enciclopedia - Informacion sobre Practicas BDSM
+!Lazo (A) (B) - Calcula la compatibilidad entre 2 usuarios
+!Astral (A) (B) -  Bromea sobre 2 usuarios
+!Horoscopo - Prediccion Diaria sobre aspectos BDSM
+!Musica - Recomendacion al Azar de musica para Sesionar
 M!p <link de YouTube> - Encola una canción para el reproductor
-!addPuntos @usuario cantidad - Suma puntos manualmente a un usuario
+!PuntosExtra @usuario cantidad - Suma puntos manualmente a un usuario
 
 [PING]
 🏓 Ra-ra-ah-ah-ah - Roma-roma-ma Lady Gaga llego al Chat!
@@ -85,7 +85,7 @@ Me conocen: {ME_CONOCEN} | Eventos: {EVENTOS}{ID_LINE}
 "{USERNAME}" no tiene los puntos suficientes para ejecutar este comando (tiene {POINTS}, necesita {COST})
 
 [PUNTOS]
-✨ Tenés {POINTS} puntos. Cada comando cuesta {COST} puntos. Se suman 5 puntos por día, acumulables.
+✨ Tenés {POINTS} puntos. Cada comando cuesta {COST} puntos. Se suman 5 puntos por día, acumulables hasta un máximo de 100.
 
 [PUNTOS_OTRO]
 ✨ "{USERNAME}" tiene {POINTS} puntos. Cada comando cuesta {COST} puntos.
@@ -100,7 +100,7 @@ No pude encontrar a ese usuario.
 ✨ Sos moderador/a, no gastás puntos al usar comandos.
 
 [SUMARPUNTOS_USAGE]
-⚠️ Uso: !addPuntos @usuario cantidad (la cantidad debe ser un número entero positivo)
+⚠️ Uso: !PuntosExtra @usuario cantidad (la cantidad debe ser un número entero positivo)
 
 [SUMARPUNTOS_ERROR]
 😕 No pude encontrar a ese usuario.
@@ -151,7 +151,7 @@ No pude encontrar a ese usuario.
 {DESCRIPCION}
 
 [PRACTICA_USAGE]
-ℹ️ Uso: !practica <nombre de la práctica>
+ℹ️ Uso: !Enciclopedia <nombre de la práctica>
 
 [PRACTICA_IA_ERROR]
 🤖 No pude evaluar esa práctica en este momento (falta configurar la IA o se agotó la cuota gratuita del día).
@@ -180,3 +180,6 @@ No pude encontrar a ese usuario.
 
 [DIA_IA_ERROR]
 🤖 No pude generar la pregunta del día en este momento (falta configurar la IA o se agotó la cuota gratuita del día).
+
+[COOLDOWN_ERROR]
+⏳ Ya usaste este comando hace poco. Podés volver a usarlo en {MINUTOS} minutos.

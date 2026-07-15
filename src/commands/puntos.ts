@@ -4,11 +4,15 @@ import { Injectable } from '@nestjs/common';
 import { BotService } from '../services/bot.service';
 import { MessagesService } from '../services/messages.service';
 import { PointsService } from '../services/points.service';
+import { ModeratorsService } from '../services/moderators.service';
 
 /**
  * Uso: !puntos (consulta el saldo propio) o !puntos @usuario (consulta el de otro).
  * Acepta @menciones reales, IDs numéricos, o usernames como texto plano para el
  * usuario objetivo, igual que !perfil.
+ *
+ * La respuesta llega solo por privado a quien lo pidió, salvo que quien lo pida
+ * sea moderador/owner — en ese caso se publica en el canal.
  */
 @Injectable()
 export class PuntosHandler implements CommandHandler {
@@ -16,6 +20,7 @@ export class PuntosHandler implements CommandHandler {
         private readonly botService: BotService,
         private readonly messagesService: MessagesService,
         private readonly pointsService: PointsService,
+        private readonly moderatorsService: ModeratorsService,
     ) {
     }
 
@@ -51,12 +56,19 @@ export class PuntosHandler implements CommandHandler {
         const body = req.body as RoomMessage;
         const channelId = body.message.channel.id;
         const authorId = body.message.author.id;
-        const askedForOther = message.trim().length > 0;
+        const isMod = this.moderatorsService.isModerator(authorId);
 
+        // según quién PIDIÓ el comando (no de quién son los puntos consultados):
+        // mod/owner -> se publica en el canal; usuario común -> solo por privado
+        const reply = (text: string) => isMod
+            ? this.botService.sendReply(body.key, channelId, text)
+            : this.botService.notifyUser(body.key, channelId, authorId, text);
+
+        const askedForOther = message.trim().length > 0;
         const targetUser = await this.resolveTargetUser(body, message);
 
         if (askedForOther && !targetUser) {
-            await this.botService.sendReply(body.key, channelId, this.messagesService.get('PUNTOS_USUARIO_NO_ENCONTRADO'));
+            await reply(this.messagesService.get('PUNTOS_USUARIO_NO_ENCONTRADO'));
             return;
         }
 
@@ -66,7 +78,7 @@ export class PuntosHandler implements CommandHandler {
         if (!askedForOther) {
             // sin argumento: mismo comportamiento de siempre, consulta sobre uno mismo
             if (isExempt) {
-                await this.botService.sendReply(body.key, channelId, this.messagesService.get('PUNTOS_EXENTO'));
+                await reply(this.messagesService.get('PUNTOS_EXENTO'));
                 return;
             }
             const points = await this.pointsService.getPoints(targetId);
@@ -74,14 +86,14 @@ export class PuntosHandler implements CommandHandler {
                 POINTS: String(points),
                 COST: String(this.pointsService.getCommandCost()),
             });
-            await this.botService.sendReply(body.key, channelId, text);
+            await reply(text);
             return;
         }
 
         // con argumento: consulta sobre otro usuario
         const username = targetUser.username ?? String(targetId);
         if (isExempt) {
-            await this.botService.sendReply(body.key, channelId, this.messagesService.get('PUNTOS_OTRO_EXENTO', { USERNAME: username }));
+            await reply(this.messagesService.get('PUNTOS_OTRO_EXENTO', { USERNAME: username }));
             return;
         }
         const points = await this.pointsService.getPoints(targetId);
@@ -90,6 +102,6 @@ export class PuntosHandler implements CommandHandler {
             POINTS: String(points),
             COST: String(this.pointsService.getCommandCost()),
         });
-        await this.botService.sendReply(body.key, channelId, text);
+        await reply(text);
     }
 }

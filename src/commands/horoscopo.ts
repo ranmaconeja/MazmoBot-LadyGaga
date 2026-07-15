@@ -15,7 +15,7 @@ import { HoroscopeService } from '../modules/ai/horoscope.service';
  * en producción. En vez de seguir intentando diagnosticar ese campo, se cambió
  * a pedir el usuario explícitamente, usando el mismo mecanismo de resolución
  * (mención/ID/username) que ya funciona confirmado en !lazo, !astral y
- * !addPuntos.
+ * !PuntosExtra.
  */
 @Injectable()
 export class HoroscopoHandler implements CommandHandler {
@@ -36,7 +36,7 @@ export class HoroscopoHandler implements CommandHandler {
     /**
      * Extrae el identificador del usuario (mención real, ID numérico o
      * username en texto) y el signo de las palabras del mensaje. Igual
-     * mecanismo que sumarpuntos.ts (ahora !addPuntos): si hay una mención
+     * mecanismo que sumarpuntos.ts (ahora !PuntosExtra): si hay una mención
      * real, el signo es el último token del mensaje (no depende de cómo Mazmo
      * represente la mención en el texto plano); si no, el primer token es el
      * usuario y el resto es el signo.

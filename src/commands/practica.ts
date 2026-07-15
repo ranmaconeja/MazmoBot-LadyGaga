@@ -6,8 +6,8 @@ import { MessagesService } from '../services/messages.service';
 import { PracticeService } from '../modules/ai/practice.service';
 
 /**
- * Uso: !practica <nombre de la práctica> (las comillas son opcionales, ej:
- * !practica Pet Play o !practica "Pet Play" funcionan igual).
+ * Uso: !Enciclopedia <nombre de la práctica> (las comillas son opcionales, ej:
+ * !Enciclopedia Pet Play o !Enciclopedia "Pet Play" funcionan igual).
  * Le pide a la IA que evalúe si es una práctica BDSM reconocida: si lo es,
  * da una descripción breve; si no, avisa que no tiene nada que ver con el BDSM.
  */
@@ -24,7 +24,7 @@ export class PracticaHandler implements CommandHandler {
     }
 
     getSignature(): string {
-        return '!practica';
+        return '!Enciclopedia';
     }
 
     async handleCommand(req: Request, res: Response, message: string) {

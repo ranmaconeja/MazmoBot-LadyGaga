@@ -1,16 +1,18 @@
-# LadyGaga v1.3 — Bot de moderación para Mazmo
+# LadyGaga v1.5 — Bot de moderación para Mazmo
 
 Bot para Mazmo orientado a la moderación y entretenimiento del canal de Femdom Argentina.
 Construido sobre NestJS + TypeScript. Corre como funciones serverless en **Vercel**, con
 persistencia en **Turso** (SQLite alojado) para el sistema de puntos y la cola del
 reproductor.
 
-## Alcance de la v1.3
+## Alcance de la v1.5
 
-Bot estable y modular: moderación, sistema de puntos anti-spam, compatibilidad vía IA
-(seria y astral/satírica), detección de links de YouTube, autofrases, búsqueda de roles
-sin IA, y cola de reproducción para un cliente de Windows aparte. **Sin** LadyPanel,
-rifas ni playlist con historial.
+Bot estable y modular: moderación, sistema de puntos anti-spam (acumulables, con tope),
+límites de uso globales para ciertos comandos, cinco funciones con IA (compatibilidad
+seria y astral/satírica, enciclopedia de prácticas BDSM, horóscopo personalizado, y
+pregunta del día), recomendación y detección de música de YouTube, autofrases, búsqueda
+de roles sin IA, y cola de reproducción para un cliente de Windows aparte. **Sin**
+LadyPanel, rifas ni playlist con historial.
 
 ## Comandos
 
@@ -21,13 +23,13 @@ rifas ni playlist con historial.
 - `!creador` — Información del creador del bot
 - `!perfil` / `!perfil @usuario` — Muestra tu perfil de Mazmo o el de otro usuario indicado
 - `!bienvenida` — Vuelve a mostrar el mensaje de bienvenida
-- `!reglas` — Muestra las reglas del canal
-- `!filosofia` — Muestra el texto de "filosofía" del canal
-- `!puntos` / `!puntos @usuario` — Consulta tu saldo de puntos o el de otro usuario (ver sección "Sistema de puntos" abajo)
-- `!addPuntos @usuario <cantidad>` — (solo moderadores/owner) suma puntos a un usuario
+- `!reglas` — Muestra las reglas del canal (por privado; cooldown GLOBAL de 3hs compartido entre todos los usuarios comunes — si uno lo usa, el resto tiene que esperar el mismo cooldown, aunque nunca lo hayan usado. Mods/owner no tienen límite, y si lo piden ellos, se publica en el canal en vez de en privado)
+- `!filosofia` — Muestra el texto de "filosofía" del canal (mismo cooldown global y comportamiento privado/público que `!reglas`)
+- `!puntos` / `!puntos @usuario` — Consulta tu saldo de puntos o el de otro usuario (por privado; si lo pide un mod/owner, se publica en el canal — ver sección "Sistema de puntos" abajo)
+- `!PuntosExtra @usuario <cantidad>` — (solo moderadores/owner) suma puntos a un usuario
 - `!lazo @usuario1 @usuario2` — La IA calcula un % de compatibilidad "real" entre dos perfiles según sus etiquetas
 - `!astral @usuario1 @usuario2` — Versión satírica, basada en el signo zodiacal por fecha de registro
-- `!practica <nombre>` — La IA evalúa si es una práctica BDSM y te da una descripción, o te avisa que no tiene nada que ver
+- `!Enciclopedia <nombre>` — La IA evalúa si es una práctica BDSM y te da una descripción, o te avisa que no tiene nada que ver
 - `!horoscopo @usuario <signo>` — La IA arma un horóscopo combinando el signo con las etiquetas del perfil indicado
 - `!musica` — La IA sugiere una canción de YouTube (mínimo 10M de vistas, según la IA) para el canal
 - `!dia` — Pregunta del día generada por la IA, se mantiene fija hasta las 00hs (hora Argentina)
@@ -86,8 +88,9 @@ queda sin cuota gratuita diaria, la otra cubre. Requiere `GEMINI_API_KEY` y/o
 `GROQ_API_KEY` en el `.env` (con al menos una configurada alcanza). Sin ninguna de las
 dos, el comando avisa que la IA no está disponible (no rompe el bot).
 
-- `!lazo` — análisis "serio": roles complementarios, afinidad de etiquetas,
-  ubicación, qué tan activo es cada uno en la comunidad.
+- `!lazo` — análisis "serio": roles complementarios y afinidad de etiquetas, en un
+  párrafo corto de 2-3 oraciones (se acortó a propósito para que el resultado entre
+  cómodo en pocas líneas del chat).
 - `!astral` — versión satírica/cómica, basada en el "Signo Zodiacal
   Mazmorrero" de cada usuario (calculado con su fecha de **registro** en Mazmo, no su
   fecha de nacimiento real).
@@ -180,11 +183,13 @@ palabra_clave_1|palabra_clave_2 = respuesta del bot
 ## Sistema de puntos (anti-spam)
 
 Cada usuario arranca con 20 puntos, y se le suman 5 más por cada día que pasa —
-acumulables, no se resetean (antes sí se reseteaban a un valor fijo cada 24hs).
+acumulables hasta un máximo de 100, no se resetean (antes sí se reseteaban a un valor
+fijo cada 24hs). El tope de 100 solo aplica a esta renovación automática: `!PuntosExtra`
+(suma manual de un moderador) sí puede llevar a alguien por encima de 100 a propósito.
 Ejecutar la mayoría de los comandos cuesta 5 puntos; si no tiene suficientes,
 el comando no se ejecuta y se le avisa por privado. Moderadores y el owner del bot están
 exentos: para ellos todos los comandos son siempre gratis. `!puntos`, `!ayuda`,
-`!addPuntos` y `!lazotest` son gratis para todo el mundo (los últimos dos ya
+`!PuntosExtra` y `!lazotest` son gratis para todo el mundo (los últimos dos ya
 tienen su propio chequeo de permisos adentro). Se persiste en Turso (`PointsRepository`),
 no en memoria — necesario porque las funciones serverless no mantienen estado entre
 invocaciones.
@@ -196,17 +201,21 @@ api/index.ts        → entry point real en Vercel (funciones serverless, cachea
 src/main.ts          → entry point tradicional (app.listen()), para desarrollo local
 config/              → config.json, mensajes.txt, moderadores.txt, autofrases.txt, busquedas.txt, tags.json
 src/
-  commands/          → un archivo por comando (!ayuda, !ping, !addPuntos, M!p, etc.)
+  commands/          → un archivo por comando (!ayuda, !ping, !PuntosExtra, M!p, etc.)
   modules/
     welcome/         → mensaje de bienvenida
     autofrases/      → respuestas automáticas por palabra clave
     busqueda/        → detección de "búsquedas" tipo "busco Dominante", sin IA
-    youtube/         → info de videos de YouTube (Data API v3 u oEmbed)
-    ai/              → Gemini + Groq en carrera, compatibilidad "seria" y astral
+    youtube/         → info y búsqueda de videos de YouTube (Data API v3 u oEmbed)
+    ai/              → Gemini + Groq en carrera: compatibilidad "seria" (!lazo) y astral
+                        (!astral), enciclopedia de prácticas (!Enciclopedia), horóscopo
+                        (!horoscopo), sugerencia de música (!musica) y pregunta del día (!dia)
     player/          → cola de reproducción persistida en Turso
   database/
-    database.service.ts   → conexión a Turso (SQLite alojado) y creación de tablas
-    points.repository.ts  → persistencia del sistema de puntos
+    database.service.ts          → conexión a Turso (SQLite alojado) y creación de tablas
+    points.repository.ts         → persistencia del sistema de puntos
+    question-of-day.repository.ts → persistencia de la pregunta del día
+    cooldown.repository.ts       → persistencia del límite de uso global (!reglas, !filosofia)
   services/
     bot.service.ts        → llamadas a la API de Mazmo
     command.service.ts    → ruteo de comandos y cobro de puntos
@@ -214,6 +223,7 @@ src/
     messages.service.ts   → carga mensajes.txt y reemplaza variables
     moderators.service.ts → carga moderadores.txt
     points.service.ts     → reglas del sistema de puntos (costo, exenciones)
+    cooldown.service.ts   → chequea/marca el límite de uso global de un comando
     tags.service.ts       → traducción de tags de Mazmo al español
   middleware/         → verificación de bot-secret (BotRequestMiddleware)
   player.controller.ts → endpoint GET /player/next, poleado por el cliente de Windows
@@ -260,7 +270,7 @@ El proyecto está pensado para desplegarse en Vercel como funciones serverless
 hosting tradicional no-serverless (Render, Heroku, un VPS, etc.), por si en algún
 momento se necesita un proceso siempre activo — hoy no se usan en producción.
 
-## Fuera de la v1.3
+## Fuera de la v1.5
 
 LadyPanel, API propia, playlist con historial, rifas, estadísticas avanzadas.
 

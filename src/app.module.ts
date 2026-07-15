@@ -12,7 +12,9 @@ import { TagsService } from './services/tags.service';
 import { DatabaseService } from './database/database.service';
 import { PointsRepository } from './database/points.repository';
 import { QuestionOfDayRepository } from './database/question-of-day.repository';
+import { CooldownRepository } from './database/cooldown.repository';
 import { PointsService } from './services/points.service';
+import { CooldownService } from './services/cooldown.service';
 
 import { WelcomeService } from './modules/welcome/welcome.service';
 import { AutofrasesService } from './modules/autofrases/autofrases.service';
@@ -73,7 +75,9 @@ import { DiaHandler } from './commands/dia';
         DatabaseService,
         PointsRepository,
         QuestionOfDayRepository,
+        CooldownRepository,
         PointsService,
+        CooldownService,
 
         // módulos
         WelcomeService,

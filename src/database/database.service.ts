@@ -51,6 +51,12 @@ export class DatabaseService implements OnModuleInit {
                 question TEXT NOT NULL,
                 createdAt TEXT NOT NULL
             )`,
+            `CREATE TABLE IF NOT EXISTS command_cooldowns (
+                userId TEXT NOT NULL,
+                command TEXT NOT NULL,
+                lastUsedAt TEXT NOT NULL,
+                PRIMARY KEY (userId, command)
+            )`,
         ], 'write');
     }
 

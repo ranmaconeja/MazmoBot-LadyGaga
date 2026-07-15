@@ -3,6 +3,7 @@ import { DatabaseService } from './database.service';
 
 const STARTING_POINTS = 20;
 const DAILY_BONUS = 5;
+const MAX_POINTS = 100;
 const RENEWAL_MS = 24 * 60 * 60 * 1000; // 24hs
 
 @Injectable()
@@ -15,7 +16,10 @@ export class PointsRepository {
      * diario: si nunca se lo vio, arranca con STARTING_POINTS puntos; si ya
      * pasó un día (o más) desde su último acreditado, se le suman DAILY_BONUS
      * puntos por cada día completo transcurrido, ACUMULÁNDOSE sobre lo que ya
-     * tenía (antes se reseteaba a un valor fijo, perdiendo lo acumulado).
+     * tenía (antes se reseteaba a un valor fijo, perdiendo lo acumulado) — pero
+     * sin pasar nunca de MAX_POINTS. Este tope solo aplica a la renovación
+     * automática; !PuntosExtra (suma manual de un moderador) sí puede llevar a
+     * alguien por encima de MAX_POINTS a propósito.
      *
      * lastRenewal avanza exactamente la cantidad de días acreditados (no se
      * resetea a "ahora"), para no perder el progreso del día en curso ni
@@ -47,8 +51,8 @@ export class PointsRepository {
             const bonus = daysElapsed * DAILY_BONUS;
             const newLastRenewal = new Date(lastRenewal.getTime() + daysElapsed * RENEWAL_MS);
             await client.execute({
-                sql: `UPDATE points SET points = points + ?, updatedAt = ?, lastRenewal = ? WHERE userId = ?`,
-                args: [bonus, nowIso, newLastRenewal.toISOString(), userId],
+                sql: `UPDATE points SET points = MIN(points + ?, ?), updatedAt = ?, lastRenewal = ? WHERE userId = ?`,
+                args: [bonus, MAX_POINTS, nowIso, newLastRenewal.toISOString(), userId],
             });
         }
     }
@@ -67,7 +71,7 @@ export class PointsRepository {
     }
 
     /**
-     * Suma una cantidad arbitraria de puntos (usado por !addPuntos), por encima
+     * Suma una cantidad arbitraria de puntos (usado por !PuntosExtra), por encima
      * de lo que tenga en ese momento (ya renovado si correspondía).
      */
     async addPoints(userId: number | string, amount: number): Promise<number> {
