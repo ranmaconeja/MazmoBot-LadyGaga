@@ -6,7 +6,7 @@
 !practica <nombre> - La IA te dice si es una práctica BDSM y te la explica
 !lazo @usuario1 @usuario2 - La IA calcula un % de compatibilidad entre dos perfiles
 !astral @usuario1 @usuario2 - Lectura astral cómica según el "Signo Zodiacal Mazmorrero (Broma)"
-!horoscopo <signo> - Horóscopo combinado con tus etiquetas de perfil
+!horoscopo @usuario <signo> - Horóscopo combinado con las etiquetas del usuario
 
 [AYUDA_MOD]
 📋 Comandos disponibles de {BOT_NAME} (vista completa - moderador/owner):
@@ -23,7 +23,7 @@
 !practica <nombre> - La IA te dice si es una práctica BDSM y te la explica
 !lazo @usuario1 @usuario2 - La IA calcula un % de compatibilidad entre dos perfiles
 !astral @usuario1 @usuario2 - Lectura astral cómica según el "Signo Zodiacal Mazmorrero (Broma)"
-!horoscopo <signo> - Horóscopo combinado con tus etiquetas de perfil
+!horoscopo @usuario <signo> - Horóscopo combinado con las etiquetas del usuario
 M!p <link de YouTube> - Encola una canción para el reproductor
 !addPuntos @usuario cantidad - Suma puntos manualmente a un usuario
 
@@ -151,13 +151,13 @@ No pude encontrar a ese usuario.
 {HOROSCOPO}
 
 [HOROSCOPO_USAGE]
-ℹ️ Uso: !horoscopo <signo>
+ℹ️ Uso: !horoscopo @usuario <signo>
 
 [HOROSCOPO_SIGNO_INVALIDO]
 😕 Ese no es un signo válido — tiene que ser una de las 12 casas del zodíaco (Aries, Tauro, Géminis, Cáncer, Leo, Virgo, Libra, Escorpio, Sagitario, Capricornio, Acuario o Piscis).
 
 [HOROSCOPO_PERFIL_ERROR]
-😕 No pude obtener tu perfil en este momento, intentá de nuevo más tarde.
+😕 No pude obtener el perfil de ese usuario en este momento, intentá de nuevo más tarde.
 
 [HOROSCOPO_IA_ERROR]
 🤖 No pude calcular tu horóscopo en este momento (falta configurar la IA o se agotó la cuota gratuita del día).

@@ -1,22 +1,25 @@
 import { CommandHandler, RoomMessage, UserData } from '../types';
 import { Request, Response } from 'express';
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { BotService } from '../services/bot.service';
 import { MessagesService } from '../services/messages.service';
 import { HoroscopeService } from '../modules/ai/horoscope.service';
 
 /**
- * Uso: !horoscopo <signo> (las comillas son opcionales, ej: !horoscopo Piscis
- * o !horoscopo "Piscis" funcionan igual).
- * Le pide a la IA que confirme si es uno de los 12 signos del zodíaco; si lo
- * es, arma un horóscopo combinando el signo con las etiquetas del perfil de
- * quien ejecuta el comando. Si no es un signo válido, avisa el error.
+ * Uso: !horoscopo @usuario <signo> (acepta @menciones reales, IDs numéricos, o
+ * usernames en texto plano para el usuario — mismo mecanismo que !lazo — y las
+ * comillas en el signo son opcionales).
+ *
+ * Nota: antes este comando usaba el perfil de quien ejecutaba el comando
+ * (resuelto por body.message.author.id), pero eso fallaba de forma consistente
+ * en producción. En vez de seguir intentando diagnosticar ese campo, se cambió
+ * a pedir el usuario explícitamente, usando el mismo mecanismo de resolución
+ * (mención/ID/username) que ya funciona confirmado en !lazo, !astral y
+ * !addPuntos.
  */
 @Injectable()
 export class HoroscopoHandler implements CommandHandler {
-    private readonly logger = new Logger('HoroscopoHandler');
-
-    // tope de largo del texto consultado, para no mandarle prompts gigantes a la IA
+    // tope de largo del signo consultado, para no mandarle prompts gigantes a la IA
     private readonly MAX_LENGTH = 50;
 
     constructor(
@@ -31,52 +34,56 @@ export class HoroscopoHandler implements CommandHandler {
     }
 
     /**
-     * Busca el perfil de quien escribió el comando. Prueba primero
-     * body.message.author.id (el campo que usa el resto del código), y si eso
-     * no devuelve nada, prueba con body.message.authorId (un campo separado
-     * que existe en el tipo pero que nunca se usó en ningún lado del proyecto
-     * — no está confirmado cuál de los dos es el ID real que acepta la API de
-     * Mazmo para /users/{id}, así que probamos los dos).
+     * Extrae el identificador del usuario (mención real, ID numérico o
+     * username en texto) y el signo de las palabras del mensaje. Igual
+     * mecanismo que sumarpuntos.ts (ahora !addPuntos): si hay una mención
+     * real, el signo es el último token del mensaje (no depende de cómo Mazmo
+     * represente la mención en el texto plano); si no, el primer token es el
+     * usuario y el resto es el signo.
      */
-    private async resolveSelf(body: RoomMessage): Promise<UserData | null> {
-        const primaryId = body.message.author?.id;
-        const fallbackId = (body.message as any)?.authorId;
+    private extractArgs(body: RoomMessage, message: string): { identifier: string, signo: string } {
+        const parts = message.split(' ').map(part => part.trim()).filter(Boolean);
+        const mentions = (body.message.payload as any)?.userMentions;
 
-        this.logger.debug(`!horoscopo: intentando resolver perfil propio. author.id=${primaryId}, authorId=${fallbackId}`);
-
-        if (primaryId !== undefined && primaryId !== null) {
-            const user = await this.botService.getUserData(primaryId);
-            if (user) {
-                return user;
+        if (Array.isArray(mentions) && mentions.length >= 1) {
+            const id = mentions[0]?.id ?? mentions[0]?.userId ?? mentions[0]?.user?.id;
+            if (id !== undefined && id !== null) {
+                return { identifier: String(id), signo: parts[parts.length - 1] ?? '' };
             }
         }
 
-        if (fallbackId !== undefined && fallbackId !== null && fallbackId !== primaryId) {
-            this.logger.debug(`!horoscopo: author.id no encontró perfil, reintentando con authorId=${fallbackId}`);
-            const user = await this.botService.getUserData(fallbackId);
-            if (user) {
-                this.logger.warn(`!horoscopo: authorId SÍ encontró el perfil pero author.id NO — conviene revisar cuál campo es el correcto en el resto del código.`);
-                return user;
-            }
-        }
+        return { identifier: parts[0] ?? '', signo: parts.slice(1).join(' ') };
+    }
 
-        this.logger.warn(`!horoscopo: no se pudo resolver el perfil propio con ningún campo de ID.`);
-        return null;
+    /**
+     * Resuelve un identificador (ID numérico, @username o username sin @) a
+     * los datos del usuario. Mismo patrón que compatibilidad.ts / perfil.ts.
+     */
+    private async resolveUser(identifier: string): Promise<UserData | null> {
+        const cleanId = identifier.replace('@', '').trim();
+        if (!cleanId) {
+            return null;
+        }
+        if (!isNaN(Number(cleanId))) {
+            return this.botService.getUserData(Number(cleanId));
+        }
+        return this.botService.getUserDataByUsername(cleanId);
     }
 
     async handleCommand(req: Request, res: Response, message: string) {
         const body = req.body as RoomMessage;
         const channelId = body.message.channel.id;
 
+        const { identifier, signo: rawSigno } = this.extractArgs(body, message);
         // saca comillas envolventes si el usuario las puso: "Piscis" -> Piscis
-        const signo = message.trim().replace(/^"(.*)"$/, '$1').trim();
+        const signo = rawSigno.trim().replace(/^"(.*)"$/, '$1').trim();
 
-        if (!signo || signo.length > this.MAX_LENGTH) {
+        if (!identifier || !signo || signo.length > this.MAX_LENGTH) {
             await this.botService.sendReply(body.key, channelId, this.messagesService.get('HOROSCOPO_USAGE'));
             return;
         }
 
-        const user = await this.resolveSelf(body);
+        const user = await this.resolveUser(identifier);
         if (!user) {
             await this.botService.sendReply(body.key, channelId, this.messagesService.get('HOROSCOPO_PERFIL_ERROR'));
             return;
