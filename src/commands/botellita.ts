@@ -1,6 +1,6 @@
 import { CommandHandler, RoomMessage, UserData } from '../types';
 import { Request, Response } from 'express';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { BotService } from '../services/bot.service';
 import { MessagesService } from '../services/messages.service';
 
@@ -25,6 +25,8 @@ import { MessagesService } from '../services/messages.service';
  */
 @Injectable()
 export class BotellitaHandler implements CommandHandler {
+    private readonly logger = new Logger('BotellitaHandler');
+
     // tope de perfiles a revisar antes de rendirse, para no demorar la función
     // ni quemar llamadas a la API en canales grandes donde nadie matchea
     private readonly MAX_ATTEMPTS = 40;
@@ -41,6 +43,18 @@ export class BotellitaHandler implements CommandHandler {
 
     getSignature(): string {
         return '!botellita';
+    }
+
+    /**
+     * Saca el ID numérico de un participante probando varios nombres de campo
+     * posibles, porque no está confirmado cuál usa realmente Mazmo en este
+     * payload (el tipo participants.userId de types.ts es un supuesto, nunca
+     * verificado contra una respuesta real).
+     */
+    private extractUserId(participant: any): number | null {
+        const candidate = participant?.userId ?? participant?.id ?? participant?.user?.id ?? participant?.user_id ?? participant?.userID;
+        const num = Number(candidate);
+        return Number.isFinite(num) && num > 0 ? num : null;
     }
 
     private matchesRoleA(user: UserData): boolean {
@@ -78,8 +92,17 @@ export class BotellitaHandler implements CommandHandler {
         const body = req.body as RoomMessage;
         const channelId = body.message.channel.id;
 
-        const participantIds = (body.message.channel.participants ?? []).map(p => p.userId);
+        const rawParticipants = body.message.channel.participants ?? [];
+        // log temporal de diagnóstico: para confirmar la forma real de este
+        // campo si el comando sigue sin encontrar candidatos
+        this.logger.debug(`!botellita: ${rawParticipants.length} participantes crudos recibidos: ${JSON.stringify(rawParticipants)}`);
+
+        const participantIds = rawParticipants
+            .map(p => this.extractUserId(p))
+            .filter((id): id is number => id !== null);
         const uniqueIds = Array.from(new Set(participantIds));
+
+        this.logger.debug(`!botellita: ${uniqueIds.length} IDs de participantes extraídos correctamente`);
 
         if (uniqueIds.length < 2) {
             await this.botService.sendReply(body.key, channelId, this.messagesService.get('BOTELLITA_ERROR'));

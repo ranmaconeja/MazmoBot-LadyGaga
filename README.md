@@ -28,6 +28,7 @@ rifas ni playlist con historial.
 - `!compatibilidad @usuario1 @usuario2` — La IA calcula un % de compatibilidad "real" entre dos perfiles según sus etiquetas
 - `!compatibilidadastral @usuario1 @usuario2` — Versión satírica, basada en el signo zodiacal por fecha de registro
 - `!botellita` — Sortea dos participantes del canal para un juego de roles (ver sección abajo)
+- `!practica <nombre>` — La IA evalúa si es una práctica BDSM y te da una descripción, o te avisa que no tiene nada que ver
 - `M!p <link de YouTube>` — Encola la canción para el cliente de reproducción (ver sección abajo)
 
 ## Configuración

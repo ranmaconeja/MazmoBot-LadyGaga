@@ -10,6 +10,7 @@
 !compatibilidad @usuario1 @usuario2 - La IA calcula un % de compatibilidad entre dos perfiles
 !compatibilidadAstral @usuario1 @usuario2 - Lectura astral cómica según el "Signo Zodiacal Mazmorrero (Broma)"
 !botellita - Sortea dos participantes del canal para el juego de roles
+!practica <nombre> - La IA te dice si es una práctica BDSM y te la explica
 
 [PING]
 🏓 Ra-ra-ah-ah-ah - Roma-roma-ma Lady Gaga llego al Chat!
@@ -127,3 +128,12 @@ No pude encontrar a ese usuario.
 
 [BOTELLITA_ERROR]
 La botellita giro tan rapido que salio volando y no habia suficientes usuarios para atraparla.
+
+[PRACTICA_RESULT]
+{DESCRIPCION}
+
+[PRACTICA_USAGE]
+ℹ️ Uso: !practica <nombre de la práctica>
+
+[PRACTICA_IA_ERROR]
+🤖 No pude evaluar esa práctica en este momento (falta configurar la IA o se agotó la cuota gratuita del día).

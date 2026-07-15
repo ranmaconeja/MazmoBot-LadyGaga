@@ -17,6 +17,7 @@ import { CompatibilidadTestHandler } from '../commands/compatibilidadtest';
 import { CompatibilidadAstralHandler } from '../commands/compatibilidadastral';
 import { ReproducirHandler } from '../commands/reproducir';
 import { BotellitaHandler } from '../commands/botellita';
+import { PracticaHandler } from '../commands/practica';
 import { PointsService } from './points.service';
 import { BotService } from './bot.service';
 import { MessagesService } from './messages.service';
@@ -69,6 +70,7 @@ export class CommandService {
         private readonly compatibilidadAstralHandler: CompatibilidadAstralHandler,
         private readonly reproducirHandler: ReproducirHandler,
         private readonly botellitaHandler: BotellitaHandler,
+        private readonly practicaHandler: PracticaHandler,
         private readonly pointsService: PointsService,
         private readonly botService: BotService,
         private readonly messagesService: MessagesService,
@@ -89,6 +91,7 @@ export class CommandService {
         this.registerHandler(compatibilidadAstralHandler)
         this.registerHandler(reproducirHandler)
         this.registerHandler(botellitaHandler)
+        this.registerHandler(practicaHandler)
     }
 
     private registerHandler(handler: CommandHandler) {
