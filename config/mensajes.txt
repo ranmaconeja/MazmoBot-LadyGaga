@@ -116,6 +116,12 @@ No pude encontrar a ese usuario.
 {DESCRIPTION}
 ![miniatura]({THUMBNAIL_URL})
 
+[MUSICA_RESULT]
+🎵 Recomendación musical: **{TITLE}**
+{DESCRIPTION}
+{URL}
+![miniatura]({THUMBNAIL_URL})
+
 [COMPATIBILIDAD_USAGE]
 ℹ️ Uso: !lazo @usuario1 @usuario2
 

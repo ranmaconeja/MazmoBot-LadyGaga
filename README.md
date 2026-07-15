@@ -130,10 +130,11 @@ miniatura — avisame y lo resuelvo de otra forma (por ejemplo enviándola como 
 
 Le pide a la IA el **nombre** de una canción "ideal para BDSM" (según criterio de la IA,
 con mínimo 10 millones de vistas) y busca el video **real** en YouTube a partir de ese
-nombre (`YoutubeService.searchVideo`, YouTube Data API v3) — publica solo la URL que
-devuelve esa búsqueda real. La idea es que el detector automático de links de YouTube
-(sección de arriba) se dispare con el propio mensaje del bot y agregue el título/miniatura,
-como si lo hubiera pegado un usuario.
+nombre (`YoutubeService.searchVideo`, YouTube Data API v3) — publica el título, la
+descripción y la miniatura directamente (mismo mecanismo que la detección pasiva de links
+de la sección de arriba), no depende de ningún "auto-disparo": se confirmó que Mazmo no
+manda el webhook `/message` para los mensajes que publica el propio bot, así que el
+comando arma el mensaje completo él mismo.
 
 **Por qué no le pedimos la URL directo a la IA:** al principio se hacía así, y la IA
 terminaba "alucinando" IDs de video que no existen — un ID de YouTube es un string
@@ -141,14 +142,9 @@ arbitrario de 11 caracteres que un modelo de lenguaje no tiene forma de memoriza
 a diferencia de nombres de canciones/artistas reales. Por eso ahora la IA solo sugiere el
 nombre, y la búsqueda real en la Data API es la que decide el video final.
 
-⚠️ Dos cosas a tener en cuenta:
-- **Requiere `YOUTUBE_API_KEY` configurada, sin excepción** — a diferencia de la detección
-  de links pegados por usuarios (que tiene respaldo por oEmbed si no tenés la key), la
-  búsqueda por texto solo la ofrece la Data API. Sin la key, `!musica` no va a funcionar.
-- Que la miniatura aparezca automáticamente **depende de que Mazmo mande el webhook
-  `/message` también para los mensajes que publica el propio bot** — esto no está
-  confirmado todavía. Si en la práctica no pasa, avisen y se cambia para que `!musica`
-  publique la info completa directamente, sin depender de esta "auto-lectura".
+⚠️ **Requiere `YOUTUBE_API_KEY` configurada, sin excepción** — a diferencia de la detección
+de links pegados por usuarios (que tiene respaldo por oEmbed si no tenés la key), la
+búsqueda por texto solo la ofrece la Data API. Sin la key, `!musica` no va a funcionar.
 
 ## Pregunta del día (`!dia`)
 

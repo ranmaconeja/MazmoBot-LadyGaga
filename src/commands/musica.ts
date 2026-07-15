@@ -9,11 +9,11 @@ import { YoutubeService } from '../modules/youtube/youtube.service';
 /**
  * Uso: !musica (sin argumentos).
  * Le pide a la IA el nombre de una canción "ideal para BDSM" con mínimo 10
- * millones de vistas (según la IA — no verificado, ver nota abajo) y busca el
- * video REAL en YouTube a partir de ese nombre, en vez de confiarle a la IA
- * la URL/ID directamente.
+ * millones de vistas (según la IA — no verificado) y busca el video REAL en
+ * YouTube a partir de ese nombre, en vez de confiarle a la IA la URL/ID
+ * directamente.
  *
- * Por qué el cambio: al principio le pedíamos la URL completa a la IA, y
+ * Por qué ese cambio: al principio le pedíamos la URL completa a la IA, y
  * terminaba "alucinando" IDs de video que no existen (los IDs de YouTube son
  * strings arbitrarios de 11 caracteres que un modelo de lenguaje no tiene
  * forma de memorizar bien, a diferencia de nombres de canciones/artistas
@@ -21,15 +21,15 @@ import { YoutubeService } from '../modules/youtube/youtube.service';
  * el nombre, y youtubeService.searchVideo() lo busca de verdad en la Data API
  * — así el ID siempre sale de una búsqueda real, nunca de la IA.
  *
+ * Publica el título, la descripción y la miniatura directamente (mismo
+ * mecanismo que la detección pasiva de links en app.controller.ts), en vez de
+ * depender de que Mazmo dispare el webhook /message para los mensajes que
+ * publica el propio bot — se confirmó que eso NO pasa en la práctica, así que
+ * había que armar el mensaje completo acá mismo.
+ *
  * Requiere YOUTUBE_API_KEY configurada (a diferencia de la detección de links
  * pegados por usuarios, que tiene respaldo por oEmbed, la búsqueda por texto
  * solo la ofrece la Data API — oEmbed no busca, solo consulta un ID ya conocido).
- *
- * OJO: que la miniatura/título aparezcan automáticamente en el canal (además
- * de la URL que publica este comando) depende de que Mazmo mande el webhook
- * /message también para los mensajes que publica el propio bot — esto no está
- * confirmado. Si no pasa en la práctica, avisen y se cambia para que !musica
- * publique la info completa directamente, sin depender de esta "auto-lectura".
  */
 @Injectable()
 export class MusicaHandler implements CommandHandler {
@@ -57,14 +57,31 @@ export class MusicaHandler implements CommandHandler {
             return;
         }
 
-        const result = await this.youtubeService.searchVideo(suggestion);
-        if (!result) {
+        const searchResult = await this.youtubeService.searchVideo(suggestion);
+        if (!searchResult) {
             this.logger.warn(`!musica: no se encontró un video real para la sugerencia de la IA: "${suggestion}" (¿falta YOUTUBE_API_KEY?)`);
             await this.botService.sendReply(body.key, channelId, this.messagesService.get('MUSICA_IA_ERROR'));
             return;
         }
 
-        const url = `https://www.youtube.com/watch?v=${result.videoId}`;
-        await this.botService.sendReply(body.key, channelId, url);
+        const url = `https://www.youtube.com/watch?v=${searchResult.videoId}`;
+
+        // trae título/descripción/miniatura completos del video ya confirmado
+        const videoInfo = await this.youtubeService.getVideoInfo(searchResult.videoId);
+        if (!videoInfo) {
+            // no debería pasar (search recién lo encontró), pero por las dudas
+            // no se pierde la recomendación entera por esto: se manda al menos la URL
+            this.logger.warn(`!musica: se encontró el video (${searchResult.videoId}) pero no se pudo traer su info completa`);
+            await this.botService.sendReply(body.key, channelId, url);
+            return;
+        }
+
+        const text = this.messagesService.get('MUSICA_RESULT', {
+            TITLE: videoInfo.title,
+            DESCRIPTION: videoInfo.description,
+            THUMBNAIL_URL: videoInfo.thumbnailUrl,
+            URL: url,
+        });
+        await this.botService.sendReply(body.key, channelId, text);
     }
 }
