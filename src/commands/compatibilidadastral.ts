@@ -6,9 +6,9 @@ import { MessagesService } from '../services/messages.service';
 import { AstralCompatibilityService } from '../modules/ai/astral-compatibility.service';
 
 /**
- * Uso: !compatibilidadAstral usuario1 usuario2
+ * Uso: !astral usuario1 usuario2
  * Acepta: @menciones reales (seleccionadas del popup de Mazmo), IDs numéricos, o usernames en texto plano.
- * Versión satírica/cómica de !compatibilidad, basada en el "Signo Zodiacal Mazmorrero"
+ * Versión satírica/cómica de !lazo, basada en el "Signo Zodiacal Mazmorrero"
  * (calculado con la fecha de REGISTRO en Mazmo).
  */
 @Injectable()
@@ -21,7 +21,7 @@ export class CompatibilidadAstralHandler implements CommandHandler {
     }
 
     getSignature(): string {
-        return '!compatibilidadastral';
+        return '!astral';
     }
 
     private extractIdentifiers(body: RoomMessage, message: string): string[] {

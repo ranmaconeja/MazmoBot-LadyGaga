@@ -6,7 +6,7 @@ import { MessagesService } from '../services/messages.service';
 import { CompatibilityService } from '../modules/ai/compatibility.service';
 
 /**
- * Clon de !compatibilidad para pruebas: SOLO lo puede usar el Owner del bot
+ * Clon de !lazo para pruebas: SOLO lo puede usar el Owner del bot
  * (OWNER_ID en el .env) y el resultado le llega en privado a él, nunca se
  * publica en el canal — útil para probar ajustes del prompt sin que el
  * resto del canal vea los resultados de prueba.
@@ -21,7 +21,7 @@ export class CompatibilidadTestHandler implements CommandHandler {
     }
 
     getSignature(): string {
-        return '!compatibilidadtest';
+        return '!lazotest';
     }
 
     private extractIdentifiers(body: RoomMessage, message: string): string[] {

@@ -35,7 +35,7 @@ export class AppController {
         this.logger.log(`Mensaje recibido: "${rawContent}" (autor id: ${body.message.author.id}, canal: ${body.message.channel.id})`);
 
         // log temporal de diagnóstico: para ver la estructura real de las menciones que manda mazmo
-        if (rawContent.startsWith('!compatibilidad') || rawContent.startsWith('!perfil')) {
+        if (rawContent.startsWith('!lazo') || rawContent.startsWith('!astral') || rawContent.startsWith('!perfil')) {
             this.logger.debug(`Payload completo del mensaje: ${JSON.stringify(body.message.payload)}`);
         }
 

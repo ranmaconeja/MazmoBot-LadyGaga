@@ -16,8 +16,8 @@ import { CompatibilidadHandler } from '../commands/compatibilidad';
 import { CompatibilidadTestHandler } from '../commands/compatibilidadtest';
 import { CompatibilidadAstralHandler } from '../commands/compatibilidadastral';
 import { ReproducirHandler } from '../commands/reproducir';
-import { BotellitaHandler } from '../commands/botellita';
 import { PracticaHandler } from '../commands/practica';
+import { HoroscopoHandler } from '../commands/horoscopo';
 import { PointsService } from './points.service';
 import { BotService } from './bot.service';
 import { MessagesService } from './messages.service';
@@ -46,12 +46,12 @@ export class CommandService {
      * no sea moderador/owner. Se guardan en minúsculas.
      *
      * Incluye tanto comandos de consulta libre (!puntos, !ayuda) como comandos
-     * exclusivos de moderadores/owner (!sumarpuntos, !compatibilidadtest):
+     * exclusivos de moderadores/owner (!sumarpuntos, !lazotest):
      * estos últimos ya tienen su propio chequeo de permisos adentro del handler,
      * así que cobrarle puntos a un usuario común que los intenta usar (y que de
      * todos modos va a ser rechazado con "no tenés permisos") no tendría sentido.
      */
-    private readonly freeCommands = new Set(['!puntos', '!ayuda', '!sumarpuntos', '!compatibilidadtest']);
+    private readonly freeCommands = new Set(['!puntos', '!ayuda', '!sumarpuntos', '!lazotest']);
 
     constructor(
         private readonly ayudaHandler: AyudaHandler,
@@ -69,8 +69,8 @@ export class CommandService {
         private readonly compatibilidadTestHandler: CompatibilidadTestHandler,
         private readonly compatibilidadAstralHandler: CompatibilidadAstralHandler,
         private readonly reproducirHandler: ReproducirHandler,
-        private readonly botellitaHandler: BotellitaHandler,
         private readonly practicaHandler: PracticaHandler,
+        private readonly horoscopoHandler: HoroscopoHandler,
         private readonly pointsService: PointsService,
         private readonly botService: BotService,
         private readonly messagesService: MessagesService,
@@ -90,8 +90,8 @@ export class CommandService {
         this.registerHandler(compatibilidadTestHandler)
         this.registerHandler(compatibilidadAstralHandler)
         this.registerHandler(reproducirHandler)
-        this.registerHandler(botellitaHandler)
         this.registerHandler(practicaHandler)
+        this.registerHandler(horoscopoHandler)
     }
 
     private registerHandler(handler: CommandHandler) {

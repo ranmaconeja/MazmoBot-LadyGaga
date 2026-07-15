@@ -1,16 +1,31 @@
 [AYUDA]
 📋 Comandos disponibles de {BOT_NAME}:
-!ayuda - Lista de Comandos para Usuarios de LadyGaga Bot
-!ping - Verifica si el Bot funciona, su Spam sera penalizado
-!creador - Información del creador del bot
-!perfil - Muestra informacion general del usuario
 !reglas - Muestra las reglas del canal
 !filosofia - Muestra la filosofía del canal
 !puntos - Muestra cuántos puntos tenés acumulados
-!compatibilidad @usuario1 @usuario2 - La IA calcula un % de compatibilidad entre dos perfiles
-!compatibilidadAstral @usuario1 @usuario2 - Lectura astral cómica según el "Signo Zodiacal Mazmorrero (Broma)"
-!botellita - Sortea dos participantes del canal para el juego de roles
 !practica <nombre> - La IA te dice si es una práctica BDSM y te la explica
+!lazo @usuario1 @usuario2 - La IA calcula un % de compatibilidad entre dos perfiles
+!astral @usuario1 @usuario2 - Lectura astral cómica según el "Signo Zodiacal Mazmorrero (Broma)"
+!horoscopo <signo> - Horóscopo combinado con tus etiquetas de perfil
+
+[AYUDA_MOD]
+📋 Comandos disponibles de {BOT_NAME} (vista completa - moderador/owner):
+!ayuda - Lista de Comandos
+!ping - Verifica si el Bot funciona
+!version - Muestra la versión del bot
+!staff - Lista de moderadores del canal
+!creador - Información del creador del bot
+!perfil @usuario - Muestra información general de un usuario
+!bienvenida - Vuelve a mostrar el mensaje de bienvenida
+!reglas - Muestra las reglas del canal
+!filosofia - Muestra la filosofía del canal
+!puntos @usuario - Consulta tu saldo de puntos o el de otro usuario
+!practica <nombre> - La IA te dice si es una práctica BDSM y te la explica
+!lazo @usuario1 @usuario2 - La IA calcula un % de compatibilidad entre dos perfiles
+!astral @usuario1 @usuario2 - Lectura astral cómica según el "Signo Zodiacal Mazmorrero (Broma)"
+!horoscopo <signo> - Horóscopo combinado con tus etiquetas de perfil
+M!p <link de YouTube> - Encola una canción para el reproductor
+!sumarpuntos @usuario cantidad - Suma puntos manualmente a un usuario
 
 [PING]
 🏓 Ra-ra-ah-ah-ah - Roma-roma-ma Lady Gaga llego al Chat!
@@ -98,7 +113,7 @@ No pude encontrar a ese usuario.
 ![miniatura]({THUMBNAIL_URL})
 
 [COMPATIBILIDAD_USAGE]
-ℹ️ Uso: !compatibilidad @usuario1 @usuario2
+ℹ️ Uso: !lazo @usuario1 @usuario2
 
 [COMPATIBILIDAD_ERROR]
 😕 No pude obtener los perfiles de uno o ambos usuarios, intentá de nuevo más tarde.
@@ -107,8 +122,7 @@ No pude encontrar a ese usuario.
 🤖 No pude calcular la compatibilidad en este momento (falta configurar la IA o se agotó la cuota gratuita del día).
 
 [COMPATIBILIDAD_RESULT]
-💞 Compatibilidad entre @{USERNAME1} y @{USERNAME2}: {PORCENTAJE}%
-{DESCRIPCION}
+💞 @{USERNAME1} + @{USERNAME2}: {PORCENTAJE}% — {DESCRIPCION}
 
 [COMPATIBILIDAD_ASTRAL_RESULT]
 🔮 Lectura Astral Mazmorrera de @{USERNAME1} y @{USERNAME2} — {PORCENTAJE}% de compatibilidad cósmica
@@ -123,12 +137,6 @@ No pude encontrar a ese usuario.
 [REPRODUCIR_LINK_INVALIDO]
 😕 Ese no parece ser un link válido de YouTube.
 
-[BOTELLITA_RESULT]
-🍾 Botellita, botellita FEMDOM Elige  sumisa@ y una DOM!!! @{USERNAME_A} y @{USERNAME_B}! A ver qué sale de esta combinación 😈
-
-[BOTELLITA_ERROR]
-La botellita giro tan rapido que salio volando y no habia suficientes usuarios para atraparla.
-
 [PRACTICA_RESULT]
 {DESCRIPCION}
 
@@ -137,3 +145,19 @@ La botellita giro tan rapido que salio volando y no habia suficientes usuarios p
 
 [PRACTICA_IA_ERROR]
 🤖 No pude evaluar esa práctica en este momento (falta configurar la IA o se agotó la cuota gratuita del día).
+
+[HOROSCOPO_RESULT]
+🔮 Horóscopo de {SIGNO}:
+{HOROSCOPO}
+
+[HOROSCOPO_USAGE]
+ℹ️ Uso: !horoscopo <signo>
+
+[HOROSCOPO_SIGNO_INVALIDO]
+😕 Ese no es un signo válido — tiene que ser una de las 12 casas del zodíaco (Aries, Tauro, Géminis, Cáncer, Leo, Virgo, Libra, Escorpio, Sagitario, Capricornio, Acuario o Piscis).
+
+[HOROSCOPO_PERFIL_ERROR]
+😕 No pude obtener tu perfil en este momento, intentá de nuevo más tarde.
+
+[HOROSCOPO_IA_ERROR]
+🤖 No pude calcular tu horóscopo en este momento (falta configurar la IA o se agotó la cuota gratuita del día).

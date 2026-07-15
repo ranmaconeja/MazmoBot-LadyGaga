@@ -6,7 +6,7 @@ import { MessagesService } from '../services/messages.service';
 import { CompatibilityService } from '../modules/ai/compatibility.service';
 
 /**
- * Uso: !compatibilidad usuario1 usuario2
+ * Uso: !lazo usuario1 usuario2
  * Acepta: @menciones reales (seleccionadas del popup de Mazmo), IDs numéricos, o usernames como texto plano.
  * Le pide a la IA (Gemini) un % de compatibilidad entre los dos perfiles según sus etiquetas.
  */
@@ -20,7 +20,7 @@ export class CompatibilidadHandler implements CommandHandler {
     }
 
     getSignature(): string {
-        return '!compatibilidad';
+        return '!lazo';
     }
 
     /**

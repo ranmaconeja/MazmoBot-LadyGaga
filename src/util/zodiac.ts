@@ -2,7 +2,7 @@
  * Calcula el signo zodiacal occidental a partir de una fecha (mes/día),
  * usando los rangos tradicionales. Se usa sobre la fecha de registro del
  * usuario en Mazmo (no su fecha de nacimiento real) para el "Signo Zodiacal
- * Mazmorrero" de !compatibilidadastral.
+ * Mazmorrero" de !astral.
  */
 export function getZodiacSign(date: Date): string {
     const month = date.getUTCMonth() + 1; // 1-12

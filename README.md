@@ -25,9 +25,8 @@ rifas ni playlist con historial.
 - `!filosofia` — Muestra el texto de "filosofía" del canal
 - `!puntos` / `!puntos @usuario` — Consulta tu saldo de puntos o el de otro usuario (ver sección "Sistema de puntos" abajo)
 - `!sumarpuntos @usuario <cantidad>` — (solo moderadores/owner) suma puntos a un usuario
-- `!compatibilidad @usuario1 @usuario2` — La IA calcula un % de compatibilidad "real" entre dos perfiles según sus etiquetas
-- `!compatibilidadastral @usuario1 @usuario2` — Versión satírica, basada en el signo zodiacal por fecha de registro
-- `!botellita` — Sortea dos participantes del canal para un juego de roles (ver sección abajo)
+- `!lazo @usuario1 @usuario2` — La IA calcula un % de compatibilidad "real" entre dos perfiles según sus etiquetas
+- `!astral @usuario1 @usuario2` — Versión satírica, basada en el signo zodiacal por fecha de registro
 - `!practica <nombre>` — La IA evalúa si es una práctica BDSM y te da una descripción, o te avisa que no tiene nada que ver
 - `M!p <link de YouTube>` — Encola la canción para el cliente de reproducción (ver sección abajo)
 
@@ -50,7 +49,7 @@ BOT_SECRET=<bot secret provisto por mazmo, valida los webhooks entrantes>
 OWNER_ID=<tu id de usuario, siempre tratado como moderador>
 TURSO_DATABASE_URL=<url de tu base en Turso>
 TURSO_AUTH_TOKEN=<token de autenticación de Turso>
-GEMINI_API_KEY=<opcional, para !compatibilidad y !compatibilidadastral>
+GEMINI_API_KEY=<opcional, para !lazo y !astral>
 GROQ_API_KEY=<opcional, respaldo/carrera con Gemini>
 YOUTUBE_API_KEY=<opcional, sin ella la info de YouTube funciona pero sin descripción>
 PLAYER_SECRET_KEY=<autentica al programa de Windows contra GET /player/next>
@@ -76,7 +75,7 @@ El bot registra cada poll (`player_status`) para saber si hay algún cliente con
 ese momento. Si nadie pollea hace más de 60 segundos, `M!p` avisa "No hay ningún
 reproductor conectado" en vez de encolar la canción en silencio.
 
-## Compatibilidad con IA (`!compatibilidad` / `!compatibilidadastral`)
+## Compatibilidad con IA (`!lazo` / `!astral`)
 
 Le pasa las etiquetas y datos de dos usuarios a **Google Gemini y Groq al mismo tiempo**
 (`AiRaceService`), y se queda con la que responda primero — así, si una de las dos se
@@ -84,13 +83,13 @@ queda sin cuota gratuita diaria, la otra cubre. Requiere `GEMINI_API_KEY` y/o
 `GROQ_API_KEY` en el `.env` (con al menos una configurada alcanza). Sin ninguna de las
 dos, el comando avisa que la IA no está disponible (no rompe el bot).
 
-- `!compatibilidad` — análisis "serio": roles complementarios, afinidad de etiquetas,
+- `!lazo` — análisis "serio": roles complementarios, afinidad de etiquetas,
   ubicación, qué tan activo es cada uno en la comunidad.
-- `!compatibilidadastral` — versión satírica/cómica, basada en el "Signo Zodiacal
+- `!astral` — versión satírica/cómica, basada en el "Signo Zodiacal
   Mazmorrero" de cada usuario (calculado con su fecha de **registro** en Mazmo, no su
   fecha de nacimiento real).
 
-Uso: `!compatibilidad @usuario1 @usuario2` (también acepta IDs numéricos o usernames
+Uso: `!lazo @usuario1 @usuario2` (también acepta IDs numéricos o usernames
 como texto plano).
 
 ⚠️ Cosas a tener en cuenta:
@@ -124,16 +123,6 @@ lo indica la documentación de Botleirplate sobre `rawContent`). Probalo una vez
 si el chat no soporta imágenes embebidas, vas a ver la URL como texto plano en vez de la
 miniatura — avisame y lo resuelvo de otra forma (por ejemplo enviándola como link aparte).
 
-## Juego de roles (`!botellita`)
-
-Sortea dos participantes del canal:
-- **Lado A**: tiene que tener la etiqueta Switch o Dominante, y género femenino (`FEMALE`, `WOMAN_CIS`, `FEMALE_TRANS` o `FEMALE_TRANSGENDER`).
-- **Lado B**: tiene que tener la etiqueta Switch o Sumiso/a, de cualquier género.
-
-Los candidatos salen de `body.message.channel.participants`, que Mazmo manda en cada webhook — no hay ningún endpoint que devuelva "todos los usuarios con tag X" de una, así que el comando revisa perfiles al azar (hasta 40 por intento) en vez de pedir el perfil de todo el canal.
-
-⚠️ **Sin confirmar todavía:** no sabemos si `participants` trae realmente a TODOS los miembros del canal, o solo a un subconjunto (ej: los últimos activos). Probalo en el canal real y fijate si los resultados te parecen representativos de todo el canal o siempre salen las mismas caras — si es lo segundo, avisame y lo resolvemos de otra forma (por ejemplo, manteniendo nuestra propia lista de miembros en Turso a medida que entran/salen, en vez de depender de este campo).
-
 ## Autofrases (respuestas automáticas por palabra clave)
 
 Cuando alguien escribe un mensaje que contiene alguna de las palabras clave configuradas
@@ -155,7 +144,7 @@ Cada usuario arranca con 20 puntos, que se renuevan automáticamente a 20 (sin a
 cada 24hs. Ejecutar la mayoría de los comandos cuesta 5 puntos; si no tiene suficientes,
 el comando no se ejecuta y se le avisa por privado. Moderadores y el owner del bot están
 exentos: para ellos todos los comandos son siempre gratis. `!puntos`, `!ayuda`,
-`!sumarpuntos` y `!compatibilidadtest` son gratis para todo el mundo (los últimos dos ya
+`!sumarpuntos` y `!lazotest` son gratis para todo el mundo (los últimos dos ya
 tienen su propio chequeo de permisos adentro). Se persiste en Turso (`PointsRepository`),
 no en memoria — necesario porque las funciones serverless no mantienen estado entre
 invocaciones.

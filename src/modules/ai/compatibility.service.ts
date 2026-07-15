@@ -41,27 +41,18 @@ export class CompatibilityService {
 Usuario 1: ${this.describeUser(user1)}
 Usuario 2: ${this.describeUser(user2)}
 
-Evaluá la compatibilidad entre ambos perfiles pensando en roles complementarios (ej: Dominante + Sumiso suele ser compatible; Dominante + Dominante suele ser menos compatible), afinidad general de prácticas/etiquetas, y género de cada uno como parte del contexto (sin asumir de antemano que una combinación de géneros es mejor o peor, pero sí mencionándolo si es relevante para la dinámica que buscan).
+Evaluá la compatibilidad pensando en roles complementarios (ej: Dominante + Sumiso suele ser compatible; Dominante + Dominante suele ser menos compatible) y afinidad general de etiquetas/prácticas.
 
-Además, para cada usuario, hacé un comentario breve sobre qué tan conocido/activo es en la comunidad, usando estos criterios (no los repitas textualmente ni menciones los números de los tramos, solo aplicá el criterio con tus palabras):
-- Cantidad de gente que lo/la conoce: 0-10 → lo conocen algunos usuarios nomás; 11-50 → es una persona sociable en la comunidad; 51-100 → es un miembro activo de la comunidad; más de 100 → tiene un montón de gente a la que le podrías preguntar referencias sobre él/ella.
-- Cantidad de eventos: 1 → se animó a participar de la comunidad; 2-5 → disfruta de la comunidad; más de 5 → seguro te lo cruzás en algún evento.
-- Caso especial: si tiene 0 en ambas cosas, decilo como que posiblemente sea nuevo en la comunidad — a menos que la fecha de "miembro desde" sea de hace bastante tiempo, en cuyo caso decilo como que parece ser poco sociable en vez de nuevo.
+Sé realista, no optimista por defecto: si hay un obstáculo concreto (roles que no calzan, ubicaciones distintas), mencionalo brevemente; si el match es bueno, decilo también. Elegí lo más relevante para mencionar, no trates de cubrir todos los aspectos posibles.
 
-Este comentario sobre cada usuario sumalo dentro del mismo párrafo de la descripción, no lo pongas aparte.
+IMPORTANTE sobre el largo: la descripción tiene que ser un párrafo CORTO de 2 a 3 oraciones como máximo — priorizá ser breve y directo por sobre exhaustivo, yendo derecho a la razón principal del porcentaje.
 
-Sé realista y objetivo con el porcentaje, no optimista por defecto: pensá también en los factores negativos concretos, no solo en los positivos. Por ejemplo:
-- Si viven en países o ciudades distintas, mencionalo como un obstáculo real (pero aclarando que se podría resolver si alguno de los dos puede viajar o mudarse, no lo trates como algo imposible).
-- Si los roles no calzan bien (ej: uno es Switch pero el otro es exclusivamente Dominante, lo que puede dejar al Switch sin poder ejercer su lado Dominante; o directamente los dos son Dominantes y ninguno cede), mencionalo como una fricción concreta que podría generar frustración, no lo barras bajo la alfombra.
-- Si hay puntos realmente compatibles, mencionalos también — la idea es un balance realista, ni todo color de rosa ni todo catastrófico.
-El porcentaje final tiene que reflejar ese balance: si encontrás varios obstáculos reales, el número tiene que ser bajo o medio, no alto solo por compromiso.
-
-Escribí la descripción con tono informal y relajado, como comentándoselo a un amigo. Usá voseo natural ("tenés", "sos", "podés") porque así habla la gente acá, pero NO uses modismos ni jerga marcada (nada de "che", "posta", "de una", "picante", "buena onda" ni cosas por el estilo) — la idea es que suene natural y cotidiano, no como una caricatura de argentino. Que sea un párrafo de 5 a 7 oraciones (ahora hay más cosas para cubrir: etiquetas, obstáculos/puntos a favor, y el comentario de qué tan conocido es cada uno), explayándote en por qué le pusiste ese porcentaje.
+Escribí con tono informal y relajado, voseo natural ("tenés", "sos", "podés"), sin modismos marcados (nada de "che", "posta", "de una").
 
 IMPORTANTE sobre las etiquetas: las etiquetas que te paso ya vienen traducidas al español (o dejadas en inglés cuando así se usan naturalmente en la jerga BDSM hispanohablante) — usalas tal cual te las doy, no las vuelvas a traducir ni le cambies el idioma.
 
 Respondé ÚNICAMENTE con un JSON válido, sin texto adicional, sin markdown, con este formato exacto:
-{"porcentaje": <número entero de 0 a 100>, "descripcion": "<párrafo de 5 a 7 oraciones en el tono descripto arriba, en español rioplatense>"}`;
+{"porcentaje": <número entero de 0 a 100>, "descripcion": "<párrafo de 2 a 3 oraciones cortas, en español rioplatense>"}`;
     }
 
     private parseResponse(response: string): CompatibilityResult | null {

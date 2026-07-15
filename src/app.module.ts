@@ -24,6 +24,7 @@ import { AiRaceService } from './modules/ai/ai-race.service';
 import { CompatibilityService } from './modules/ai/compatibility.service';
 import { AstralCompatibilityService } from './modules/ai/astral-compatibility.service';
 import { PracticeService } from './modules/ai/practice.service';
+import { HoroscopeService } from './modules/ai/horoscope.service';
 import { PlayerQueueService } from './modules/player/player-queue.service';
 import { PlayerController } from './player.controller';
 
@@ -42,8 +43,8 @@ import { CompatibilidadHandler } from './commands/compatibilidad';
 import { CompatibilidadTestHandler } from './commands/compatibilidadtest';
 import { CompatibilidadAstralHandler } from './commands/compatibilidadastral';
 import { ReproducirHandler } from './commands/reproducir';
-import { BotellitaHandler } from './commands/botellita';
 import { PracticaHandler } from './commands/practica';
+import { HoroscopoHandler } from './commands/horoscopo';
 
 @Module({
     imports: [
@@ -79,6 +80,7 @@ import { PracticaHandler } from './commands/practica';
         CompatibilityService,
         AstralCompatibilityService,
         PracticeService,
+        HoroscopeService,
         PlayerQueueService,
 
         // comandos
@@ -97,8 +99,8 @@ import { PracticaHandler } from './commands/practica';
         CompatibilidadTestHandler,
         CompatibilidadAstralHandler,
         ReproducirHandler,
-        BotellitaHandler,
         PracticaHandler,
+        HoroscopoHandler,
     ],
 })
 export class AppModule implements NestModule {
