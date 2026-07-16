@@ -1,6 +1,6 @@
 import { CommandHandler, RoomMessage } from '../types';
 import { Request, Response } from 'express';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { BotService } from '../services/bot.service';
 import { MessagesService } from '../services/messages.service';
 import { YoutubeService } from '../modules/youtube/youtube.service';
@@ -15,6 +15,8 @@ import { PlayerQueueService } from '../modules/player/player-queue.service';
  */
 @Injectable()
 export class ReproducirHandler implements CommandHandler {
+    private readonly logger = new Logger('ReproducirDiag');
+
     constructor(
         private readonly botService: BotService,
         private readonly messagesService: MessagesService,
@@ -37,6 +39,10 @@ export class ReproducirHandler implements CommandHandler {
             await this.botService.sendReply(body.key, channelId, this.messagesService.get('REPRODUCIR_LINK_INVALIDO'));
             return;
         }
+
+        // DIAG TEMPORAL: volcar el body completo para ver si el username del autor
+        // está disponible en algún lado (channel.participants, etc.). Sacar despues.
+        this.logger.log(`DIAG body completo de !radio: ${JSON.stringify(body)}`);
 
         const author = await this.botService.getUserData(body.message.author.id);
         const requestedBy = author?.username ?? String(body.message.author.id);
