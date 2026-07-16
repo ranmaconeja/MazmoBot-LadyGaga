@@ -1,6 +1,6 @@
 import { CommandHandler, RoomMessage } from '../types';
 import { Request, Response } from 'express';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { BotService } from '../services/bot.service';
 import { MessagesService } from '../services/messages.service';
 import { YoutubeService } from '../modules/youtube/youtube.service';
@@ -15,6 +15,8 @@ import { PlayerQueueService } from '../modules/player/player-queue.service';
  */
 @Injectable()
 export class ReproducirHandler implements CommandHandler {
+    private readonly logger = new Logger('ReproducirDiag');
+
     constructor(
         private readonly botService: BotService,
         private readonly messagesService: MessagesService,
@@ -38,7 +40,14 @@ export class ReproducirHandler implements CommandHandler {
             return;
         }
 
+        // DIAGNOSTICO TEMPORAL: por qué a veces el reproductor de Windows muestra
+        // el ID en vez del username (ver memoria del proyecto). Sacar este log
+        // una vez resuelto.
+        this.logger.log(`DIAG author: ${JSON.stringify(body.message.author)}`);
+        this.logger.log(`DIAG userMentions: ${JSON.stringify((body.message.payload as any)?.userMentions)}`);
+
         const author = await this.botService.getUserData(body.message.author.id);
+        this.logger.log(`DIAG getUserData resultado: ${JSON.stringify(author)}`);
         const requestedBy = author?.username ?? String(body.message.author.id);
 
         await this.playerQueueService.enqueue(link, requestedBy);
