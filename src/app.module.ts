@@ -12,6 +12,7 @@ import { TagsService } from './services/tags.service';
 import { DatabaseService } from './database/database.service';
 import { PointsRepository } from './database/points.repository';
 import { QuestionOfDayRepository } from './database/question-of-day.repository';
+import { FactRepository } from './database/fact.repository';
 import { CooldownRepository } from './database/cooldown.repository';
 import { PointsService } from './services/points.service';
 import { CooldownService } from './services/cooldown.service';
@@ -77,6 +78,7 @@ import { DatoHandler } from './commands/dato';
         DatabaseService,
         PointsRepository,
         QuestionOfDayRepository,
+        FactRepository,
         CooldownRepository,
         PointsService,
         CooldownService,

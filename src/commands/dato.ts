@@ -4,12 +4,13 @@ import { Injectable } from '@nestjs/common';
 import { BotService } from '../services/bot.service';
 import { MessagesService } from '../services/messages.service';
 import { FactService } from '../modules/ai/fact.service';
+import { FactRepository } from '../database/fact.repository';
 
 /**
  * Uso: !dato (sin argumentos).
- * Le pide a la IA un dato curioso sobre el mundo Femdom/BDSM: histórico,
- * cultural, o sobre alguna figura pública (con el resguardo de solo mencionar
- * información ya pública y verificable, ver fact.service.ts).
+ * Le pide a la IA un dato curioso sobre el mundo Femdom/BDSM (histórico,
+ * cultural, cine/música, curiosidad práctica, etc. — ver fact.service.ts),
+ * pasándole los últimos datos ya usados para que no repita siempre lo mismo.
  */
 @Injectable()
 export class DatoHandler implements CommandHandler {
@@ -17,6 +18,7 @@ export class DatoHandler implements CommandHandler {
         private readonly botService: BotService,
         private readonly messagesService: MessagesService,
         private readonly factService: FactService,
+        private readonly factRepository: FactRepository,
     ) {
     }
 
@@ -28,11 +30,14 @@ export class DatoHandler implements CommandHandler {
         const body = req.body as RoomMessage;
         const channelId = body.message.channel.id;
 
-        const fact = await this.factService.getFact();
+        const previousFacts = await this.factRepository.getRecent();
+        const fact = await this.factService.getFact(previousFacts);
         if (!fact) {
             await this.botService.sendReply(body.key, channelId, this.messagesService.get('DATO_IA_ERROR'));
             return;
         }
+
+        await this.factRepository.save(fact);
 
         const text = this.messagesService.get('DATO_RESULT', { DATO: fact });
         await this.botService.sendReply(body.key, channelId, text);

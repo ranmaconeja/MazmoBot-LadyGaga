@@ -57,6 +57,11 @@ export class DatabaseService implements OnModuleInit {
                 lastUsedAt TEXT NOT NULL,
                 PRIMARY KEY (userId, command)
             )`,
+            `CREATE TABLE IF NOT EXISTS dato_history (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                dato TEXT NOT NULL,
+                createdAt TEXT NOT NULL
+            )`,
         ], 'write');
     }
 
