@@ -5,6 +5,7 @@ import { BotService } from '../services/bot.service';
 import { MessagesService } from '../services/messages.service';
 import { TagsService } from '../services/tags.service';
 import { ModeratorsService } from '../services/moderators.service';
+import { parseMentions } from '../util/mentions';
 
 @Injectable()
 export class PerfilHandler implements CommandHandler {
@@ -28,13 +29,12 @@ export class PerfilHandler implements CommandHandler {
      * - "!perfil" (sin argumento) -> quien escribió el comando
      */
     private async resolveTargetUser(body: RoomMessage, argument: string): Promise<UserData> {
-        const mentions = (body.message.payload as any)?.userMentions;
-        if (Array.isArray(mentions) && mentions.length) {
-            const mention = mentions[0];
-            const mentionId = mention?.id ?? mention?.userId ?? mention?.user?.id;
-            if (mentionId) {
-                return this.botService.getUserData(Number(mentionId));
-            }
+        // las menciones vienen en el HTML del rawContent (<mazmo-user
+        // username="...">), no en userMentions (siempre vacío). Ver
+        // util/mentions.ts. Resolvemos por username, que sí funciona.
+        const mentions = parseMentions(body.message.payload.rawContent);
+        if (mentions.length && mentions[0].username) {
+            return this.botService.getUserDataByUsername(mentions[0].username);
         }
 
         const trimmed = argument.replace('@', '').trim();

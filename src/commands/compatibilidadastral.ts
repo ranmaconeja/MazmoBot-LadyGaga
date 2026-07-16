@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { BotService } from '../services/bot.service';
 import { MessagesService } from '../services/messages.service';
 import { AstralCompatibilityService } from '../modules/ai/astral-compatibility.service';
+import { parseMentions } from '../util/mentions';
 
 /**
  * Uso: !astral usuario1 usuario2
@@ -25,11 +26,13 @@ export class CompatibilidadAstralHandler implements CommandHandler {
     }
 
     private extractIdentifiers(body: RoomMessage, message: string): string[] {
-        const mentions = (body.message.payload as any)?.userMentions;
-        if (Array.isArray(mentions) && mentions.length >= 2) {
-            const ids = mentions.slice(0, 2).map((m: any) => String(m?.id ?? m?.userId ?? m?.user?.id ?? '')).filter(Boolean);
-            if (ids.length === 2) {
-                return ids;
+        // Ver compatibilidad.ts / util/mentions.ts: las menciones vienen en el
+        // HTML del rawContent, no en userMentions. Resolvemos por username.
+        const mentions = parseMentions(body.message.payload.rawContent);
+        if (mentions.length >= 2) {
+            const usernames = mentions.slice(0, 2).map(m => m.username).filter(Boolean);
+            if (usernames.length === 2) {
+                return usernames;
             }
         }
 

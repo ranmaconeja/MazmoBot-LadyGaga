@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { BotService } from '../services/bot.service';
 import { MessagesService } from '../services/messages.service';
 import { HoroscopeService } from '../modules/ai/horoscope.service';
+import { parseMentions } from '../util/mentions';
 
 /**
  * Uso: !horoscopo @usuario <signo> (acepta @menciones reales, IDs numéricos, o
@@ -43,13 +44,14 @@ export class HoroscopoHandler implements CommandHandler {
      */
     private extractArgs(body: RoomMessage, message: string): { identifier: string, signo: string } {
         const parts = message.split(' ').map(part => part.trim()).filter(Boolean);
-        const mentions = (body.message.payload as any)?.userMentions;
+        // las menciones vienen en el HTML del rawContent (<mazmo-user>), no en
+        // userMentions (siempre vacío). Ver util/mentions.ts.
+        const mentions = parseMentions(body.message.payload.rawContent);
 
-        if (Array.isArray(mentions) && mentions.length >= 1) {
-            const id = mentions[0]?.id ?? mentions[0]?.userId ?? mentions[0]?.user?.id;
-            if (id !== undefined && id !== null) {
-                return { identifier: String(id), signo: parts[parts.length - 1] ?? '' };
-            }
+        if (mentions.length >= 1 && mentions[0].username) {
+            // el signo es el último token del texto plano (no depende de cómo
+            // Mazmo represente la mención en el texto)
+            return { identifier: mentions[0].username, signo: parts[parts.length - 1] ?? '' };
         }
 
         return { identifier: parts[0] ?? '', signo: parts.slice(1).join(' ') };

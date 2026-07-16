@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { BotService } from '../services/bot.service';
 import { MessagesService } from '../services/messages.service';
 import { CompatibilityService } from '../modules/ai/compatibility.service';
+import { parseMentions } from '../util/mentions';
 
 /**
  * Uso: !lazo usuario1 usuario2
@@ -28,11 +29,15 @@ export class CompatibilidadHandler implements CommandHandler {
      * de las palabras del mensaje, ignorando palabras vacías.
      */
     private extractIdentifiers(body: RoomMessage, message: string): string[] {
-        const mentions = (body.message.payload as any)?.userMentions;
-        if (Array.isArray(mentions) && mentions.length >= 2) {
-            const ids = mentions.slice(0, 2).map((m: any) => String(m?.id ?? m?.userId ?? m?.user?.id ?? '')).filter(Boolean);
-            if (ids.length === 2) {
-                return ids;
+        // Mazmo mete las menciones en el HTML del rawContent (<mazmo-user
+        // username="..." displayname="...">), NO en userMentions (que viene
+        // siempre vacío). Ver util/mentions.ts. Usamos el username, que se
+        // resuelve confiable por getUserDataByUsername (a diferencia del id).
+        const mentions = parseMentions(body.message.payload.rawContent);
+        if (mentions.length >= 2) {
+            const usernames = mentions.slice(0, 2).map(m => m.username).filter(Boolean);
+            if (usernames.length === 2) {
+                return usernames;
             }
         }
 

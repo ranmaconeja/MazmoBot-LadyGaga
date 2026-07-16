@@ -5,6 +5,7 @@ import { BotService } from '../services/bot.service';
 import { MessagesService } from '../services/messages.service';
 import { ModeratorsService } from '../services/moderators.service';
 import { PointsService } from '../services/points.service';
+import { parseMentions } from '../util/mentions';
 
 /**
  * Uso: !PuntosExtra @usuario <cantidad>
@@ -31,15 +32,14 @@ export class SumarPuntosHandler implements CommandHandler {
      */
     private extractArgs(body: RoomMessage, message: string): { identifier: string, amountRaw: string } {
         const parts = message.split(' ').map(part => part.trim()).filter(Boolean);
-        const mentions = (body.message.payload as any)?.userMentions;
+        // las menciones vienen en el HTML del rawContent (<mazmo-user>), no en
+        // userMentions (siempre vacío). Ver util/mentions.ts.
+        const mentions = parseMentions(body.message.payload.rawContent);
 
-        if (Array.isArray(mentions) && mentions.length >= 1) {
-            const id = mentions[0]?.id ?? mentions[0]?.userId ?? mentions[0]?.user?.id;
-            if (id !== undefined && id !== null) {
-                // la cantidad es el último token del mensaje (para no depender de cómo
-                // Mazmo represente la mención dentro del texto plano)
-                return { identifier: String(id), amountRaw: parts[parts.length - 1] };
-            }
+        if (mentions.length >= 1 && mentions[0].username) {
+            // la cantidad es el último token del mensaje (para no depender de cómo
+            // Mazmo represente la mención dentro del texto plano)
+            return { identifier: mentions[0].username, amountRaw: parts[parts.length - 1] };
         }
 
         return { identifier: parts[0], amountRaw: parts[1] };
