@@ -32,9 +32,11 @@ export class AppController {
         const rawContent = stripHtml(body.message.payload.rawContent);
         this.logger.log(`Mensaje recibido: "${rawContent}" (autor id: ${body.message.author.id}, canal: ${body.message.channel.id})`);
 
-        // log temporal de diagnóstico: para ver la estructura real de las menciones que manda mazmo
-        if (rawContent.startsWith('!lazo') || rawContent.startsWith('!astral') || rawContent.startsWith('!perfil')) {
-            this.logger.debug(`Payload completo del mensaje: ${JSON.stringify(body.message.payload)}`);
+        // log temporal de diagnóstico: para ver la estructura real de las menciones que manda mazmo.
+        // Se usa .log() (no .debug()) para asegurar que aparezca en los logs de Vercel en produccion.
+        if (rawContent.startsWith('!lazo') || rawContent.startsWith('!astral') || rawContent.startsWith('!perfil') || rawContent.startsWith('!radio')) {
+            this.logger.log(`DIAG rawContent CRUDO (sin stripHtml): ${JSON.stringify(body.message.payload.rawContent)}`);
+            this.logger.log(`DIAG payload completo: ${JSON.stringify(body.message.payload)}`);
         }
 
         if (! await this.commandService.handle(rawContent, req, res)) {
