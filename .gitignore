@@ -8,3 +8,4 @@ env-backup-KEYS-NO-SUBIR.txt
 
 .vercel
 .env*
+channel-log-*.txt

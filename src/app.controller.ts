@@ -8,6 +8,7 @@ import { AutofrasesService } from './modules/autofrases/autofrases.service';
 import { YoutubeService } from './modules/youtube/youtube.service';
 import { MessagesService } from './services/messages.service';
 import { stripHtml } from './util/sanitize';
+import { ChannelMessagesRepository } from './database/channel-messages.repository';
 
 @Controller()
 export class AppController {
@@ -20,6 +21,7 @@ export class AppController {
         private autofrasesService: AutofrasesService,
         private youtubeService: YoutubeService,
         private messagesService: MessagesService,
+        private channelMessagesRepository: ChannelMessagesRepository,
     ) {
     }
 
@@ -31,6 +33,15 @@ export class AppController {
     async onRoomMessage(@Body() body: RoomMessage, @Req() req: Request, @Res() res: Response) {
         const rawContent = stripHtml(body.message.payload.rawContent);
         this.logger.log(`Mensaje recibido: "${rawContent}" (autor id: ${body.message.author.id}, canal: ${body.message.channel.id})`);
+
+        // log rotativo del canal (últimas 24hs): se guarda todo mensaje que llega.
+        // Best effort — un fallo acá no debe frenar comandos/autofrases.
+        await this.channelMessagesRepository.save(
+            body.message.id,
+            body.message.author.id,
+            rawContent,
+            body.message.createdAt ?? new Date().toISOString(),
+        );
 
         if (! await this.commandService.handle(rawContent, req, res)) {
             // no se ha encontrado coincidencia para un comando registrado

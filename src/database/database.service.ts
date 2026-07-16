@@ -72,6 +72,17 @@ export class DatabaseService implements OnModuleInit {
                 username TEXT NOT NULL,
                 updatedAt TEXT NOT NULL
             )`,
+            // Log rotativo de los mensajes del canal (últimas 24hs). Se guarda
+            // cada mensaje que llega por el webhook /message; los de más de 24hs
+            // se borran de forma oportunista en cada insert (ver
+            // ChannelMessagesRepository). authorId es el id numérico de Mazmo
+            // (el username se resuelve aparte con known_users si hace falta).
+            `CREATE TABLE IF NOT EXISTS channel_messages (
+                id TEXT PRIMARY KEY,
+                authorId INTEGER NOT NULL,
+                content TEXT NOT NULL,
+                createdAt TEXT NOT NULL
+            )`,
         ], 'write');
     }
 
