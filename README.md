@@ -34,7 +34,7 @@ playlist con historial.
 - `!horoscopo @usuario <signo>` — La IA arma un horóscopo combinando el signo con las etiquetas del perfil indicado
 - `!musica` — La IA sugiere una canción de YouTube (mínimo 10M de vistas, según la IA) para el canal
 - `!dia` — Pregunta del día generada por la IA, se mantiene fija hasta las 00hs (hora Argentina)
-- `M!p <link de YouTube>` — Encola la canción para el cliente de reproducción (ver sección abajo)
+- `!radio <link de YouTube>` — Encola la canción para el cliente de reproducción (ver sección abajo). Apto para cualquier usuario.
 
 ## Configuración
 
@@ -60,12 +60,13 @@ YOUTUBE_API_KEY=<opcional para la detección pasiva de links, OBLIGATORIA para q
 PLAYER_SECRET_KEY=<autentica al programa de Windows contra GET /player/next>
 ```
 
-## Cliente de reproducción (`M!p`)
+## Cliente de reproducción (`!radio`)
 
-El comando `M!p <link>` no reproduce nada del lado del servidor — encola el link en Turso
-(tabla `player_queue`), y un programa de escritorio para Windows aparte (fuera de este
-repo) hace **polling** cada 10-15 segundos contra `GET /player/next` para preguntar si
-hay una canción nueva. Cuando la encuentra, la reproduce con `mpv`.
+El comando `!radio <link>` (apto para cualquier usuario, no solo moderadores/owner) no
+reproduce nada del lado del servidor — encola el link en Turso (tabla `player_queue`), y
+un programa de escritorio para Windows aparte (fuera de este repo) hace **polling** cada
+10-15 segundos contra `GET /player/next` para preguntar si hay una canción nueva. Cuando
+la encuentra, la reproduce con `mpv`.
 
 No usa WebSocket ni ninguna conexión persistente — eso no es viable en funciones
 serverless (Vercel no soporta procesos ni conexiones que sobrevivan entre invocaciones),
@@ -77,7 +78,7 @@ Configuración necesaria:
   el header `x-secret-key` de cada poll a `GET /player/next`.
 
 El bot registra cada poll (`player_status`) para saber si hay algún cliente conectado en
-ese momento. Si nadie pollea hace más de 60 segundos, `M!p` avisa "No hay ningún
+ese momento. Si nadie pollea hace más de 60 segundos, `!radio` avisa "No hay ningún
 reproductor conectado" en vez de encolar la canción en silencio.
 
 ## Compatibilidad con IA (`!lazo` / `!astral`)
@@ -201,7 +202,7 @@ api/index.ts        → entry point real en Vercel (funciones serverless, cachea
 src/main.ts          → entry point tradicional (app.listen()), para desarrollo local
 config/              → config.json, mensajes.txt, moderadores.txt, autofrases.txt, tags.json
 src/
-  commands/          → un archivo por comando (!ayuda, !ping, !PuntosExtra, M!p, etc.)
+  commands/          → un archivo por comando (!ayuda, !ping, !PuntosExtra, !radio, etc.)
   modules/
     welcome/         → mensaje de bienvenida
     autofrases/      → respuestas automáticas por palabra clave

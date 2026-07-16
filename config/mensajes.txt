@@ -10,6 +10,7 @@
 !Horoscopo - Prediccion Diaria sobre aspectos BDSM
 !Musica - Recomendacion al Azar de musica para Sesionar
 !Dato - Un dato curioso sobre el mundo Femdom/BDSM
+!Radio <link de YouTube> - Encola una canción para el reproductor del canal
 
 [AYUDA_MOD]
 📋 Comandos disponibles de {BOT_NAME} (vista completa - moderador/owner):
@@ -30,7 +31,7 @@
 !Horoscopo - Prediccion Diaria sobre aspectos BDSM
 !Musica - Recomendacion al Azar de musica para Sesionar
 !Dato - Un dato curioso sobre el mundo Femdom/BDSM
-M!p <link de YouTube> - Encola una canción para el reproductor
+!Radio <link de YouTube> - Encola una canción para el reproductor del canal
 !PuntosExtra @usuario cantidad - Suma puntos manualmente a un usuario
 
 [PING]

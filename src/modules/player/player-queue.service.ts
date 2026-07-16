@@ -68,7 +68,7 @@ export class PlayerQueueService {
 
     /**
      * true si algún cliente hizo poll en los últimos ACTIVE_WINDOW_MS ms. Se usa
-     * en M!p para avisar en el chat "no hay ningún reproductor conectado" en vez
+     * en !radio para avisar en el chat "no hay ningún reproductor conectado" en vez
      * de mandar la canción a una cola que nadie está mirando.
      */
     async hasActiveClient(): Promise<boolean> {
