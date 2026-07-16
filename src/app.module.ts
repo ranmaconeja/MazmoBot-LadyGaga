@@ -14,6 +14,7 @@ import { PointsRepository } from './database/points.repository';
 import { QuestionOfDayRepository } from './database/question-of-day.repository';
 import { FactRepository } from './database/fact.repository';
 import { CooldownRepository } from './database/cooldown.repository';
+import { KnownUsersRepository } from './database/known-users.repository';
 import { PointsService } from './services/points.service';
 import { CooldownService } from './services/cooldown.service';
 
@@ -80,6 +81,7 @@ import { DatoHandler } from './commands/dato';
         QuestionOfDayRepository,
         FactRepository,
         CooldownRepository,
+        KnownUsersRepository,
         PointsService,
         CooldownService,
 

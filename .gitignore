@@ -5,3 +5,6 @@ coverage/
 *.log
 .env
 env-backup-KEYS-NO-SUBIR.txt
+
+.vercel
+.env*

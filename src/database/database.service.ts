@@ -62,6 +62,16 @@ export class DatabaseService implements OnModuleInit {
                 dato TEXT NOT NULL,
                 createdAt TEXT NOT NULL
             )`,
+            // Caché id->username: GET /users/{id} de Mazmo no funciona de forma
+            // confiable (confirmado el 16/07/2026), solo GET /users/{username}.
+            // Cada vez que resolvemos un usuario con éxito (por username, o por
+            // mención) guardamos acá su id+username, para poder reintentar por
+            // username la próxima vez que solo tengamos el id (ej: !radio).
+            `CREATE TABLE IF NOT EXISTS known_users (
+                id INTEGER PRIMARY KEY,
+                username TEXT NOT NULL,
+                updatedAt TEXT NOT NULL
+            )`,
         ], 'write');
     }
 
