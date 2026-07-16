@@ -18,7 +18,6 @@ import { CooldownService } from './services/cooldown.service';
 
 import { WelcomeService } from './modules/welcome/welcome.service';
 import { AutofrasesService } from './modules/autofrases/autofrases.service';
-import { BusquedaService } from './modules/busqueda/busqueda.service';
 
 import { YoutubeService } from './modules/youtube/youtube.service';
 import { AiService } from './modules/ai/ai.service';
@@ -85,7 +84,6 @@ import { DatoHandler } from './commands/dato';
         // módulos
         WelcomeService,
         AutofrasesService,
-        BusquedaService,
         YoutubeService,
         AiService,
         GroqService,

@@ -5,7 +5,6 @@ import { CommandService } from './services/command.service';
 import { BotService } from './services/bot.service';
 import { WelcomeService } from './modules/welcome/welcome.service';
 import { AutofrasesService } from './modules/autofrases/autofrases.service';
-import { BusquedaService } from './modules/busqueda/busqueda.service';
 import { YoutubeService } from './modules/youtube/youtube.service';
 import { MessagesService } from './services/messages.service';
 import { stripHtml } from './util/sanitize';
@@ -19,7 +18,6 @@ export class AppController {
         private commandService: CommandService,
         private welcomeService: WelcomeService,
         private autofrasesService: AutofrasesService,
-        private busquedaService: BusquedaService,
         private youtubeService: YoutubeService,
         private messagesService: MessagesService,
     ) {
@@ -46,12 +44,6 @@ export class AppController {
             const autoResponse = this.autofrasesService.checkMessage(rawContent);
             if (autoResponse) {
                 await this.botService.sendReply(body.key, body.message.channel.id, autoResponse);
-            }
-
-            // chequeamos si el mensaje es una "búsqueda" tipo "busco Dominante" (sin IA, ver BusquedaService)
-            const busquedaResponse = this.busquedaService.checkMessage(rawContent);
-            if (busquedaResponse) {
-                await this.botService.sendReply(body.key, body.message.channel.id, busquedaResponse);
             }
         }
 

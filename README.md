@@ -8,11 +8,11 @@ reproductor.
 ## Alcance de la v1.5
 
 Bot estable y modular: moderación, sistema de puntos anti-spam (acumulables, con tope),
-límites de uso globales para ciertos comandos, cinco funciones con IA (compatibilidad
-seria y astral/satírica, enciclopedia de prácticas BDSM, horóscopo personalizado, y
-pregunta del día), recomendación y detección de música de YouTube, autofrases, búsqueda
-de roles sin IA, y cola de reproducción para un cliente de Windows aparte. **Sin**
-LadyPanel, rifas ni playlist con historial.
+límites de uso globales para ciertos comandos, seis funciones con IA (compatibilidad
+seria y astral/satírica, enciclopedia de prácticas BDSM, horóscopo personalizado, dato
+curioso, y pregunta del día), recomendación y detección de música de YouTube, autofrases,
+y cola de reproducción para un cliente de Windows aparte. **Sin** LadyPanel, rifas ni
+playlist con historial.
 
 ## Comandos
 
@@ -45,7 +45,6 @@ Toda la configuración vive en `/config`, **no hay nada hardcodeado**:
   tipo `{BOT_NAME}`, `{CHANNEL_NAME}`, `{OWNER}`, `{VERSION}`, `{MODERATORS}`, etc.
 - `moderadores.txt` — Un ID de usuario de Mazmo por línea (`#` para comentarios).
 - `autofrases.txt` — Respuestas automáticas por palabra clave (ver sección abajo).
-- `busquedas.txt` — Reglas de detección de "búsquedas" tipo "busco Dominante" (sin IA).
 - `tags.json` — Diccionario de traducción de tags de Mazmo al español.
 
 Además, en `.env` (versionado en el repo porque es privado y de uso personal):
@@ -200,13 +199,12 @@ invocaciones.
 ```
 api/index.ts        → entry point real en Vercel (funciones serverless, cachea la app de Nest)
 src/main.ts          → entry point tradicional (app.listen()), para desarrollo local
-config/              → config.json, mensajes.txt, moderadores.txt, autofrases.txt, busquedas.txt, tags.json
+config/              → config.json, mensajes.txt, moderadores.txt, autofrases.txt, tags.json
 src/
   commands/          → un archivo por comando (!ayuda, !ping, !PuntosExtra, M!p, etc.)
   modules/
     welcome/         → mensaje de bienvenida
     autofrases/      → respuestas automáticas por palabra clave
-    busqueda/        → detección de "búsquedas" tipo "busco Dominante", sin IA
     youtube/         → info y búsqueda de videos de YouTube (Data API v3 u oEmbed)
     ai/              → Gemini + Groq en carrera: compatibilidad "seria" (!lazo) y astral
                         (!astral), enciclopedia de prácticas (!Enciclopedia), horóscopo
