@@ -1,0 +1,9 @@
+# Respuestas automáticas por palabra clave.
+# Formato: palabra_o_frase_clave1|palabra_o_frase_clave2 = respuesta del bot
+# - No importan mayúsculas/minúsculas.
+# - Si el mensaje contiene CUALQUIERA de las palabras clave de una línea, se dispara esa respuesta.
+# - Se usa la primera línea que coincida (de arriba hacia abajo).
+# - Editá o agregá líneas sin tocar código, y sin reiniciar... salvo que reinicies el bot, ya que se carga una sola vez al arrancar.
+
+busco dom|busco ama|busco dueña = 🔎 Che, para publicar búsquedas revisá el tema fijado del canal con las reglas correspondientes.
+busco sub|busco esclav = 🔎 Che, para publicar búsquedas revisá el tema fijado del canal con las reglas correspondientes.

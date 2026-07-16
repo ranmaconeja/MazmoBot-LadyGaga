@@ -1,0 +1,194 @@
+[AYUDA]
+📋 Comandos disponibles de {BOT_NAME}:
+!Reglas - Muestra las Reglas del Canal
+!Filosofia - Conoce la Filosofia de Femdom Argentina
+!Dia - Pregunta del Dia del Canal
+!Puntos - Cantidad de Puntos para Ejecutar Comandos
+!Enciclopedia - Informacion sobre Practicas BDSM
+!Lazo (A) (B) - Calcula la compatibilidad entre 2 usuarios
+!Astral (A) (B) -  Bromea sobre 2 usuarios
+!Horoscopo - Prediccion Diaria sobre aspectos BDSM
+!Musica - Recomendacion al Azar de musica para Sesionar
+!Dato - Un dato curioso sobre el mundo Femdom/BDSM
+
+[AYUDA_MOD]
+📋 Comandos disponibles de {BOT_NAME} (vista completa - moderador/owner):
+!ayuda - Lista de Comandos
+!ping - Verifica si el Bot funciona
+!version - Muestra la versión del bot
+!staff - Lista de moderadores del canal
+!creador - Información del creador del bot
+!perfil @usuario - Muestra información general de un usuario
+!bienvenida - Vuelve a mostrar el mensaje de bienvenida
+!Reglas - Muestra las Reglas del Canal
+!Filosofia - Conoce la Filosofia de Femdom Argentina
+!Dia - Pregunta del Dia del Canal
+!Puntos - Cantidad de Puntos para Ejecutar Comandos
+!Enciclopedia - Informacion sobre Practicas BDSM
+!Lazo (A) (B) - Calcula la compatibilidad entre 2 usuarios
+!Astral (A) (B) -  Bromea sobre 2 usuarios
+!Horoscopo - Prediccion Diaria sobre aspectos BDSM
+!Musica - Recomendacion al Azar de musica para Sesionar
+!Dato - Un dato curioso sobre el mundo Femdom/BDSM
+M!p <link de YouTube> - Encola una canción para el reproductor
+!PuntosExtra @usuario cantidad - Suma puntos manualmente a un usuario
+
+[PING]
+🏓 Ra-ra-ah-ah-ah - Roma-roma-ma Lady Gaga llego al Chat!
+
+[VERSION]
+🤖 {BOT_NAME} v{VERSION}
+
+[STAFF]
+👮 Moderadores de {CHANNEL_NAME}:
+{MODERATORS}
+
+[CREADOR]
+👑 {BOT_NAME} fue creado por Ranma Coneja, usuaria de Mazmorra desde hace mas de 15 Años, no dudes en Contactarla si hay problemas en la Sala.
+
+[FILOSOFIA]
+Filosofía del Canal
+En Femdom Argentina creemos que las relaciones BDSM nacen de la confianza y de un vínculo sano. Esto se construye de manera lenta, casual y natural.
+Por eso, en este canal está permitido el offtopic: para que primero puedan conocer a la persona antes que al rol. Prohibimos las búsquedas y los mensajes privados porque saltean por completo ese proceso.
+Un mensaje privado debería surgir cuando dos personas se siguen mutuamente. Si la otra persona no te devolvió el Follow, probablemente tuvo sus motivos: la notificación le llegó. No insistan.
+Sean amables, respétense entre ustedes y disfruten del canal.
+
+[REGLAS]
+Reglas del Canal
+Sistema de 3 Advertencias
+1. Está prohibido realizar búsquedas de personas. Para ello recomendamos utilizar el sector "Contactos BDSM".
+1.B. Si la búsqueda proviene de un Dominante Masculino, será expulsado sin previo aviso.
+2. No está permitido solicitar mensajes privados ni pedir seguimientos mutuos.
+3. No está permitido el FINDOM, ni la venta de packs o cualquier otro tipo de contenido. Para ello recomendamos utilizar el sector "Relaciones con intercambio de dinero".
+4. Ningún usuario está obligado a rolear. Recomendamos que cualquier dinámica de rol sea previamente acordada entre las partes.
+Ejemplo: Una DOM tratando a otros usuarios de "basura" o un sumiso arrastrándose por todas las Doms sin que exista un acuerdo previo.
+5. No realizar reclamos sobre aspectos técnicos de la página. No administramos Sades ni tenemos control sobre sus funciones, límites de mensajes u otras características.
+6. Compórtense como personas. (Sabemos que no haría falta aclararlo, pero nunca falta el pejelagarto).
+7. Las imágenes NSFW están permitidas únicamente si tienen contexto dentro de la conversación. Publicarlas sin relación con el tema tratado será considerada una falta.
+Ejemplo: Se está hablando de spank y, de repente, aparece una "fotopija" salvaje sin ningún contexto.
+Las reglas no exigen nada extraordinario. No están sujetas a discusión y se basan en la filosofía del canal.
+
+[PERFIL]
+👤 Perfil de @{USERNAME}
+Nombre: {DISPLAYNAME}
+Género: {GENERO}
+Ubicación: {COUNTRY}
+Miembro desde: {REGDATE}
+Etiquetas: {TAGS}
+Me conocen: {ME_CONOCEN} | Eventos: {EVENTOS}{ID_LINE}
+
+[PERFIL_ERROR]
+😕 No pude obtener tu perfil en este momento, intentá de nuevo más tarde.
+
+[BIENVENIDA]
+🎉 Bienvenid@s a este canal, nuestra filosofia del canal es conocer primero a la Persona y por ultimo el Rol, dado que las mejores experiencias BDSM, nacen de la confianza. Fomentamos el Offtopic en la Charla para que las personas puedan conocerse y las tematicas BDSM son debatidas desde el punto de vista FEMDOM. Recomendamos leer las !reglas , !ayuda , !filosofia
+
+[SIN_PUNTOS]
+"{USERNAME}" no tiene los puntos suficientes para ejecutar este comando (tiene {POINTS}, necesita {COST})
+
+[PUNTOS]
+✨ Tenés {POINTS} puntos. Cada comando cuesta {COST} puntos. Se suman 5 puntos por día, acumulables hasta un máximo de 100.
+
+[PUNTOS_OTRO]
+✨ "{USERNAME}" tiene {POINTS} puntos. Cada comando cuesta {COST} puntos.
+
+[PUNTOS_OTRO_EXENTO]
+✨ "{USERNAME}" es moderador/a, no gasta puntos al usar comandos.
+
+[PUNTOS_USUARIO_NO_ENCONTRADO]
+No pude encontrar a ese usuario.
+
+[PUNTOS_EXENTO]
+✨ Sos moderador/a, no gastás puntos al usar comandos.
+
+[SUMARPUNTOS_USAGE]
+⚠️ Uso: !PuntosExtra @usuario cantidad (la cantidad debe ser un número entero positivo)
+
+[SUMARPUNTOS_ERROR]
+😕 No pude encontrar a ese usuario.
+
+[SUMARPUNTOS_OK]
+✅ Se le sumaron {AMOUNT} puntos a @{USERNAME}. Ahora tiene {TOTAL} puntos.
+
+[NOT_MODERATOR]
+🚫 No tenés permisos de moderador para usar este comando.
+
+[YOUTUBE_INFO]
+📺 **{TITLE}**
+{DESCRIPTION}
+![miniatura]({THUMBNAIL_URL})
+
+[MUSICA_RESULT]
+🎵 Recomendación musical: **{TITLE}**
+{DESCRIPTION}
+{URL}
+![miniatura]({THUMBNAIL_URL})
+
+[COMPATIBILIDAD_USAGE]
+ℹ️ Uso: !lazo @usuario1 @usuario2
+
+[COMPATIBILIDAD_ERROR]
+😕 No pude obtener los perfiles de uno o ambos usuarios, intentá de nuevo más tarde.
+
+[COMPATIBILIDAD_IA_ERROR]
+🤖 No pude calcular la compatibilidad en este momento (falta configurar la IA o se agotó la cuota gratuita del día).
+
+[COMPATIBILIDAD_RESULT]
+💞 @{USERNAME1} + @{USERNAME2}: {PORCENTAJE}% — {DESCRIPCION}
+
+[COMPATIBILIDAD_ASTRAL_RESULT]
+🔮 Lectura Astral Mazmorrera de @{USERNAME1} y @{USERNAME2} — {PORCENTAJE}% de compatibilidad cósmica
+{DESCRIPCION}
+
+[REPRODUCIR_OK]
+🎵 Mandado a reproducir: {LINK}
+
+[REPRODUCIR_SIN_CLIENTE]
+⚠️ No hay ningún reproductor conectado en este momento.
+
+[REPRODUCIR_LINK_INVALIDO]
+😕 Ese no parece ser un link válido de YouTube.
+
+[PRACTICA_RESULT]
+{DESCRIPCION}
+
+[PRACTICA_USAGE]
+ℹ️ Uso: !Enciclopedia <nombre de la práctica>
+
+[PRACTICA_IA_ERROR]
+🤖 No pude evaluar esa práctica en este momento (falta configurar la IA o se agotó la cuota gratuita del día).
+
+[HOROSCOPO_RESULT]
+🔮 Horóscopo de {SIGNO}:
+{HOROSCOPO}
+
+[HOROSCOPO_USAGE]
+ℹ️ Uso: !horoscopo @usuario <signo>
+
+[HOROSCOPO_SIGNO_INVALIDO]
+😕 Ese no es un signo válido — tiene que ser una de las 12 casas del zodíaco (Aries, Tauro, Géminis, Cáncer, Leo, Virgo, Libra, Escorpio, Sagitario, Capricornio, Acuario o Piscis).
+
+[HOROSCOPO_PERFIL_ERROR]
+😕 No pude obtener el perfil de ese usuario en este momento, intentá de nuevo más tarde.
+
+[HOROSCOPO_IA_ERROR]
+🤖 No pude calcular tu horóscopo en este momento (falta configurar la IA o se agotó la cuota gratuita del día).
+
+[MUSICA_IA_ERROR]
+🤖 No pude conseguir una sugerencia de música en este momento (falta configurar la IA, falta YOUTUBE_API_KEY para poder buscar el video real, o no encontré ningún video que coincida).
+
+[DIA_RESULT]
+❓ Pregunta del día: {PREGUNTA}
+(Faltan {TIEMPO_RESTANTE} para la próxima pregunta)
+
+[DIA_IA_ERROR]
+🤖 No pude generar la pregunta del día en este momento (falta configurar la IA o se agotó la cuota gratuita del día).
+
+[COOLDOWN_ERROR]
+⏳ Ya usaste este comando hace poco. Podés volver a usarlo en {MINUTOS} minutos.
+
+[DATO_RESULT]
+🧠 ¿Sabías que...? {DATO}
+
+[DATO_IA_ERROR]
+🤖 No pude conseguir un dato curioso en este momento (falta configurar la IA o se agotó la cuota gratuita del día).
