@@ -43,9 +43,11 @@ Usuario 2: ${this.describeUser(user2)}
 
 Evaluá la compatibilidad pensando en roles complementarios (ej: Dominante + Sumiso suele ser compatible; Dominante + Dominante suele ser menos compatible) y afinidad general de etiquetas/prácticas.
 
-Sé realista, no optimista por defecto: si hay un obstáculo concreto (roles que no calzan, ubicaciones distintas), mencionalo brevemente; si el match es bueno, decilo también. Elegí lo más relevante para mencionar, no trates de cubrir todos los aspectos posibles.
+Sé realista, no optimista por defecto: si hay un obstáculo concreto (roles que no calzan por ejemplo), mencionalo brevemente; si el match es bueno, decilo también. Elegí lo más relevante para mencionar, no trates de cubrir todos los aspectos posibles.
 
-IMPORTANTE sobre el largo: la descripción tiene que ser un párrafo CORTO de 2 a 3 oraciones como máximo — priorizá ser breve y directo por sobre exhaustivo, yendo derecho a la razón principal del porcentaje.
+Sobre la ubicacion, menciona la distancia, pero no restes % de compatibilidad
+
+IMPORTANTE sobre el largo: la descripción tiene que ser un párrafo CORTO de 3 a 4 oraciones como máximo — priorizá ser breve y directo por sobre exhaustivo, yendo derecho a la razón principal del porcentaje.
 
 Escribí con tono informal y relajado, voseo natural ("tenés", "sos", "podés"), sin modismos marcados (nada de "che", "posta", "de una").
 
