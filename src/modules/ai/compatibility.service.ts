@@ -31,7 +31,7 @@ export class CompatibilityService {
 
     private describeUser(user: UserData): string {
         const tags = (user.tags && user.tags.length) ? this.tagsService.translateAll(user.tags).join(', ') : 'sin etiquetas';
-        return `@${user.username ?? 'desconocido'} (${user.displayname ?? '-'}), género: ${user.gender ?? '-'}, etiquetas: ${tags}, miembro desde: ${user.regdate ?? 'desconocido'}, lo/la conocen ${user.knowedCount ?? 0} personas, participó en ${user.eventCount ?? 0} eventos del canal`;
+        return `${user.displayname ?? user.username ?? 'desconocido'}, género: ${user.gender ?? '-'}, etiquetas: ${tags}, miembro desde: ${user.regdate ?? 'desconocido'}, lo/la conocen ${user.knowedCount ?? 0} personas, participó en ${user.eventCount ?? 0} eventos del canal`;
     }
 
     private buildPrompt(user1: UserData, user2: UserData): string {
@@ -43,6 +43,10 @@ Usuario 2: ${this.describeUser(user2)}
 Evaluá la compatibilidad pensando en roles complementarios (ej: Dominante + Sumiso suele ser compatible; Dominante + Dominante suele ser menos compatible) y afinidad general de etiquetas/prácticas.
 
 Sé realista, no optimista por defecto: si hay un obstáculo concreto (ej: roles que no calzan bien entre sí), mencionalo brevemente; si el match es bueno, decilo también. El porcentaje tiene que reflejar tu evaluación real, bajalo tanto como te parezca que corresponde si encontrás obstáculos genuinos. NO menciones ubicación, distancia geográfica, ni de dónde es cada usuario — ese dato no es relevante para este análisis y no tenés que traerlo a colación.
+
+IMPORTANTE sobre cómo nombrar a cada persona (esto es crítico, no es solo estilo): cada vez que aparece un "@Nombre" en el mensaje, esa persona recibe una notificación real en el chat — así que podés usar el @ alguna vez si te resulta natural, pero como MÁXIMO una vez por persona en todo el párrafo (nunca 3, 4 o más veces seguidas como en un mensaje de spam). Mencioná el nombre de cada persona como mucho dos veces en total (una con @ si querés, y como mucho una vez más sin @) — de ahí en más, referite a ella por su rol principal (ej: "la Dominante", "el Switch", "quien tiene el rol de Sumisa") en vez de repetir el nombre — NO uses pronombres como "ella"/"él" para diferenciarlas, porque si las dos personas comparten género se vuelve confuso saber a quién te referís; el rol, en cambio, siempre las distingue bien ya que es justo lo que estás comparando. Si alguna de las dos no tiene ningún tag de rol claro, usá "la primera persona"/"la segunda persona" en su lugar.
+
+Organizá el párrafo así: primero lo relevante del primer usuario, después lo relevante del segundo, y por último la conclusión sobre cómo calzan entre sí — no vayas saltando de uno a otro todo el tiempo.
 
 IMPORTANTE sobre el largo: la descripción tiene que ser un párrafo de 4 a 5 oraciones, desarrollando bien la razón del porcentaje.
 
