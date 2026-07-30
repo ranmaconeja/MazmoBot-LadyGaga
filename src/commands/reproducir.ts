@@ -7,11 +7,9 @@ import { YoutubeService } from '../modules/youtube/youtube.service';
 import { PlayerQueueService } from '../modules/player/player-queue.service';
 
 /**
- * Uso: !radio <link de YouTube>
+ * Uso: M!p <link de YouTube>
  * Agrega el link a la cola del reproductor (ver PlayerQueueService). El programa
  * de Windows la va a levantar en su próximo poll a GET /player/next.
- * Apto para cualquier usuario (no requiere ser moderador/owner), cuesta el
- * costo estándar en puntos como cualquier otro comando (ver PointsService).
  */
 @Injectable()
 export class ReproducirHandler implements CommandHandler {
@@ -24,7 +22,7 @@ export class ReproducirHandler implements CommandHandler {
     }
 
     getSignature(): string {
-        return '!radio';
+        return 'M!p';
     }
 
     async handleCommand(req: Request, res: Response, message: string) {

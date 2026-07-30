@@ -7,8 +7,9 @@ import { WelcomeService } from './modules/welcome/welcome.service';
 import { AutofrasesService } from './modules/autofrases/autofrases.service';
 import { YoutubeService } from './modules/youtube/youtube.service';
 import { MessagesService } from './services/messages.service';
+import { ExpulsionGifService } from './services/expulsion-gif.service';
+import { RandomMentionService } from './services/random-mention.service';
 import { stripHtml } from './util/sanitize';
-import { ChannelMessagesRepository } from './database/channel-messages.repository';
 
 @Controller()
 export class AppController {
@@ -21,7 +22,8 @@ export class AppController {
         private autofrasesService: AutofrasesService,
         private youtubeService: YoutubeService,
         private messagesService: MessagesService,
-        private channelMessagesRepository: ChannelMessagesRepository,
+        private expulsionGifService: ExpulsionGifService,
+        private randomMentionService: RandomMentionService,
     ) {
     }
 
@@ -34,14 +36,10 @@ export class AppController {
         const rawContent = stripHtml(body.message.payload.rawContent);
         this.logger.log(`Mensaje recibido: "${rawContent}" (autor id: ${body.message.author.id}, canal: ${body.message.channel.id})`);
 
-        // log rotativo del canal (últimas 24hs): se guarda todo mensaje que llega.
-        // Best effort — un fallo acá no debe frenar comandos/autofrases.
-        await this.channelMessagesRepository.save(
-            body.message.id,
-            body.message.author.id,
-            rawContent,
-            body.message.createdAt ?? new Date().toISOString(),
-        );
+        // log temporal de diagnóstico: para ver la estructura real de las menciones que manda mazmo
+        if (rawContent.startsWith('!lazo') || rawContent.startsWith('!astral') || rawContent.startsWith('!perfil')) {
+            this.logger.debug(`Payload completo del mensaje: ${JSON.stringify(body.message.payload)}`);
+        }
 
         if (! await this.commandService.handle(rawContent, req, res)) {
             // no se ha encontrado coincidencia para un comando registrado
@@ -50,6 +48,16 @@ export class AppController {
             const autoResponse = this.autofrasesService.checkMessage(rawContent);
             if (autoResponse) {
                 await this.botService.sendReply(body.key, body.message.channel.id, autoResponse);
+            }
+
+            // si el mensaje contiene la palabra "quien" (sola, no "quienes" ni
+            // "aquien"), mencionamos a un participante al azar del canal
+            if (/\bquien\b/i.test(rawContent)) {
+                const username = await this.randomMentionService.pickRandomParticipant(body);
+                if (username) {
+                    const text = this.messagesService.get('QUIEN_RESPUESTA', { USERNAME: username });
+                    await this.botService.sendReply(body.key, body.message.channel.id, text);
+                }
             }
         }
 
@@ -102,10 +110,43 @@ export class AppController {
     }
 
     /**
-     *  Endpoint ejecutado al banear un usuario en la sala
+     *  Endpoint ejecutado al banear un usuario en la sala.
+     *
+     *  La forma exacta del payload que manda Mazmo acá NUNCA se confirmó
+     *  (el tipo RoomMessage es un supuesto heredado de la plantilla original
+     *  del bot, no algo verificado para este evento puntual) — por eso se
+     *  loguea el body crudo completo, y se prueban varios nombres de campo
+     *  posibles para channelId/key antes de rendirse. Si en producción no
+     *  postea el GIF, hay que mirar el log "onNewBan: body crudo recibido"
+     *  en Vercel para ver la forma real y ajustar la extracción de abajo.
      */
     @Post('new_ban')
-    async onNewBan(@Body() body: RoomMessage, @Req() req: Request, @Res() res: Response) {
+    async onNewBan(@Body() body: AnyDict, @Req() req: Request, @Res() res: Response) {
+        this.logger.debug(`onNewBan: body crudo recibido: ${JSON.stringify(body)}`);
+
+        try {
+            const channelId = body?.message?.channel?.id ?? body?.channel?.id ?? body?.channelId;
+            const replyKey = body?.key ?? body?.replyKey;
+
+            if (!channelId || !replyKey) {
+                this.logger.warn(`onNewBan: no se pudo extraer channelId/key del payload, no se publica el GIF (channelId=${channelId}, replyKey=${replyKey})`);
+                res.status(200).send('OK');
+                return;
+            }
+
+            const gifUrl = this.expulsionGifService.getRandomGif();
+            if (!gifUrl) {
+                this.logger.warn('onNewBan: no hay GIFs configurados en config/gifs-expulsion.json');
+                res.status(200).send('OK');
+                return;
+            }
+
+            const text = this.messagesService.get('EXPULSION_GIF', { GIF_URL: gifUrl });
+            await this.botService.sendReply(replyKey, channelId, text);
+        } catch (e) {
+            this.logger.error('onNewBan: error inesperado al procesar el ban: ' + e.message);
+        }
+
         res.status(200).send('OK')
     }
 

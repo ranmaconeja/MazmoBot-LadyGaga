@@ -1,0 +1,13 @@
+{
+  "_comentario": "GIFs de anime (temática patadas) que el bot postea cuando se detecta una expulsión. Formato: array de URLs directas a archivos .gif (no páginas de Tenor/Giphy — tienen que apuntar directo al archivo, ej: https://media.tenor.com/XXXX/nombre.gif, si no la imagen no se va a poder embeber en el chat). Se elige uno al azar en cada expulsión.",
+  "gifs": [
+    "https://media1.tenor.com/m/HlMpGR0uHq0AAAAC/charlotte-window-kick.gif",
+    "https://media1.tenor.com/m/G7P1KqxDfOIAAAAC/cross-ange-anime-girl.gif",
+    "https://media1.tenor.com/m/7te6q4wtcYoAAAAC/mad-angry.gif",
+    "https://media1.tenor.com/m/Cg305k6Z2JAAAAAC/anime.gif",
+    "https://media1.tenor.com/m/_9yB1M_YSjkAAAAC/umi-monogatari-miyamori-kanon.gif",
+    "https://media.tenor.com/QqllvZh-YRUAAAAM/maid-girl-bunny.gif",
+    "https://media1.tenor.com/m/suCnJdZs5UYAAAAd/haruhi-angry.gif",
+    "https://media1.tenor.com/m/EFvl1UqzIbEAAAAC/mirko-my-hero-academia.gif"
+  ]
+}

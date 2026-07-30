@@ -62,25 +62,11 @@ export class DatabaseService implements OnModuleInit {
                 dato TEXT NOT NULL,
                 createdAt TEXT NOT NULL
             )`,
-            // Caché id->username: GET /users/{id} de Mazmo no funciona de forma
-            // confiable (confirmado el 16/07/2026), solo GET /users/{username}.
-            // Cada vez que resolvemos un usuario con éxito (por username, o por
-            // mención) guardamos acá su id+username, para poder reintentar por
-            // username la próxima vez que solo tengamos el id (ej: !radio).
-            `CREATE TABLE IF NOT EXISTS known_users (
-                id INTEGER PRIMARY KEY,
-                username TEXT NOT NULL,
-                updatedAt TEXT NOT NULL
-            )`,
-            // Log rotativo de los mensajes del canal (últimas 24hs). Se guarda
-            // cada mensaje que llega por el webhook /message; los de más de 24hs
-            // se borran de forma oportunista en cada insert (ver
-            // ChannelMessagesRepository). authorId es el id numérico de Mazmo
-            // (el username se resuelve aparte con known_users si hace falta).
-            `CREATE TABLE IF NOT EXISTS channel_messages (
-                id TEXT PRIMARY KEY,
-                authorId INTEGER NOT NULL,
-                content TEXT NOT NULL,
+            `CREATE TABLE IF NOT EXISTS music_history (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                artist TEXT NOT NULL,
+                title TEXT NOT NULL,
+                suggestion TEXT NOT NULL,
                 createdAt TEXT NOT NULL
             )`,
         ], 'write');

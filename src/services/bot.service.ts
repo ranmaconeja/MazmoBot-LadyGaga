@@ -1,16 +1,12 @@
 import { HttpService, Injectable, Logger } from '@nestjs/common';
 import { AxiosRequestConfig } from 'axios';
 import { AnyDict, RoomReplyMessage, SadesAsk, UserData, UserNotify } from '../types';
-import { KnownUsersRepository } from '../database/known-users.repository';
 
 @Injectable()
 export class BotService {
     private readonly logger = new Logger('OutgoingRequest');
 
-    constructor(
-        private httpService: HttpService,
-        private readonly knownUsersRepository: KnownUsersRepository,
-    ) {}
+    constructor(private httpService: HttpService) {}
 
 
     /**
@@ -42,25 +38,9 @@ export class BotService {
 
     /**
      * Devuelve los datos de un usuario por su ID numérico.
-     *
-     * GET /users/{id} de Mazmo no funciona de forma confiable (confirmado el
-     * 16/07/2026: devuelve 404 incluso para ids válidos). Si falla, se intenta
-     * el caché local id->username (ver KnownUsersRepository) y se reintenta
-     * por username, que sí funciona siempre.
      */
     async getUserData(userId: number): Promise<UserData> {
-        const direct = await this.fetchUser(userId);
-        if (direct) {
-            return direct;
-        }
-
-        const cachedUsername = await this.knownUsersRepository.getUsername(userId);
-        if (cachedUsername) {
-            this.logger.log(`getUserData(${userId}): lookup directo falló, usando cache -> "${cachedUsername}"`);
-            return this.fetchUser(cachedUsername);
-        }
-
-        return null;
+        return this.fetchUser(userId);
     }
 
     /**
@@ -91,14 +71,7 @@ export class BotService {
             return null
         }
 
-        const userData = res.data as UserData
-        if (userData.id && userData.username) {
-            // no bloqueamos la respuesta por esto: si falla el guardado en caché,
-            // el usuario igual se resuelve bien esta vez
-            this.knownUsersRepository.upsert(userData.id, userData.username).catch(() => {})
-        }
-
-        return userData
+        return res.data as UserData
     }
 
     /**

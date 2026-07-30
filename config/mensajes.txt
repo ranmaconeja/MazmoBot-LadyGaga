@@ -10,7 +10,6 @@
 !Horoscopo - Prediccion Diaria sobre aspectos BDSM
 !Musica - Recomendacion al Azar de musica para Sesionar
 !Dato - Un dato curioso sobre el mundo Femdom/BDSM
-!Radio <link de YouTube> - Encola una canción para el reproductor del canal
 
 [AYUDA_MOD]
 📋 Comandos disponibles de {BOT_NAME} (vista completa - moderador/owner):
@@ -31,7 +30,7 @@
 !Horoscopo - Prediccion Diaria sobre aspectos BDSM
 !Musica - Recomendacion al Azar de musica para Sesionar
 !Dato - Un dato curioso sobre el mundo Femdom/BDSM
-!Radio <link de YouTube> - Encola una canción para el reproductor del canal
+M!p <link de YouTube> - Encola una canción para el reproductor
 !PuntosExtra @usuario cantidad - Suma puntos manualmente a un usuario
 
 [PING]
@@ -67,6 +66,7 @@ Ejemplo: Una DOM tratando a otros usuarios de "basura" o un sumiso arrastrándos
 6. Compórtense como personas. (Sabemos que no haría falta aclararlo, pero nunca falta el pejelagarto).
 7. Las imágenes NSFW están permitidas únicamente si tienen contexto dentro de la conversación. Publicarlas sin relación con el tema tratado será considerada una falta.
 Ejemplo: Se está hablando de spank y, de repente, aparece una "fotopija" salvaje sin ningún contexto.
+8. En caso de debates sobre prácticas BDSM, los "masculinos" siempre deben presentar su punto de vista desde la sumisión, dado que es un canal de FEMDOM.
 Las reglas no exigen nada extraordinario. No están sujetas a discusión y se basan en la filosofía del canal.
 
 [PERFIL]
@@ -193,3 +193,10 @@ No pude encontrar a ese usuario.
 
 [DATO_IA_ERROR]
 🤖 No pude conseguir un dato curioso en este momento (falta configurar la IA o se agotó la cuota gratuita del día).
+
+[EXPULSION_GIF]
+👢 ¡Fuera!
+![patada]({GIF_URL})
+
+[QUIEN_RESPUESTA]
+🎲 Yo digo que fue @{USERNAME}

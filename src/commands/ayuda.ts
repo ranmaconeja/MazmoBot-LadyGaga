@@ -5,8 +5,7 @@ import { BotService } from '../services/bot.service';
 import { MessagesService } from '../services/messages.service';
 
 /**
- * Lista corta de comandos, igual para cualquier usuario. Se manda por privado
- * (solo lo ve quien lo pidió), no al canal completo.
+ * Lista corta de comandos, igual para cualquier usuario, siempre pública.
  * La versión completa para moderadores/owner es un comando aparte: !ayudaMods.
  */
 @Injectable()
@@ -25,6 +24,6 @@ export class AyudaHandler implements CommandHandler {
         const body = req.body as RoomMessage;
         const channelId = body.message.channel.id;
         const text = this.messagesService.get('AYUDA');
-        await this.botService.notifyUser(body.key, channelId, body.message.author.id, text);
+        await this.botService.sendReply(body.key, channelId, text);
     }
 }

@@ -31,8 +31,7 @@ export class CompatibilityService {
 
     private describeUser(user: UserData): string {
         const tags = (user.tags && user.tags.length) ? this.tagsService.translateAll(user.tags).join(', ') : 'sin etiquetas';
-        const ubicacion = user.region?.name ? `${user.region.name}, ${user.country?.name ?? '-'}` : (user.country?.name ?? '-');
-        return `@${user.username ?? 'desconocido'} (${user.displayname ?? '-'}), género: ${user.gender ?? '-'}, etiquetas: ${tags}, ubicación: ${ubicacion}, miembro desde: ${user.regdate ?? 'desconocido'}, lo/la conocen ${user.knowedCount ?? 0} personas, participó en ${user.eventCount ?? 0} eventos del canal`;
+        return `@${user.username ?? 'desconocido'} (${user.displayname ?? '-'}), género: ${user.gender ?? '-'}, etiquetas: ${tags}, miembro desde: ${user.regdate ?? 'desconocido'}, lo/la conocen ${user.knowedCount ?? 0} personas, participó en ${user.eventCount ?? 0} eventos del canal`;
     }
 
     private buildPrompt(user1: UserData, user2: UserData): string {
@@ -43,18 +42,16 @@ Usuario 2: ${this.describeUser(user2)}
 
 Evaluá la compatibilidad pensando en roles complementarios (ej: Dominante + Sumiso suele ser compatible; Dominante + Dominante suele ser menos compatible) y afinidad general de etiquetas/prácticas.
 
-Sé realista, no optimista por defecto: si hay un obstáculo concreto (roles que no calzan por ejemplo), mencionalo brevemente; si el match es bueno, decilo también. Elegí lo más relevante para mencionar, no trates de cubrir todos los aspectos posibles.
+Sé realista, no optimista por defecto: si hay un obstáculo concreto (ej: roles que no calzan bien entre sí), mencionalo brevemente; si el match es bueno, decilo también. El porcentaje tiene que reflejar tu evaluación real, bajalo tanto como te parezca que corresponde si encontrás obstáculos genuinos. NO menciones ubicación, distancia geográfica, ni de dónde es cada usuario — ese dato no es relevante para este análisis y no tenés que traerlo a colación.
 
-Sobre la ubicacion, menciona la distancia, pero no restes % de compatibilidad
-
-IMPORTANTE sobre el largo: la descripción tiene que ser un párrafo CORTO de 3 a 4 oraciones como máximo — priorizá ser breve y directo por sobre exhaustivo, yendo derecho a la razón principal del porcentaje.
+IMPORTANTE sobre el largo: la descripción tiene que ser un párrafo de 4 a 5 oraciones, desarrollando bien la razón del porcentaje.
 
 Escribí con tono informal y relajado, voseo natural ("tenés", "sos", "podés"), sin modismos marcados (nada de "che", "posta", "de una").
 
 IMPORTANTE sobre las etiquetas: las etiquetas que te paso ya vienen traducidas al español (o dejadas en inglés cuando así se usan naturalmente en la jerga BDSM hispanohablante) — usalas tal cual te las doy, no las vuelvas a traducir ni le cambies el idioma.
 
 Respondé ÚNICAMENTE con un JSON válido, sin texto adicional, sin markdown, con este formato exacto:
-{"porcentaje": <número entero de 0 a 100>, "descripcion": "<párrafo de 2 a 3 oraciones cortas, en español rioplatense>"}`;
+{"porcentaje": <número entero de 0 a 100>, "descripcion": "<párrafo de 4 a 5 oraciones, en español rioplatense>"}`;
     }
 
     private parseResponse(response: string): CompatibilityResult | null {

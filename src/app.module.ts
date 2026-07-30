@@ -8,14 +8,15 @@ import { ConfigService } from './services/config.service';
 import { MessagesService } from './services/messages.service';
 import { ModeratorsService } from './services/moderators.service';
 import { TagsService } from './services/tags.service';
+import { ExpulsionGifService } from './services/expulsion-gif.service';
+import { RandomMentionService } from './services/random-mention.service';
 
 import { DatabaseService } from './database/database.service';
 import { PointsRepository } from './database/points.repository';
 import { QuestionOfDayRepository } from './database/question-of-day.repository';
 import { FactRepository } from './database/fact.repository';
+import { MusicHistoryRepository } from './database/music-history.repository';
 import { CooldownRepository } from './database/cooldown.repository';
-import { KnownUsersRepository } from './database/known-users.repository';
-import { ChannelMessagesRepository } from './database/channel-messages.repository';
 import { PointsService } from './services/points.service';
 import { CooldownService } from './services/cooldown.service';
 
@@ -75,15 +76,16 @@ import { DatoHandler } from './commands/dato';
         MessagesService,
         ModeratorsService,
         TagsService,
+        ExpulsionGifService,
+        RandomMentionService,
 
         // base de datos
         DatabaseService,
         PointsRepository,
         QuestionOfDayRepository,
         FactRepository,
+        MusicHistoryRepository,
         CooldownRepository,
-        KnownUsersRepository,
-        ChannelMessagesRepository,
         PointsService,
         CooldownService,
 
