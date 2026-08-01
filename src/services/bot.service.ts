@@ -35,6 +35,42 @@ export class BotService {
             })
     }
 
+    /**
+     * Banea a un usuario de un canal.
+     * Endpoint confirmado el 01/08/2026 inspeccionando el tráfico real de mazmo.net:
+     * POST /chat/channels/{channelId}/bans, body: { bannedUserId: <number> }.
+     * Usa el mismo mecanismo de autenticación (Bot-Key con la key del mensaje
+     * entrante) que sendMessageToChannel, ya que es el mismo tipo de endpoint
+     * (una acción sobre un canal puntual) — no confirmado de forma directa que
+     * el bot tenga permisos para esto, así que devuelve false y loguea el
+     * detalle si Mazmo lo rechaza (por ejemplo, si el bot no tiene rol de
+     * moderador en el canal).
+     */
+    async banUser(replyKey: string, channelId: string, bannedUserId: number, reason?: string): Promise<boolean> {
+        const url = `https://prod.mazmoapi.net/chat/channels/${channelId}/bans`
+        const config: AxiosRequestConfig = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Bot-Key': replyKey,
+            },
+        }
+        const payload: AnyDict = { bannedUserId }
+        if (reason) {
+            payload.reason = reason
+        }
+
+        return this.httpService.post(url, payload, config).toPromise()
+            .then(() => {
+                this.logger.log(`Usuario ${bannedUserId} baneado OK en el canal ${channelId}`);
+                return true;
+            })
+            .catch(e => {
+                this.logger.error(`FALLÓ el baneo del usuario ${bannedUserId} en el canal ${channelId}: status ${e?.response?.status}, body: ${JSON.stringify(e?.response?.data)}, mensaje: ${e?.message}`);
+                return false;
+            })
+    }
+
 
     /**
      * Devuelve los datos de un usuario por su ID numérico.

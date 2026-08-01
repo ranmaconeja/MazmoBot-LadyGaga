@@ -47,6 +47,7 @@ import { FilosofiaHandler } from './commands/filosofia';
 import { ReglasHandler } from './commands/reglas';
 import { PuntosHandler } from './commands/puntos';
 import { SumarPuntosHandler } from './commands/sumarpuntos';
+import { BanHandler } from './commands/ban';
 import { PerfilHandler } from './commands/perfil';
 import { BienvenidaHandler } from './commands/bienvenida';
 import { CompatibilidadHandler } from './commands/compatibilidad';
@@ -116,6 +117,7 @@ import { DatoHandler } from './commands/dato';
         ReglasHandler,
         PuntosHandler,
         SumarPuntosHandler,
+        BanHandler,
         PerfilHandler,
         BienvenidaHandler,
         CompatibilidadHandler,
