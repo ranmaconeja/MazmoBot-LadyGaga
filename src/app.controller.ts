@@ -41,30 +41,33 @@ export class AppController {
      * si no se puede extraer algo esencial, no crashea: loguea un warning y
      * corta ahí, en vez de tirar abajo el mensaje entero (y de paso todos los
      * comandos, que dependían de este mismo endpoint para todo).
+     *
+     * ✅ 05/08/2026, forma real CONFIRMADA con un payload de producción:
+     * { event: "channel.message", payload: { channelId, message: { channel,
+     * author, payload: { rawContent, userMentions, ... }, authorId, ... } } }
+     * Ya no viaja ningún campo "key" — la autenticación ahora es con
+     * MAZMO_ORG_TOKEN fijo (ver bot.service.ts), no con una key por mensaje.
+     *
+     * ⚠️ El objeto "channel" acá YA NO trae "participants" (este canal tiene
+     * 7133 participantes — mandarlos completos en cada mensaje sería
+     * altísimo volumen). Esto rompe RandomMentionService (la función de
+     * "quien"), que dependía de ese campo — hasta que se resuelva de otra
+     * forma, "quien" no va a poder mencionar a nadie al azar.
      */
     @Post('message')
     async onRoomMessage(@Body() body: AnyDict, @Req() req: Request, @Res() res: Response) {
         this.logger.debug(`onRoomMessage: body crudo recibido: ${JSON.stringify(body)}`);
 
-        const rawContentRaw = body?.message?.payload?.rawContent
-            ?? body?.message?.rawContent
-            ?? body?.payload?.rawContent
-            ?? body?.rawContent
-            ?? body?.content;
+        const messageBody = body?.payload?.message;
+        const rawContentRaw = messageBody?.payload?.rawContent;
+        const channelId = body?.payload?.channelId ?? messageBody?.channel?.id;
+        const authorId = messageBody?.author?.id ?? messageBody?.authorId;
+        // ya no existe una "key" por mensaje — se deja vacía, bot.service.ts
+        // ignora este parámetro y autentica con MAZMO_ORG_TOKEN en su lugar
+        const replyKey = '';
 
-        const channelId = body?.message?.channel?.id
-            ?? body?.channel?.id
-            ?? body?.channelId;
-
-        const authorId = body?.message?.author?.id
-            ?? body?.author?.id
-            ?? body?.authorId
-            ?? body?.userId;
-
-        const replyKey = body?.key ?? body?.replyKey;
-
-        if (!rawContentRaw || !channelId || !authorId || !replyKey) {
-            this.logger.warn(`onRoomMessage: no se pudo extraer todo lo necesario del payload nuevo (rawContent=${!!rawContentRaw}, channelId=${channelId}, authorId=${authorId}, replyKey=${!!replyKey}) — revisar el log "body crudo recibido" de arriba para ajustar la extracción con la forma real`);
+        if (!rawContentRaw || !channelId || !authorId) {
+            this.logger.warn(`onRoomMessage: no se pudo extraer todo lo necesario del payload (rawContent=${!!rawContentRaw}, channelId=${channelId}, authorId=${authorId}) — revisar el log "body crudo recibido" de arriba`);
             res.status(200).send('OK');
             return;
         }
@@ -73,15 +76,12 @@ export class AppController {
         this.logger.log(`Mensaje recibido: "${rawContent}" (autor id: ${authorId}, canal: ${channelId})`);
 
         // reconstruye el body en la forma vieja que ya esperan CommandService y
-        // los ~20 comandos (RoomMessage) — así, una vez que esta extracción esté
-        // bien, no hace falta tocar cada comando por separado
+        // los ~20 comandos (RoomMessage) — messageBody ya trae casi exactamente
+        // esa forma (channel, author, payload.rawContent, etc.), así que no
+        // hace falta tocar cada comando por separado
         (req as any).body = {
             key: replyKey,
-            message: {
-                payload: body?.message?.payload ?? body?.payload ?? { rawContent: rawContentRaw },
-                author: body?.message?.author ?? body?.author ?? { id: authorId },
-                channel: body?.message?.channel ?? body?.channel ?? { id: channelId },
-            },
+            message: messageBody,
         };
         const normalizedBody = (req as any).body;
 
@@ -156,24 +156,25 @@ export class AppController {
     /**
      *  Endpoint ejecutado al banear un usuario en la sala.
      *
-     *  La forma exacta del payload que manda Mazmo acá NUNCA se confirmó
-     *  (el tipo RoomMessage es un supuesto heredado de la plantilla original
-     *  del bot, no algo verificado para este evento puntual) — por eso se
-     *  loguea el body crudo completo, y se prueban varios nombres de campo
-     *  posibles para channelId/key antes de rendirse. Si en producción no
-     *  postea el GIF, hay que mirar el log "onNewBan: body crudo recibido"
-     *  en Vercel para ver la forma real y ajustar la extracción de abajo.
+     *  ⚠️ La forma exacta de ESTE evento puntual (channel.ban) todavía no se
+     *  confirmó con un payload real — se prioriza la misma forma que ya se
+     *  confirmó para channel.message (body.payload.channelId), con
+     *  fallbacks por si acá viene distinto. Revisar el log "body crudo
+     *  recibido" de abajo si no postea el GIF.
      */
     @Post('new_ban')
     async onNewBan(@Body() body: AnyDict, @Req() req: Request, @Res() res: Response) {
         this.logger.debug(`onNewBan: body crudo recibido: ${JSON.stringify(body)}`);
 
         try {
-            const channelId = body?.message?.channel?.id ?? body?.channel?.id ?? body?.channelId;
-            const replyKey = body?.key ?? body?.replyKey;
+            const channelId = body?.payload?.channelId
+                ?? body?.payload?.message?.channel?.id
+                ?? body?.message?.channel?.id
+                ?? body?.channel?.id
+                ?? body?.channelId;
 
-            if (!channelId || !replyKey) {
-                this.logger.warn(`onNewBan: no se pudo extraer channelId/key del payload, no se publica el GIF (channelId=${channelId}, replyKey=${replyKey})`);
+            if (!channelId) {
+                this.logger.warn(`onNewBan: no se pudo extraer channelId del payload, no se publica el GIF`);
                 res.status(200).send('OK');
                 return;
             }
@@ -186,7 +187,8 @@ export class AppController {
             }
 
             const text = this.messagesService.get('EXPULSION_GIF', { GIF_URL: gifUrl });
-            await this.botService.sendReply(replyKey, channelId, text);
+            // replyKey vacío: ya no se usa para autenticar (ver bot.service.ts, MAZMO_ORG_TOKEN)
+            await this.botService.sendReply('', channelId, text);
         } catch (e) {
             this.logger.error('onNewBan: error inesperado al procesar el ban: ' + e.message);
         }
