@@ -29,17 +29,61 @@ export class AppController {
 
     /**
      * Endpoint ejecutado al recibir mensaje de la sala, incluye la lógica necesaria para ejecutar los
-     * commandHandlers registrados en el constructor
+     * commandHandlers registrados en el constructor.
+     *
+     * ⚠️ 05/08/2026: la migración de bot a cuenta de Organización cambió la
+     * forma del payload que manda Mazmo (con el esquema viejo era
+     * body.message.payload.rawContent, etc. — eso ya no funciona, tira
+     * "Cannot read properties of undefined"). Todavía no se confirmó la
+     * forma nueva, así que esto extrae de forma defensiva probando varias
+     * rutas posibles, y loguea el body crudo completo para poder ajustar con
+     * datos reales en vez de seguir adivinando. Mientras no se confirme,
+     * si no se puede extraer algo esencial, no crashea: loguea un warning y
+     * corta ahí, en vez de tirar abajo el mensaje entero (y de paso todos los
+     * comandos, que dependían de este mismo endpoint para todo).
      */
     @Post('message')
-    async onRoomMessage(@Body() body: RoomMessage, @Req() req: Request, @Res() res: Response) {
-        const rawContent = stripHtml(body.message.payload.rawContent);
-        this.logger.log(`Mensaje recibido: "${rawContent}" (autor id: ${body.message.author.id}, canal: ${body.message.channel.id})`);
+    async onRoomMessage(@Body() body: AnyDict, @Req() req: Request, @Res() res: Response) {
+        this.logger.debug(`onRoomMessage: body crudo recibido: ${JSON.stringify(body)}`);
 
-        // log temporal de diagnóstico: para ver la estructura real de las menciones que manda mazmo
-        if (rawContent.startsWith('!lazo') || rawContent.startsWith('!astral') || rawContent.startsWith('!perfil')) {
-            this.logger.debug(`Payload completo del mensaje: ${JSON.stringify(body.message.payload)}`);
+        const rawContentRaw = body?.message?.payload?.rawContent
+            ?? body?.message?.rawContent
+            ?? body?.payload?.rawContent
+            ?? body?.rawContent
+            ?? body?.content;
+
+        const channelId = body?.message?.channel?.id
+            ?? body?.channel?.id
+            ?? body?.channelId;
+
+        const authorId = body?.message?.author?.id
+            ?? body?.author?.id
+            ?? body?.authorId
+            ?? body?.userId;
+
+        const replyKey = body?.key ?? body?.replyKey;
+
+        if (!rawContentRaw || !channelId || !authorId || !replyKey) {
+            this.logger.warn(`onRoomMessage: no se pudo extraer todo lo necesario del payload nuevo (rawContent=${!!rawContentRaw}, channelId=${channelId}, authorId=${authorId}, replyKey=${!!replyKey}) — revisar el log "body crudo recibido" de arriba para ajustar la extracción con la forma real`);
+            res.status(200).send('OK');
+            return;
         }
+
+        const rawContent = stripHtml(rawContentRaw);
+        this.logger.log(`Mensaje recibido: "${rawContent}" (autor id: ${authorId}, canal: ${channelId})`);
+
+        // reconstruye el body en la forma vieja que ya esperan CommandService y
+        // los ~20 comandos (RoomMessage) — así, una vez que esta extracción esté
+        // bien, no hace falta tocar cada comando por separado
+        (req as any).body = {
+            key: replyKey,
+            message: {
+                payload: body?.message?.payload ?? body?.payload ?? { rawContent: rawContentRaw },
+                author: body?.message?.author ?? body?.author ?? { id: authorId },
+                channel: body?.message?.channel ?? body?.channel ?? { id: channelId },
+            },
+        };
+        const normalizedBody = (req as any).body;
 
         if (! await this.commandService.handle(rawContent, req, res)) {
             // no se ha encontrado coincidencia para un comando registrado
@@ -47,16 +91,16 @@ export class AppController {
             // chequeamos si el mensaje dispara alguna autofrase por palabra clave
             const autoResponse = this.autofrasesService.checkMessage(rawContent);
             if (autoResponse) {
-                await this.botService.sendReply(body.key, body.message.channel.id, autoResponse);
+                await this.botService.sendReply(replyKey, channelId, autoResponse);
             }
 
             // si el mensaje contiene la palabra "quien" (sola, no "quienes" ni
             // "aquien"), mencionamos a un participante al azar del canal
             if (/\bquien\b/i.test(rawContent)) {
-                const username = await this.randomMentionService.pickRandomParticipant(body);
+                const username = await this.randomMentionService.pickRandomParticipant(normalizedBody);
                 if (username) {
                     const text = this.messagesService.get('QUIEN_RESPUESTA', { USERNAME: username });
-                    await this.botService.sendReply(body.key, body.message.channel.id, text);
+                    await this.botService.sendReply(replyKey, channelId, text);
                 }
             }
         }
@@ -72,7 +116,7 @@ export class AppController {
                     DESCRIPTION: videoInfo.description,
                     THUMBNAIL_URL: videoInfo.thumbnailUrl,
                 });
-                await this.botService.sendReply(body.key, body.message.channel.id, text);
+                await this.botService.sendReply(replyKey, channelId, text);
             }
         }
 
