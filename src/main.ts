@@ -14,8 +14,14 @@ async function bootstrap() {
   // límite por defecto de Express de 100kb se quedaba corto y rechazaba las requests
   // antes de que llegaran a nuestro código).
   const app = await NestFactory.create(AppModule, { bodyParser: false });
-  app.use(json({ limit: '10mb' }));
-  app.use(urlencoded({ extended: true, limit: '10mb' }));
+  // guarda el body crudo en req.rawBody ANTES de parsearlo como JSON — hace
+  // falta tal cual, byte a byte, para verificar la firma HMAC de Mazmo
+  // (channel_signature.service.ts / ver migración a cuentas de Organización)
+  const rawBodySaver = (req: any, res: any, buf: Buffer) => {
+    req.rawBody = buf;
+  };
+  app.use(json({ limit: '10mb', verify: rawBodySaver }));
+  app.use(urlencoded({ extended: true, limit: '10mb', verify: rawBodySaver }));
 
   await app.listen(process.env.PORT || 3000);
 }

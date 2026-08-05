@@ -5,7 +5,7 @@ import { PlayerQueueService } from './modules/player/player-queue.service';
  * Endpoint que polea el cliente de reproducción (programa de Windows) cada
  * tantos segundos, preguntando si hay una canción nueva para reproducir.
  *
- * No pasa por BotRequestMiddleware (ese valida el "bot-secret" que manda Mazmo,
+ * No pasa por BotRequestMiddleware (ese valida la firma HMAC que manda Mazmo,
  * una credencial distinta) — acá se valida "x-secret-key" contra PLAYER_SECRET_KEY,
  * igual que antes se validaba en la conexión WebSocket.
  */

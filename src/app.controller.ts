@@ -151,6 +151,17 @@ export class AppController {
     }
 
     /**
+     *  Endpoint para el evento channel.unban (cuenta de Organización) — se
+     *  dispara cuando se le saca el baneo a alguien. Sin lógica todavía,
+     *  gancho vacío listo para cuando haga falta (mismo patrón que los
+     *  demás stubs de este controller).
+     */
+    @Post('new_unban')
+    async onNewUnban(@Body() body: AnyDict, @Req() req: Request, @Res() res: Response) {
+        res.status(200).send('OK')
+    }
+
+    /**
      *  Endpoint ejecutado al actualizar la información del canal (se dispara cuando se remueve un baneo)
      */
     @Post('channel_updated')

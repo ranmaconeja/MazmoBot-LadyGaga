@@ -8,7 +8,7 @@ describe('AppController (e2e)', () => {
   let app: INestApplication;
 
   beforeEach(async () => {
-    process.env.BOT_SECRET = process.env.BOT_SECRET || 'test-secret';
+    process.env.MAZMO_WEBHOOK_SIGNING_KEY = process.env.MAZMO_WEBHOOK_SIGNING_KEY || 'test-signing-key';
 
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
@@ -29,7 +29,7 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  it('/message (POST) sin bot-secret debe devolver 403', () => {
+  it('/message (POST) sin firma HMAC válida debe devolver 403', () => {
     return request(app.getHttpServer())
       .post('/message')
       .send({})

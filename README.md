@@ -50,7 +50,8 @@ Toda la configuración vive en `/config`, **no hay nada hardcodeado**:
 Además, en `.env` (versionado en el repo porque es privado y de uso personal):
 
 ```
-BOT_SECRET=<bot secret provisto por mazmo, valida los webhooks entrantes>
+MAZMO_ORG_TOKEN=<token Bearer de tu cuenta de Organización en Mazmo, autentica las llamadas salientes>
+MAZMO_WEBHOOK_SIGNING_KEY=<clave de firma HMAC-SHA256 de la organización, verifica los webhooks entrantes>
 OWNER_ID=<tu id de usuario, siempre tratado como moderador>
 TURSO_DATABASE_URL=<url de tu base en Turso>
 TURSO_AUTH_TOKEN=<token de autenticación de Turso>
@@ -257,9 +258,9 @@ El proyecto está pensado para desplegarse en Vercel como funciones serverless
 
 1. Importá el repo en Vercel (o corré `vercel` desde la CLI).
 2. Configurá las variables de entorno en el panel de Vercel (Project Settings →
-   Environment Variables): `BOT_SECRET`, `OWNER_ID`, `TURSO_DATABASE_URL`,
-   `TURSO_AUTH_TOKEN`, y opcionalmente `GEMINI_API_KEY`, `GROQ_API_KEY`,
-   `YOUTUBE_API_KEY`, `PLAYER_SECRET_KEY`.
+   Environment Variables): `MAZMO_ORG_TOKEN`, `MAZMO_WEBHOOK_SIGNING_KEY`, `OWNER_ID`,
+   `TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN`, y opcionalmente `GEMINI_API_KEY`,
+   `GROQ_API_KEY`, `YOUTUBE_API_KEY`, `PLAYER_SECRET_KEY`.
 3. Completá `config/config.json` con los datos reales de tu bot antes de desplegar
    (se lee del filesystem de solo lectura en cada arranque de contenedor).
 4. Asegurate de tener una base creada en [Turso](https://turso.tech/) — las tablas se

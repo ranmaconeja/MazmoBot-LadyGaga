@@ -18,8 +18,13 @@ let cachedApp: Promise<NestExpressApplication> | null = null;
 
 async function createApp(): Promise<NestExpressApplication> {
     const app = await NestFactory.create<NestExpressApplication>(AppModule, { bodyParser: false });
-    app.use(json({ limit: '10mb' }));
-    app.use(urlencoded({ extended: true, limit: '10mb' }));
+    // guarda el body crudo en req.rawBody ANTES de parsearlo como JSON — hace
+    // falta tal cual, byte a byte, para verificar la firma HMAC de Mazmo
+    const rawBodySaver = (req: any, res: any, buf: Buffer) => {
+        req.rawBody = buf;
+    };
+    app.use(json({ limit: '10mb', verify: rawBodySaver }));
+    app.use(urlencoded({ extended: true, limit: '10mb', verify: rawBodySaver }));
     await app.init();
     return app;
 }

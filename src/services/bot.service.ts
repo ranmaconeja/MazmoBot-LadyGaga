@@ -8,10 +8,29 @@ export class BotService {
 
     constructor(private httpService: HttpService) {}
 
+    /**
+     * Headers de autenticación para las llamadas salientes a la API de Mazmo.
+     * Migrado el 05/08/2026 del viejo esquema de bots (Bot-Key distinto por
+     * canal, sacado de cada mensaje entrante) al nuevo de cuentas de
+     * Organización: un solo token fijo (MAZMO_ORG_TOKEN), igual para
+     * cualquier canal, que no expira por canal y se puede revocar entero
+     * desde los ajustes de la organización en Mazmo.
+     *
+     * El parámetro `replyKey` que reciben sendReply/notifyUser/banUser/etc.
+     * quedó sin uso real (era la key vieja) — se dejó en las firmas de todas
+     * formas para no tener que tocar los ~20 comandos que ya lo pasan como
+     * primer argumento; es un parámetro vestigial hoy, no rompe nada dejarlo.
+     */
+    private authHeaders(): Record<string, string> {
+        return {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${process.env.MAZMO_ORG_TOKEN}`,
+        };
+    }
 
     /**
      * Envía un mensaje a un canal.
-     * @param string replyKey
+     * @param string replyKey Vestigial, ver authHeaders() — ya no se usa para autenticar.
      * @param string channelId
      * @param string replyPayload Especificar en rawContent el mensaje a enviar a la sala, otras propiedades son opcionales y dependen del tipo de mensaje a enviar
      */
@@ -19,10 +38,7 @@ export class BotService {
         const postbackUrl = `https://prod.mazmoapi.net/chat/channels/${channelId}/messages`
         const config: AxiosRequestConfig = {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Bot-Key': replyKey,
-            },
+            headers: this.authHeaders(),
         }
         await this.httpService.post(postbackUrl, replyPayload, config).toPromise()
             .then(() => {
@@ -39,21 +55,17 @@ export class BotService {
      * Banea a un usuario de un canal.
      * Endpoint confirmado el 01/08/2026 inspeccionando el tráfico real de mazmo.net:
      * POST /chat/channels/{channelId}/bans, body: { bannedUserId: <number> }.
-     * Usa el mismo mecanismo de autenticación (Bot-Key con la key del mensaje
-     * entrante) que sendMessageToChannel, ya que es el mismo tipo de endpoint
-     * (una acción sobre un canal puntual) — no confirmado de forma directa que
-     * el bot tenga permisos para esto, así que devuelve false y loguea el
-     * detalle si Mazmo lo rechaza (por ejemplo, si el bot no tiene rol de
-     * moderador en el canal).
+     * Ahora autenticado con el token de la Organización — al ser una cuenta
+     * real que se une al canal como participante (a diferencia de los bots
+     * viejos), es más probable que sí se le pueda dar rol de moderador y esto
+     * funcione de verdad. Igual devuelve false y loguea el detalle si Mazmo
+     * lo rechaza, por si todavía hace falta ese permiso aparte.
      */
     async banUser(replyKey: string, channelId: string, bannedUserId: number, reason?: string): Promise<boolean> {
         const url = `https://prod.mazmoapi.net/chat/channels/${channelId}/bans`
         const config: AxiosRequestConfig = {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Bot-Key': replyKey,
-            },
+            headers: this.authHeaders(),
         }
         const payload: AnyDict = { bannedUserId }
         if (reason) {
@@ -92,6 +104,7 @@ export class BotService {
      * GET /users/{username_o_id}?relationships=true&subscriptions=true&view=true
      * Acepta tanto un username como un ID numérico en el mismo path, y devuelve el
      * objeto de usuario directo (no envuelto por ID como se asumía antes).
+     * Es una consulta pública, no lleva autenticación.
      */
     private async fetchUser(identifier: string | number): Promise<UserData> {
         // encodeURIComponent evita que un identificador con caracteres como /, ?, & o espacios
@@ -111,11 +124,15 @@ export class BotService {
     }
 
     /**
-     * Devuelve el balance de sades del bot
+     * Devuelve el balance de sades de la organización.
+     * Antes usaba ?botSecret=... como query param; ahora Bearer, igual que
+     * el resto — no confirmado de forma directa para este endpoint puntual
+     * (el anuncio de Mazmo no lo menciona explícitamente), es una inferencia
+     * razonable dado que todo lo demás migró a este esquema.
      */
     async getBalance(): Promise<number> {
         const config: AxiosRequestConfig = {
-            params: { botSecret: process.env.BOT_SECRET }
+            headers: this.authHeaders(),
         }
         const { data: { balance } } = await this.httpService.get('https://prod.mazmoapi.net/bank/boxes/balance', config).toPromise().catch(e => { return { data: {balance: 0} } })
         return balance ?? 0
@@ -126,7 +143,7 @@ export class BotService {
      * Solo el usuario destinatario podrá ver el mensaje (confirmado en
      * producción el 15/07/2026: Mazmo lo muestra con la etiqueta "Sólo vos
      * podés ver este mensaje", visible solo para el destinatario).
-     * @param replyKey
+     * @param replyKey Vestigial, ver authHeaders() — ya no se usa para autenticar.
      * @param channelId
      * @param toUserId
      * @param rawContent Mensaje a enviar a la sala, acepta el mismo markdown que la UI del chat
@@ -143,7 +160,7 @@ export class BotService {
 
     /**
      * Envía un pedido de transferencia de sades a un canal.
-     * @param replyKey
+     * @param replyKey Vestigial, ver authHeaders() — ya no se usa para autenticar.
      * @param channelId
      * @param rawContent Mensaje a enviar a la sala, acepta el mismo markdown que la UI del chat
      * @param amount Cantidad de sades a pedir
@@ -167,7 +184,7 @@ export class BotService {
 
     async transferSadesToUser(toUserId: number, concept: string, amount: number) {
         const config: AxiosRequestConfig = {
-            params: { botSecret: process.env.BOT_SECRET }
+            headers: this.authHeaders(),
         }
         const payload = {
             to: { type: 'USER', id: toUserId },
@@ -180,7 +197,7 @@ export class BotService {
 
     /**
      * Envía un mensaje a un canal.
-     * @param string replyKey
+     * @param string replyKey Vestigial, ver authHeaders() — ya no se usa para autenticar.
      * @param string channelId
      * @param string replyPayload Mensaje a enviar a la sala, acepta el mismo markdown que la UI del chat
      */
