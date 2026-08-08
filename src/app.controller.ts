@@ -125,6 +125,7 @@ export class AppController {
                         if (result.won) {
                             await this.pointsService.addPointsManually(authorId, 10);
                             const text = this.messagesService.get('AHORCADO_GANADO', {
+                                DIBUJO: this.hangmanService.drawHangman(result.game.wrongCount),
                                 PALABRA: result.game.word,
                                 PUNTOS: '10',
                             });
@@ -137,7 +138,6 @@ export class AppController {
                             await this.botService.sendReply(replyKey, channelId, text);
                         } else {
                             const text = this.messagesService.get(result.correct ? 'AHORCADO_LETRA_CORRECTA' : 'AHORCADO_LETRA_INCORRECTA', {
-                                DIBUJO: this.hangmanService.drawHangman(result.game.wrongCount),
                                 PALABRA: this.hangmanService.maskWord(result.game),
                                 RESTANTES: String(this.hangmanService.getMaxWrong() - result.game.wrongCount),
                             });
@@ -148,6 +148,7 @@ export class AppController {
                     const wonGame = await this.hangmanService.winByWord(game);
                     await this.pointsService.addPointsManually(authorId, 10);
                     const text = this.messagesService.get('AHORCADO_GANADO', {
+                        DIBUJO: this.hangmanService.drawHangman(wonGame.wrongCount),
                         PALABRA: wonGame.word,
                         PUNTOS: '10',
                     });

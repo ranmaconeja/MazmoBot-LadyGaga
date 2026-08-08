@@ -10,7 +10,7 @@
 !Horoscopo - Prediccion Diaria sobre aspectos BDSM
 !Musica - Recomendacion al Azar de musica para Sesionar
 !Dato - Un dato curioso sobre el mundo Femdom/BDSM
-!Suspension - Arranca una partida del juego de adivinar letras (ex Ahorcado)
+!Suspension - Arranca una partida del juego de adivinar letras
 
 ATENCION: El bot no reconoce acentos (Cuidado con el autocorrector), y tampoco lee ediciones del texto, cualquier cosita escribí el comando de nuevo.
 
@@ -33,7 +33,7 @@ ATENCION: El bot no reconoce acentos (Cuidado con el autocorrector), y tampoco l
 !Horoscopo - Prediccion Diaria sobre aspectos BDSM
 !Musica - Recomendacion al Azar de musica para Sesionar
 !Dato - Un dato curioso sobre el mundo Femdom/BDSM
-!Suspension - Arranca una partida del juego de adivinar letras (ex Ahorcado)
+!Suspension - Arranca una partida del juego de adivinar letras
 M!p <link de YouTube> - Encola una canción para el reproductor
 !PuntosExtra @usuario cantidad - Suma puntos manualmente a un usuario
 !ban @usuario [motivo] - Expulsa a un usuario del canal
@@ -219,40 +219,37 @@ No pude encontrar a ese usuario.
 ❌ No pude banear a "{USERNAME}" (Mazmo rechazó la acción — puede que el bot no tenga permisos de moderador en el canal).
 
 [AHORCADO_INICIO]
-🎯 ¡Arrancó el Ahorcado! Escribí una letra sola en el chat para adivinar, o directamente la palabra completa si te animás.
+🎯 ¡Arrancó la Suspensión! Escribí una letra sola en el chat para adivinar, o directamente la palabra completa si te animás.
 ```
 {DIBUJO}
 ```
 {PALABRA}
 
 [AHORCADO_YA_ACTIVO]
-⚠️ Ya hay una partida de Ahorcado en curso:
+⚠️ Ya hay una partida de Suspensión en curso:
 ```
 {DIBUJO}
 ```
 {PALABRA}
 
 [AHORCADO_SIN_PALABRAS]
-😕 Todavía no hay palabras cargadas para jugar al Ahorcado.
+😕 Todavía no hay palabras cargadas para jugar a la Suspensión.
 
 [AHORCADO_LETRA_CORRECTA]
 ✅ ¡Bien! Esa letra está.
-```
-{DIBUJO}
-```
 {PALABRA}
 (Te quedan {RESTANTES} errores)
 
 [AHORCADO_LETRA_INCORRECTA]
 ❌ Esa letra no está.
-```
-{DIBUJO}
-```
 {PALABRA}
 (Te quedan {RESTANTES} errores)
 
 [AHORCADO_GANADO]
 🎉 ¡Ganaste! La palabra era "{PALABRA}". Sumaste {PUNTOS} puntos de premio.
+```
+{DIBUJO}
+```
 
 [AHORCADO_PERDIDO]
 💀 Se acabaron los intentos. La palabra era "{PALABRA}".

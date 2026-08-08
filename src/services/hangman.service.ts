@@ -11,7 +11,7 @@ export type GuessResult = {
     lost: boolean,
 };
 
-const MAX_WRONG = 6;
+const MAX_WRONG = 10;
 
 // dibujo clásico del ahorcado, una entrada por cantidad de fallos (0 a 6)
 const HANGMAN_STAGES = [
@@ -150,7 +150,10 @@ export class HangmanService {
     }
 
     drawHangman(wrongCount: number): string {
-        const stage = Math.min(wrongCount, MAX_WRONG);
+        // el dibujo tiene 7 etapas (0 a 6) aunque MAX_WRONG sea más alto — a
+        // partir de la etapa 6 (figura completa) se reutiliza la misma
+        // imagen, no hace falta dibujar más para los intentos 7 a 10
+        const stage = Math.min(wrongCount, HANGMAN_STAGES.length - 1);
         return HANGMAN_STAGES[stage];
     }
 
