@@ -9,6 +9,8 @@ import { YoutubeService } from './modules/youtube/youtube.service';
 import { MessagesService } from './services/messages.service';
 import { ExpulsionGifService } from './services/expulsion-gif.service';
 import { RandomMentionService } from './services/random-mention.service';
+import { HangmanService } from './services/hangman.service';
+import { PointsService } from './services/points.service';
 import { stripHtml } from './util/sanitize';
 
 @Controller()
@@ -24,6 +26,8 @@ export class AppController {
         private messagesService: MessagesService,
         private expulsionGifService: ExpulsionGifService,
         private randomMentionService: RandomMentionService,
+        private hangmanService: HangmanService,
+        private pointsService: PointsService,
     ) {
     }
 
@@ -100,6 +104,53 @@ export class AppController {
                 const username = await this.randomMentionService.pickRandomParticipant(normalizedBody);
                 if (username) {
                     const text = this.messagesService.get('QUIEN_RESPUESTA', { USERNAME: username });
+                    await this.botService.sendReply(replyKey, channelId, text);
+                }
+            }
+
+            // si hay una partida de !suspension activa en este canal, chequeamos
+            // dos cosas con el mismo mensaje: si es una sola letra (intento
+            // normal, con penalidad si falla), o si el mensaje entero coincide
+            // con la palabra secreta (gana directo, sin pedir ningún comando
+            // aparte — y si NO coincide, no hacemos nada, ni penaliza ni
+            // manda ningún mensaje, para no interferir con la charla normal)
+            const game = await this.hangmanService.getActiveGame(channelId);
+            if (game) {
+                const soloUnaLetra = /^[a-zA-ZñÑáéíóúÁÉÍÓÚ]$/.test(rawContent.trim());
+
+                if (soloUnaLetra) {
+                    const result = await this.hangmanService.guessLetter(game, rawContent.trim());
+
+                    if (!result.alreadyGuessed) {
+                        if (result.won) {
+                            await this.pointsService.addPointsManually(authorId, 10);
+                            const text = this.messagesService.get('AHORCADO_GANADO', {
+                                PALABRA: result.game.word,
+                                PUNTOS: '10',
+                            });
+                            await this.botService.sendReply(replyKey, channelId, text);
+                        } else if (result.lost) {
+                            const text = this.messagesService.get('AHORCADO_PERDIDO', {
+                                DIBUJO: this.hangmanService.drawHangman(result.game.wrongCount),
+                                PALABRA: result.game.word,
+                            });
+                            await this.botService.sendReply(replyKey, channelId, text);
+                        } else {
+                            const text = this.messagesService.get(result.correct ? 'AHORCADO_LETRA_CORRECTA' : 'AHORCADO_LETRA_INCORRECTA', {
+                                DIBUJO: this.hangmanService.drawHangman(result.game.wrongCount),
+                                PALABRA: this.hangmanService.maskWord(result.game),
+                                RESTANTES: String(this.hangmanService.getMaxWrong() - result.game.wrongCount),
+                            });
+                            await this.botService.sendReply(replyKey, channelId, text);
+                        }
+                    }
+                } else if (this.hangmanService.isWordMatch(game, rawContent.trim())) {
+                    const wonGame = await this.hangmanService.winByWord(game);
+                    await this.pointsService.addPointsManually(authorId, 10);
+                    const text = this.messagesService.get('AHORCADO_GANADO', {
+                        PALABRA: wonGame.word,
+                        PUNTOS: '10',
+                    });
                     await this.botService.sendReply(replyKey, channelId, text);
                 }
             }

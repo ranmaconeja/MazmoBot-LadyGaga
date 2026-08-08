@@ -12,6 +12,7 @@ import { ReglasHandler } from '../commands/reglas';
 import { PuntosHandler } from '../commands/puntos';
 import { SumarPuntosHandler } from '../commands/sumarpuntos';
 import { BanHandler } from '../commands/ban';
+import { AhorcadoHandler } from '../commands/ahorcado';
 import { PerfilHandler } from '../commands/perfil';
 import { BienvenidaHandler } from '../commands/bienvenida';
 import { CompatibilidadHandler } from '../commands/compatibilidad';
@@ -70,6 +71,7 @@ export class CommandService {
         private readonly puntosHandler: PuntosHandler,
         private readonly sumarPuntosHandler: SumarPuntosHandler,
         private readonly banHandler: BanHandler,
+        private readonly ahorcadoHandler: AhorcadoHandler,
         private readonly perfilHandler: PerfilHandler,
         private readonly bienvenidaHandler: BienvenidaHandler,
         private readonly compatibilidadHandler: CompatibilidadHandler,
@@ -96,6 +98,7 @@ export class CommandService {
         this.registerHandler(puntosHandler)
         this.registerHandler(sumarPuntosHandler)
         this.registerHandler(banHandler)
+        this.registerHandler(ahorcadoHandler)
         this.registerHandler(perfilHandler)
         this.registerHandler(bienvenidaHandler)
         this.registerHandler(compatibilidadHandler)
@@ -109,10 +112,20 @@ export class CommandService {
         this.registerHandler(datoHandler)
     }
 
+    /**
+     * Saca acentos de un texto (á->a, ó->o, etc.), para que los nombres de
+     * comando funcionen sin importar si el usuario tipeó el acento o no
+     * (ej: !suspension y !suspensión son el mismo comando).
+     */
+    private stripAccents(text: string): string {
+        return text.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+    }
+
     private registerHandler(handler: CommandHandler) {
-        // se guarda en minúsculas para que el comando funcione sin importar
-        // cómo lo hayan tipeado (!Ping, !PING, !ping, etc. son todos el mismo comando)
-        this.handlers[handler.getSignature().toLowerCase()] = handler;
+        // se guarda en minúsculas y sin acentos para que el comando funcione sin
+        // importar cómo lo hayan tipeado (!Ping, !PING, !ping, !suspensión,
+        // !suspension, etc. son todos el mismo comando)
+        this.handlers[this.stripAccents(handler.getSignature().toLowerCase())] = handler;
     }
 
     async handle(rawContent: string, req: Request, res: Response): Promise<boolean> {
@@ -132,7 +145,7 @@ export class CommandService {
             }
         }
 
-        const commandKey = command ? command.toLowerCase() : command;
+        const commandKey = command ? this.stripAccents(command.toLowerCase()) : command;
 
         if (commandKey && this.handlers[commandKey]) {
             // remover comando

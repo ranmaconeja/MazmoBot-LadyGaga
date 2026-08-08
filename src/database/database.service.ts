@@ -69,6 +69,20 @@ export class DatabaseService implements OnModuleInit {
                 suggestion TEXT NOT NULL,
                 createdAt TEXT NOT NULL
             )`,
+            `CREATE TABLE IF NOT EXISTS hangman_game (
+                channelId TEXT PRIMARY KEY,
+                word TEXT NOT NULL,
+                guessedLetters TEXT NOT NULL DEFAULT '',
+                wrongLetters TEXT NOT NULL DEFAULT '',
+                wrongCount INTEGER NOT NULL DEFAULT 0,
+                startedBy TEXT NOT NULL,
+                startedAt TEXT NOT NULL
+            )`,
+            `CREATE TABLE IF NOT EXISTS hangman_history (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                word TEXT NOT NULL,
+                createdAt TEXT NOT NULL
+            )`,
         ], 'write');
     }
 
