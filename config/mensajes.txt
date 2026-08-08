@@ -11,6 +11,8 @@
 !Musica - Recomendacion al Azar de musica para Sesionar
 !Dato - Un dato curioso sobre el mundo Femdom/BDSM
 
+ATENCION: El bot no reconoce acentos (Cuidado con el autocorrector), y tampoco lee ediciones del texto, cualquier cosita escribí el comando de nuevo.
+
 [AYUDA_MOD]
 📋 Comandos disponibles de {BOT_NAME} (vista completa - moderador/owner):
 !ayuda - Lista de Comandos
