@@ -140,9 +140,17 @@ export class HangmanService {
         return game.word
             .split('')
             .map(char => {
+                if (char === ' ') {
+                    // un espacio real, sin marcar, es fácil que el chat lo
+                    // colapse junto con los espacios que separan cada letra
+                    // (el .join(' ') de abajo), y las dos palabras terminan
+                    // pareciendo una sola pegada — se marca con "/" para que
+                    // se note siempre, colapse lo que colapse
+                    return '/';
+                }
                 const normalizedChar = this.normalize(char);
                 if (!/[a-z]/.test(normalizedChar)) {
-                    return char; // espacios, guiones, etc. se muestran siempre
+                    return char; // guiones, signos, etc. se muestran siempre
                 }
                 return game.guessedLetters.includes(normalizedChar) ? char : '_';
             })
