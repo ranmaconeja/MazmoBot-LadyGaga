@@ -124,6 +124,11 @@ No pude encontrar a ese usuario.
 {DESCRIPTION}
 ![miniatura]({THUMBNAIL_URL})
 
+[YOUTUBE_PLAYLIST_INFO]
+📺 **{TITLE}** (playlist de {CANAL}, {CANTIDAD} videos)
+{DESCRIPTION}
+![miniatura]({THUMBNAIL_URL})
+
 [MUSICA_RESULT]
 🎵 Recomendación musical: **{TITLE}**
 {DESCRIPTION}

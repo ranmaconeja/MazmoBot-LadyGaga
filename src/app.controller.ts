@@ -79,6 +79,28 @@ export class AppController {
         const rawContent = stripHtml(rawContentRaw);
         this.logger.log(`Mensaje recibido: "${rawContent}" (autor id: ${authorId}, canal: ${channelId})`);
 
+        // ⚠️ 08/08/2026: ahora que el bot es una cuenta de Organización real
+        // (participante del canal, no un "bot" externo como antes), Mazmo
+        // manda este mismo webhook también por los mensajes que publica el
+        // propio bot — sin este chequeo, !musica (y cualquier otra respuesta
+        // que contenga un link de YouTube) se "leía a sí misma" y volvía a
+        // publicar la miniatura del video una segunda vez.
+        //
+        // Se compara authorId contra MAZMO_ORG_ID (confirmado con datos
+        // reales: viene en subscribedOrgs del payload del canal) — si no
+        // está configurada esa variable, se usa author.type !== 'USER' como
+        // respaldo (no confirmado con un mensaje real del bot todavía, por
+        // las dudas se loguea para poder ajustar si hace falta).
+        const authorType = messageBody?.author?.type;
+        const esMensajePropio = (process.env.MAZMO_ORG_ID && String(authorId) === String(process.env.MAZMO_ORG_ID))
+            || (authorType && authorType !== 'USER');
+
+        if (esMensajePropio) {
+            this.logger.debug(`onRoomMessage: mensaje del propio bot (authorId=${authorId}, author.type=${authorType}), se ignora para no auto-responderse`);
+            res.status(200).send('OK');
+            return;
+        }
+
         // reconstruye el body en la forma vieja que ya esperan CommandService y
         // los ~20 comandos (RoomMessage) — messageBody ya trae casi exactamente
         // esa forma (channel, author, payload.rawContent, etc.), así que no
@@ -169,6 +191,23 @@ export class AppController {
                     THUMBNAIL_URL: videoInfo.thumbnailUrl,
                 });
                 await this.botService.sendReply(replyKey, channelId, text);
+            }
+        } else {
+            // sin video individual: puede ser un link de playlist pura
+            // (youtube.com/playlist?list=...)
+            const playlistId = this.youtubeService.extractPlaylistId(rawContent);
+            if (playlistId) {
+                const playlistInfo = await this.youtubeService.getPlaylistInfo(playlistId);
+                if (playlistInfo) {
+                    const text = this.messagesService.get('YOUTUBE_PLAYLIST_INFO', {
+                        TITLE: playlistInfo.title,
+                        DESCRIPTION: playlistInfo.description,
+                        THUMBNAIL_URL: playlistInfo.thumbnailUrl,
+                        CANAL: playlistInfo.channelTitle,
+                        CANTIDAD: String(playlistInfo.itemCount),
+                    });
+                    await this.botService.sendReply(replyKey, channelId, text);
+                }
             }
         }
 

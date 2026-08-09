@@ -6,6 +6,14 @@ export type YoutubeVideoInfo = {
     thumbnailUrl: string,
 };
 
+export type YoutubePlaylistInfo = {
+    title: string,
+    description: string,
+    thumbnailUrl: string,
+    channelTitle: string,
+    itemCount: number,
+};
+
 export type YoutubeSearchResult = {
     videoId: string,
     title: string,
@@ -44,6 +52,21 @@ export class YoutubeService {
     }
 
     /**
+     * Busca el parámetro list= de una URL de YouTube (tanto un link de playlist
+     * puro, ej: youtube.com/playlist?list=XXX, como un video que además
+     * pertenece a una, ej: youtube.com/watch?v=YYY&list=XXX). Se usa como
+     * respaldo cuando extractVideoId() no encontró un video individual, para
+     * no pisar el comportamiento ya existente cuando el link trae las dos cosas.
+     */
+    extractPlaylistId(text: string): string | null {
+        if (!text) {
+            return null;
+        }
+        const match = text.match(/[?&]list=([a-zA-Z0-9_-]+)/);
+        return match ? match[1] : null;
+    }
+
+    /**
      * Busca un video REAL en YouTube a partir de un texto libre (ej: "Artista -
      * Canción"), usando la YouTube Data API v3. Requiere YOUTUBE_API_KEY — a
      * diferencia de getVideoInfo, esto no tiene respaldo por oEmbed porque
@@ -74,6 +97,40 @@ export class YoutubeService {
         return {
             videoId,
             title: item?.snippet?.title ?? query,
+        };
+    }
+
+    /**
+     * Trae título, descripción, miniatura, canal y cantidad de videos de una
+     * playlist. A diferencia de getVideoInfo, NO tiene respaldo por oEmbed
+     * (oEmbed de YouTube no soporta playlists, solo videos individuales) —
+     * sin YOUTUBE_API_KEY configurada, esto no funciona, sin excepción.
+     */
+    async getPlaylistInfo(playlistId: string): Promise<YoutubePlaylistInfo | null> {
+        const apiKey = process.env.YOUTUBE_API_KEY;
+        if (!apiKey) {
+            this.logger.warn('YOUTUBE_API_KEY no configurada: no se puede traer información de playlists (no hay respaldo por oEmbed para esto).');
+            return null;
+        }
+
+        const url = `https://www.googleapis.com/youtube/v3/playlists?part=snippet,contentDetails&id=${playlistId}&key=${apiKey}`;
+        const res = await this.httpService.get(url).toPromise().catch(e => {
+            this.logger.error('Error trayendo info de playlist: ' + (e?.response?.data ? JSON.stringify(e.response.data) : e.message));
+            return null;
+        });
+
+        const item = res?.data?.items?.[0];
+        const snippet = item?.snippet;
+        if (!snippet) {
+            return null;
+        }
+
+        return {
+            title: snippet.title,
+            description: this.truncateDescription(snippet.description),
+            thumbnailUrl: snippet.thumbnails?.high?.url ?? snippet.thumbnails?.default?.url,
+            channelTitle: snippet.channelTitle ?? '-',
+            itemCount: item?.contentDetails?.itemCount ?? 0,
         };
     }
 

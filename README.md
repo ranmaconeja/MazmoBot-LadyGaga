@@ -52,6 +52,7 @@ Además, en `.env` (versionado en el repo porque es privado y de uso personal):
 ```
 MAZMO_ORG_TOKEN=<token Bearer de tu cuenta de Organización en Mazmo, autentica las llamadas salientes>
 MAZMO_WEBHOOK_SIGNING_KEY=<clave de firma HMAC-SHA256 de la organización, verifica los webhooks entrantes>
+MAZMO_ORG_ID=<ID de tu organización (número), para que el bot ignore sus propios mensajes>
 OWNER_ID=<tu id de usuario, siempre tratado como moderador>
 TURSO_DATABASE_URL=<url de tu base en Turso>
 TURSO_AUTH_TOKEN=<token de autenticación de Turso>
@@ -129,6 +130,13 @@ del mensaje, asumiendo que el chat de Mazmo renderiza imágenes embebidas en mar
 lo indica la documentación de Botleirplate sobre `rawContent`). Probalo una vez desplegado:
 si el chat no soporta imágenes embebidas, vas a ver la URL como texto plano en vez de la
 miniatura — avisame y lo resuelvo de otra forma (por ejemplo enviándola como link aparte).
+
+**Playlists** (`youtube.com/playlist?list=...`): funciona igual, con el bloque
+`[YOUTUBE_PLAYLIST_INFO]` (agrega el canal y la cantidad de videos). A diferencia de los
+videos individuales, esto **requiere `YOUTUBE_API_KEY` sin excepción** — oEmbed de
+YouTube no soporta consultar playlists, solo videos puntuales, así que no hay modo
+"sin key" para esto. Si un link trae video Y playlist a la vez (ej:
+`watch?v=XXX&list=YYY`), se prioriza mostrar el video individual, no la playlist.
 
 ## Sugerencia de música (`!musica`)
 
@@ -258,7 +266,7 @@ El proyecto está pensado para desplegarse en Vercel como funciones serverless
 
 1. Importá el repo en Vercel (o corré `vercel` desde la CLI).
 2. Configurá las variables de entorno en el panel de Vercel (Project Settings →
-   Environment Variables): `MAZMO_ORG_TOKEN`, `MAZMO_WEBHOOK_SIGNING_KEY`, `OWNER_ID`,
+   Environment Variables): `MAZMO_ORG_TOKEN`, `MAZMO_WEBHOOK_SIGNING_KEY`, `MAZMO_ORG_ID`, `OWNER_ID`,
    `TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN`, y opcionalmente `GEMINI_API_KEY`,
    `GROQ_API_KEY`, `YOUTUBE_API_KEY`, `PLAYER_SECRET_KEY`.
 3. Completá `config/config.json` con los datos reales de tu bot antes de desplegar
