@@ -13,6 +13,7 @@ import { PuntosHandler } from '../commands/puntos';
 import { SumarPuntosHandler } from '../commands/sumarpuntos';
 import { BanHandler } from '../commands/ban';
 import { AhorcadoHandler } from '../commands/ahorcado';
+import { NombreHandler } from '../commands/nombre';
 import { PerfilHandler } from '../commands/perfil';
 import { BienvenidaHandler } from '../commands/bienvenida';
 import { CompatibilidadHandler } from '../commands/compatibilidad';
@@ -57,7 +58,7 @@ export class CommandService {
      * así que cobrarle puntos a un usuario común que los intenta usar (y que de
      * todos modos va a ser rechazado con "no tenés permisos") no tendría sentido.
      */
-    private readonly freeCommands = new Set(['!puntos', '!ayuda', '!puntosextra', '!lazotest', '!ayudamods', '!ban']);
+    private readonly freeCommands = new Set(['!puntos', '!ayuda', '!puntosextra', '!lazotest', '!ayudamods', '!ban', '!nombre']);
 
     constructor(
         private readonly ayudaHandler: AyudaHandler,
@@ -72,6 +73,7 @@ export class CommandService {
         private readonly sumarPuntosHandler: SumarPuntosHandler,
         private readonly banHandler: BanHandler,
         private readonly ahorcadoHandler: AhorcadoHandler,
+        private readonly nombreHandler: NombreHandler,
         private readonly perfilHandler: PerfilHandler,
         private readonly bienvenidaHandler: BienvenidaHandler,
         private readonly compatibilidadHandler: CompatibilidadHandler,
@@ -99,6 +101,7 @@ export class CommandService {
         this.registerHandler(sumarPuntosHandler)
         this.registerHandler(banHandler)
         this.registerHandler(ahorcadoHandler)
+        this.registerHandler(nombreHandler)
         this.registerHandler(perfilHandler)
         this.registerHandler(bienvenidaHandler)
         this.registerHandler(compatibilidadHandler)

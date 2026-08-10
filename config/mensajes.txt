@@ -37,6 +37,7 @@ ATENCION: El bot no reconoce acentos (Cuidado con el autocorrector), y tampoco l
 M!p <link de YouTube> - Encola una canción para el reproductor
 !PuntosExtra @usuario cantidad - Suma puntos manualmente a un usuario
 !ban @usuario [motivo] - Expulsa a un usuario del canal
+!nombre <ID o username> - Te dice de quién es un ID, siempre en privado
 
 [PING]
 🏓 Ra-ra-ah-ah-ah - Roma-roma-ma Lady Gaga llego al Chat!
@@ -261,3 +262,12 @@ No pude encontrar a ese usuario.
 ```
 {DIBUJO}
 ```
+
+[NOMBRE_RESULT]
+🔎 ID {ID}: @{USERNAME} ({DISPLAYNAME})
+
+[NOMBRE_USAGE]
+⚠️ Uso: !nombre <ID o username>
+
+[NOMBRE_ERROR]
+😕 No encontré ningún usuario con "{ID}".

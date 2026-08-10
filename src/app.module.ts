@@ -51,6 +51,7 @@ import { PuntosHandler } from './commands/puntos';
 import { SumarPuntosHandler } from './commands/sumarpuntos';
 import { BanHandler } from './commands/ban';
 import { AhorcadoHandler } from './commands/ahorcado';
+import { NombreHandler } from './commands/nombre';
 import { PerfilHandler } from './commands/perfil';
 import { BienvenidaHandler } from './commands/bienvenida';
 import { CompatibilidadHandler } from './commands/compatibilidad';
@@ -124,6 +125,7 @@ import { DatoHandler } from './commands/dato';
         SumarPuntosHandler,
         BanHandler,
         AhorcadoHandler,
+        NombreHandler,
         PerfilHandler,
         BienvenidaHandler,
         CompatibilidadHandler,
