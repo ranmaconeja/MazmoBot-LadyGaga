@@ -11,6 +11,7 @@ import { TagsService } from './services/tags.service';
 import { ExpulsionGifService } from './services/expulsion-gif.service';
 import { RandomMentionService } from './services/random-mention.service';
 import { HangmanService } from './services/hangman.service';
+import { TarotService } from './modules/ai/tarot.service';
 
 import { DatabaseService } from './database/database.service';
 import { PointsRepository } from './database/points.repository';
@@ -18,6 +19,7 @@ import { QuestionOfDayRepository } from './database/question-of-day.repository';
 import { FactRepository } from './database/fact.repository';
 import { MusicHistoryRepository } from './database/music-history.repository';
 import { HangmanRepository } from './database/hangman.repository';
+import { TarotRepository } from './database/tarot.repository';
 import { CooldownRepository } from './database/cooldown.repository';
 import { PointsService } from './services/points.service';
 import { CooldownService } from './services/cooldown.service';
@@ -52,6 +54,7 @@ import { SumarPuntosHandler } from './commands/sumarpuntos';
 import { BanHandler } from './commands/ban';
 import { AhorcadoHandler } from './commands/ahorcado';
 import { NombreHandler } from './commands/nombre';
+import { TarotHandler } from './commands/tarot';
 import { PerfilHandler } from './commands/perfil';
 import { BienvenidaHandler } from './commands/bienvenida';
 import { CompatibilidadHandler } from './commands/compatibilidad';
@@ -84,6 +87,7 @@ import { DatoHandler } from './commands/dato';
         ExpulsionGifService,
         RandomMentionService,
         HangmanService,
+        TarotService,
 
         // base de datos
         DatabaseService,
@@ -92,6 +96,7 @@ import { DatoHandler } from './commands/dato';
         FactRepository,
         MusicHistoryRepository,
         HangmanRepository,
+        TarotRepository,
         CooldownRepository,
         PointsService,
         CooldownService,
@@ -126,6 +131,7 @@ import { DatoHandler } from './commands/dato';
         BanHandler,
         AhorcadoHandler,
         NombreHandler,
+        TarotHandler,
         PerfilHandler,
         BienvenidaHandler,
         CompatibilidadHandler,

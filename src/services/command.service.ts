@@ -14,6 +14,7 @@ import { SumarPuntosHandler } from '../commands/sumarpuntos';
 import { BanHandler } from '../commands/ban';
 import { AhorcadoHandler } from '../commands/ahorcado';
 import { NombreHandler } from '../commands/nombre';
+import { TarotHandler } from '../commands/tarot';
 import { PerfilHandler } from '../commands/perfil';
 import { BienvenidaHandler } from '../commands/bienvenida';
 import { CompatibilidadHandler } from '../commands/compatibilidad';
@@ -74,6 +75,7 @@ export class CommandService {
         private readonly banHandler: BanHandler,
         private readonly ahorcadoHandler: AhorcadoHandler,
         private readonly nombreHandler: NombreHandler,
+        private readonly tarotHandler: TarotHandler,
         private readonly perfilHandler: PerfilHandler,
         private readonly bienvenidaHandler: BienvenidaHandler,
         private readonly compatibilidadHandler: CompatibilidadHandler,
@@ -102,6 +104,7 @@ export class CommandService {
         this.registerHandler(banHandler)
         this.registerHandler(ahorcadoHandler)
         this.registerHandler(nombreHandler)
+        this.registerHandler(tarotHandler)
         this.registerHandler(perfilHandler)
         this.registerHandler(bienvenidaHandler)
         this.registerHandler(compatibilidadHandler)

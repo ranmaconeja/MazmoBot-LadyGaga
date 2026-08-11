@@ -10,6 +10,7 @@
 !Horoscopo - Prediccion Diaria sobre aspectos BDSM
 !Musica - Recomendacion al Azar de musica para Sesionar
 !Dato - Un dato curioso sobre el mundo Femdom/BDSM
+!Tarot - Tirada diaria de 2 cartas del Tarot (Arcanos Mayores)
 !Suspension - Arranca una partida del juego de adivinar letras
 
 ATENCION: El bot no reconoce acentos (Cuidado con el autocorrector), y tampoco lee ediciones del texto, cualquier cosita escribí el comando de nuevo.
@@ -33,6 +34,7 @@ ATENCION: El bot no reconoce acentos (Cuidado con el autocorrector), y tampoco l
 !Horoscopo - Prediccion Diaria sobre aspectos BDSM
 !Musica - Recomendacion al Azar de musica para Sesionar
 !Dato - Un dato curioso sobre el mundo Femdom/BDSM
+!Tarot - Tirada diaria de 2 cartas del Tarot (Arcanos Mayores)
 !Suspension - Arranca una partida del juego de adivinar letras
 M!p <link de YouTube> - Encola una canción para el reproductor
 !PuntosExtra @usuario cantidad - Suma puntos manualmente a un usuario
@@ -271,3 +273,17 @@ No pude encontrar a ese usuario.
 
 [NOMBRE_ERROR]
 😕 No encontré ningún usuario con "{ID}".
+
+[TAROT_RESULT]
+🔮 Tu tirada de Tarot de hoy:
+
+**{CARTA1}** ({ORIENTACION1})
+{SIGNIFICADO1}
+
+**{CARTA2}** ({ORIENTACION2})
+{SIGNIFICADO2}
+
+_Recordá que cada carta puede salir al derecho o al revés, y el significado cambia según cómo caiga._
+
+[TAROT_IA_ERROR]
+🤖 No pude armar tu tirada de Tarot en este momento (falta configurar la IA o se agotó la cuota gratuita del día).

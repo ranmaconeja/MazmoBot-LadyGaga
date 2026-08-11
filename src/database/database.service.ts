@@ -83,6 +83,18 @@ export class DatabaseService implements OnModuleInit {
                 word TEXT NOT NULL,
                 createdAt TEXT NOT NULL
             )`,
+            `CREATE TABLE IF NOT EXISTS tarot_daily (
+                userId TEXT NOT NULL,
+                date TEXT NOT NULL,
+                carta1 TEXT NOT NULL,
+                orientacion1 TEXT NOT NULL,
+                significado1 TEXT NOT NULL,
+                carta2 TEXT NOT NULL,
+                orientacion2 TEXT NOT NULL,
+                significado2 TEXT NOT NULL,
+                createdAt TEXT NOT NULL,
+                PRIMARY KEY (userId, date)
+            )`,
         ], 'write');
     }
 
