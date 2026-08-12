@@ -1,13 +1,57 @@
 {
-  "_comentario": "GIFs de anime (temática patadas) que el bot postea cuando se detecta una expulsión. Formato: array de URLs directas a archivos .gif (no páginas de Tenor/Giphy — tienen que apuntar directo al archivo, ej: https://media.tenor.com/XXXX/nombre.gif, si no la imagen no se va a poder embeber en el chat). Se elige uno al azar en cada expulsión.",
+  "_comentario": "GIFs de anime que el bot postea cuando se detecta una expulsión, cada uno con su propio texto. Formato: array de objetos {url, texto}. La URL tiene que ser directa al archivo .gif (no páginas de Tenor/Giphy — ej: https://media.tenor.com/XXXX/nombre.gif, si no la imagen no se va a poder embeber en el chat). Se elige uno al azar en cada expulsión, con su texto correspondiente.",
   "gifs": [
-    "https://media1.tenor.com/m/HlMpGR0uHq0AAAAC/charlotte-window-kick.gif",
-    "https://media1.tenor.com/m/G7P1KqxDfOIAAAAC/cross-ange-anime-girl.gif",
-    "https://media1.tenor.com/m/7te6q4wtcYoAAAAC/mad-angry.gif",
-    "https://media1.tenor.com/m/Cg305k6Z2JAAAAAC/anime.gif",
-    "https://media1.tenor.com/m/_9yB1M_YSjkAAAAC/umi-monogatari-miyamori-kanon.gif",
-    "https://media.tenor.com/QqllvZh-YRUAAAAM/maid-girl-bunny.gif",
-    "https://media1.tenor.com/m/suCnJdZs5UYAAAAd/haruhi-angry.gif",
-    "https://media1.tenor.com/m/EFvl1UqzIbEAAAAC/mirko-my-hero-academia.gif"
+    {
+      "url": "https://media1.tenor.com/m/HlMpGR0uHq0AAAAC/charlotte-window-kick.gif",
+      "texto": "Aprende a Volar por que del canal te vas!"
+    },
+    {
+      "url": "https://media1.tenor.com/m/G7P1KqxDfOIAAAAC/cross-ange-anime-girl.gif",
+      "texto": "Cuantas veces te dijimos, NO HAGAS ESO!"
+    },
+    {
+      "url": "https://media1.tenor.com/m/7te6q4wtcYoAAAAC/mad-angry.gif",
+      "texto": "Y daleeeee con Molestar, raja de aca."
+    },
+    {
+      "url": "https://media1.tenor.com/m/Cg305k6Z2JAAAAAC/anime.gif",
+      "texto": "Por que seguis haciendo lo mismo... AHHHHHHHH!!!"
+    },
+    {
+      "url": "https://media1.tenor.com/m/_9yB1M_YSjkAAAAC/umi-monogatari-miyamori-kanon.gif",
+      "texto": "AHHHHHHHHH! Pejelagarto!"
+    },
+    {
+      "url": "https://media.tenor.com/QqllvZh-YRUAAAAM/maid-girl-bunny.gif",
+      "texto": "Bye Byeeeee, y no vuelvas Pyon!"
+    },
+    {
+      "url": "https://media1.tenor.com/m/suCnJdZs5UYAAAAd/haruhi-angry.gif",
+      "texto": "Que ganas de arruinarme el dia..."
+    },
+    {
+      "url": "https://media1.tenor.com/m/EFvl1UqzIbEAAAAC/mirko-my-hero-academia.gif",
+      "texto": "Ya me estaba aburriendo!!! VOLA DE ACA!"
+    },
+    {
+      "url": "https://media1.tenor.com/m/261Jz0rfRPAAAAAC/momona-lady-jewelpet.gif",
+      "texto": "Jijijiji Expulsado!"
+    },
+    {
+      "url": "https://media1.tenor.com/m/0pGUrLK24KIAAAAC/dress-up-darling-marin-kitagawa.gif",
+      "texto": "LAS REGLAS PAPU, LEE LAS REGLAS!"
+    },
+    {
+      "url": "https://media1.tenor.com/m/Pg-cMY9EFJIAAAAd/seriously-dull-face.gif",
+      "texto": "Rompehuevo!"
+    },
+    {
+      "url": "https://media1.tenor.com/m/JwhIqRCsBBMAAAAC/yor-loid.gif",
+      "texto": "Ahhhhh Pejelagarto!!!"
+    },
+    {
+      "url": "https://media1.tenor.com/m/7cr0sDA-mSkAAAAd/frieren-frieren-anime.gif",
+      "texto": "Otra vez expulso a alguien de la Sala? Si..."
+    }
   ]
 }

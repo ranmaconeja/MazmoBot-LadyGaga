@@ -270,14 +270,14 @@ export class AppController {
                 return;
             }
 
-            const gifUrl = this.expulsionGifService.getRandomGif();
-            if (!gifUrl) {
+            const gif = this.expulsionGifService.getRandomGif();
+            if (!gif) {
                 this.logger.warn('onNewBan: no hay GIFs configurados en config/gifs-expulsion.json');
                 res.status(200).send('OK');
                 return;
             }
 
-            const text = this.messagesService.get('EXPULSION_GIF', { GIF_URL: gifUrl });
+            const text = this.messagesService.get('EXPULSION_GIF', { GIF_URL: gif.url, TEXTO: gif.texto });
             // replyKey vacío: ya no se usa para autenticar (ver bot.service.ts, MAZMO_ORG_TOKEN)
             await this.botService.sendReply('', channelId, text);
         } catch (e) {

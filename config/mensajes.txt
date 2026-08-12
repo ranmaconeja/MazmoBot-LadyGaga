@@ -208,7 +208,7 @@ No pude encontrar a ese usuario.
 🤖 No pude conseguir un dato curioso en este momento (falta configurar la IA o se agotó la cuota gratuita del día).
 
 [EXPULSION_GIF]
-👢 ¡Fuera!
+{TEXTO}
 ![patada]({GIF_URL})
 
 [QUIEN_RESPUESTA]

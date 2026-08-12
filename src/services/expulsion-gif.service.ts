@@ -2,15 +2,19 @@ import { Injectable, Logger } from '@nestjs/common';
 import * as fs from 'fs';
 import { resolveConfigPath } from '../util/config-path';
 
+export type ExpulsionGif = {
+    url: string,
+    texto: string,
+};
+
 /**
- * Carga config/gifs-expulsion.json y elige uno al azar cuando se detecta una
- * expulsión. Ver ExpulsionHandler para el disparador (todavía pendiente de
- * confirmar si Mazmo manda algún webhook para esto).
+ * Carga config/gifs-expulsion.json y elige uno al azar (con su texto
+ * correspondiente) cuando se detecta una expulsión.
  */
 @Injectable()
 export class ExpulsionGifService {
     private readonly logger = new Logger('ExpulsionGifService');
-    private gifs: string[] = [];
+    private gifs: ExpulsionGif[] = [];
 
     constructor() {
         this.load();
@@ -28,7 +32,7 @@ export class ExpulsionGifService {
         }
     }
 
-    getRandomGif(): string | null {
+    getRandomGif(): ExpulsionGif | null {
         if (!this.gifs.length) {
             return null;
         }
