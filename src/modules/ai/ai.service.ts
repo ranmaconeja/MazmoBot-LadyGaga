@@ -8,7 +8,15 @@ import { HttpService, Injectable, Logger } from '@nestjs/common';
 @Injectable()
 export class AiService {
     private readonly logger = new Logger(AiService.name);
-    private readonly model = 'gemini-flash-latest';
+    // ⚠️ 19/08/2026: antes usaba el alias 'gemini-flash-latest', que Google
+    // repunta automáticamente al modelo Flash más nuevo que va sacando —
+    // hace poco pasó a apuntar a Gemini 3.5 Flash sin ningún aviso, y eso
+    // rompió la IA de un día para el otro sin que se tocara nada del código.
+    // Se fija un modelo concreto para que esto no vuelva a pasar de sorpresa;
+    // si en el futuro hay que migrar a uno más nuevo, mejor hacerlo a
+    // propósito (revisando antes que el modelo elegido esté disponible en el
+    // plan gratis) que dejar que Google lo decida solo.
+    private readonly model = 'gemini-3.5-flash';
 
     constructor(private readonly httpService: HttpService) {
     }

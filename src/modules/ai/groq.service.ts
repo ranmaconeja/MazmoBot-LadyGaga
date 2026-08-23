@@ -8,7 +8,11 @@ import { HttpService, Injectable, Logger } from '@nestjs/common';
 @Injectable()
 export class GroqService {
     private readonly logger = new Logger(GroqService.name);
-    private readonly model = 'llama-3.3-70b-versatile';
+    // ⚠️ 19/08/2026: 'llama-3.3-70b-versatile' se dio de baja definitivamente
+    // el 16/08/2026 (Groq lo anunció el 17/06/2026, con 2 meses de aviso).
+    // Reemplazo recomendado oficialmente por Groq para ese modelo:
+    // 'openai/gpt-oss-120b'.
+    private readonly model = 'openai/gpt-oss-120b';
 
     constructor(private readonly httpService: HttpService) {
     }

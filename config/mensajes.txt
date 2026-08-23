@@ -90,7 +90,24 @@ Me conocen: {ME_CONOCEN} | Eventos: {EVENTOS}{ID_LINE}
 😕 No pude obtener tu perfil en este momento, intentá de nuevo más tarde.
 
 [BIENVENIDA]
-🎉 Bienvenid@s a este canal, nuestra filosofia del canal es conocer primero a la Persona y por ultimo el Rol, dado que las mejores experiencias BDSM, nacen de la confianza. Fomentamos el Offtopic en la Charla para que las personas puedan conocerse y las tematicas BDSM son debatidas desde el punto de vista FEMDOM. Recomendamos leer las !reglas , !ayuda , !filosofia
+🎉 Bienvenid@s a este canal, nuestra filosofia del canal es conocer primero a la Persona y por ultimo el Rol, dado que las mejores experiencias BDSM, nacen de la confianza. Fomentamos el Offtopic en la Charla para que las personas puedan conocerse y las tematicas BDSM son debatidas desde el punto de vista FEMDOM.
+
+Reglas del Canal
+Sistema de 3 Advertencias
+1. Está prohibido realizar búsquedas de personas. Para ello recomendamos utilizar el sector "Contactos BDSM".
+1.B. Si la búsqueda proviene de un Dominante Masculino, será expulsado sin previo aviso.
+2. No está permitido solicitar mensajes privados ni pedir seguimientos mutuos.
+3. No está permitido el FINDOM, ni la venta de packs o cualquier otro tipo de contenido. Para ello recomendamos utilizar el sector "Relaciones con intercambio de dinero".
+4. Ningún usuario está obligado a rolear. Recomendamos que cualquier dinámica de rol sea previamente acordada entre las partes.
+Ejemplo: Una DOM tratando a otros usuarios de "basura" o un sumiso arrastrándose por todas las Doms sin que exista un acuerdo previo.
+5. No realizar reclamos sobre aspectos técnicos de la página. No administramos Sades ni tenemos control sobre sus funciones, límites de mensajes u otras características.
+6. Compórtense como personas. (Sabemos que no haría falta aclararlo, pero nunca falta el pejelagarto).
+7. Las imágenes NSFW están permitidas únicamente si tienen contexto dentro de la conversación. Publicarlas sin relación con el tema tratado será considerada una falta.
+Ejemplo: Se está hablando de spank y, de repente, aparece una "fotopija" salvaje sin ningún contexto.
+8. En caso de debates sobre prácticas BDSM, los "masculinos" siempre deben presentar su punto de vista desde la sumisión, dado que es un canal de FEMDOM.
+Las reglas no exigen nada extraordinario. No están sujetas a discusión y se basan en la filosofía del canal.
+
+Recomendamos leer las !ayuda , !filosofia
 
 [SIN_PUNTOS]
 "{USERNAME}" no tiene los puntos suficientes para ejecutar este comando (tiene {POINTS}, necesita {COST})
@@ -287,3 +304,6 @@ _Recordá que cada carta puede salir al derecho o al revés, y el significado ca
 
 [TAROT_IA_ERROR]
 🤖 No pude armar tu tirada de Tarot en este momento (falta configurar la IA o se agotó la cuota gratuita del día).
+
+[REGLAS_USUARIO_NO_ENCONTRADO]
+😕 No pude encontrar a ese usuario.
