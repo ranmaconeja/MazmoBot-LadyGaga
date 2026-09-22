@@ -160,13 +160,13 @@ export class CommandService {
             const body = req.body as RoomMessage;
             const userId = body.message.author.id;
 
-            if (!this.freeCommands.has(commandKey) && !(await this.pointsService.canUseCommand(userId))) {
+            if (!this.freeCommands.has(commandKey) && !(await this.pointsService.canUseCommand(userId, commandKey))) {
                 const points = await this.pointsService.getPoints(userId);
-                this.logger.log(`Comando "${command}" bloqueado: usuario ${userId} no tiene suficientes puntos (tiene ${points}, necesita ${this.pointsService.getCommandCost()})`);
+                this.logger.log(`Comando "${command}" bloqueado: usuario ${userId} no tiene suficientes puntos (tiene ${points}, necesita ${this.pointsService.getCommandCost(commandKey)})`);
                 const authorData = await this.botService.getUserData(userId);
                 const text = this.messagesService.get('SIN_PUNTOS', {
                     USERNAME: authorData?.username ?? String(userId),
-                    COST: String(this.pointsService.getCommandCost()),
+                    COST: String(this.pointsService.getCommandCost(commandKey)),
                     POINTS: String(points),
                 });
                 await this.botService.notifyUser(body.key, body.message.channel.id, userId, text);
@@ -177,7 +177,7 @@ export class CommandService {
             // se ha encontrado coincidencia para un comando registrado
             await this.handlers[commandKey].handleCommand(req, res, messageParts.join(' '));
             if (!this.freeCommands.has(commandKey)) {
-                await this.pointsService.spendCommandCost(userId);
+                await this.pointsService.spendCommandCost(userId, commandKey);
             }
             this.logger.log(`Comando "${command}" terminó de ejecutarse`);
             return true
