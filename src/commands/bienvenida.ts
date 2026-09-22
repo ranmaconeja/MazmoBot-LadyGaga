@@ -13,7 +13,8 @@ export class BienvenidaHandler implements CommandHandler {
     }
 
     async handleCommand(req: Request, res: Response, message: string) {
+        // el body ya viene normalizado por onRoomMessage ({ key: '', message })
         const body = req.body as RoomMessage;
-        await this.welcomeService.welcomeUser(body);
+        await this.welcomeService.welcomeUser(body.message.channel.id, body.message.author.id);
     }
 }

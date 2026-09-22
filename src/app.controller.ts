@@ -228,11 +228,58 @@ export class AppController {
 
 
     /**
-     *  Endpoint ejecutado al ingresar un nuevo usuario en la sala
+     *  Endpoint ejecutado al ingresar un nuevo usuario en la sala (evento channel.join).
+     *
+     *  22/09/2026: seguía leyendo el formato viejo de bots (body.key,
+     *  body.message.channel.id, body.message.author.id), que con la cuenta de
+     *  Organización llega undefined — por eso la bienvenida no le llegaba a nadie.
+     *  Mismo arreglo que /message y /new_ban: extracción defensiva probando
+     *  varias rutas.
+     *
+     *  ⚠️ La forma real de channel.join todavía NO se confirmó con un payload
+     *  de producción. Revisar el log "onUserEnter: body crudo recibido" la
+     *  primera vez que entre alguien y ajustar las rutas si hace falta.
      */
     @Post('user_enter')
-    async onUserEnter(@Body() body: RoomMessage, @Req() req: Request, @Res() res: Response) {
-        await this.welcomeService.welcomeUser(body)
+    async onUserEnter(@Body() body: AnyDict, @Req() req: Request, @Res() res: Response) {
+        this.logger.log(`onUserEnter: body crudo recibido: ${JSON.stringify(body)}`);
+
+        try {
+            const channelId = body?.payload?.channelId
+                ?? body?.payload?.channel?.id
+                ?? body?.payload?.message?.channel?.id
+                ?? body?.message?.channel?.id
+                ?? body?.channel?.id
+                ?? body?.channelId;
+
+            const userId = body?.payload?.userId
+                ?? body?.payload?.user?.id
+                ?? body?.payload?.participant?.userId
+                ?? body?.payload?.participant?.user?.id
+                ?? body?.payload?.message?.author?.id
+                ?? body?.message?.author?.id
+                ?? body?.user?.id
+                ?? body?.userId;
+
+            if (!channelId || !userId) {
+                this.logger.warn(`onUserEnter: no se pudo extraer todo lo necesario (channelId=${channelId}, userId=${userId}) — revisar el log "body crudo recibido" de arriba`);
+                res.status(200).send('OK');
+                return;
+            }
+
+            // si el que "entra" es la propia organización, no le damos la bienvenida
+            if (process.env.MAZMO_ORG_ID && String(userId) === String(process.env.MAZMO_ORG_ID)) {
+                this.logger.debug(`onUserEnter: el que entra es la propia organización (${userId}), se ignora`);
+                res.status(200).send('OK');
+                return;
+            }
+
+            this.logger.log(`onUserEnter: enviando bienvenida a usuario ${userId} en canal ${channelId}`);
+            await this.welcomeService.welcomeUser(channelId, userId);
+        } catch (e) {
+            this.logger.error('onUserEnter: error inesperado al enviar la bienvenida: ' + e.message);
+        }
+
         res.status(200).send('OK')
     }
 
