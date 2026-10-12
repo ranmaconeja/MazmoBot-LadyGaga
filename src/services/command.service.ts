@@ -59,7 +59,7 @@ export class CommandService {
      * así que cobrarle puntos a un usuario común que los intenta usar (y que de
      * todos modos va a ser rechazado con "no tenés permisos") no tendría sentido.
      */
-    private readonly freeCommands = new Set(['!puntos', '!ayuda', '!puntosextra', '!lazotest', '!ayudamods', '!ban', '!nombre']);
+    private readonly freeCommands = new Set(['!puntos', '!ayuda', '!puntosextra', '!lazotest', '!ayudamods', '!ban', '!nombre', '!reglas']);
 
     constructor(
         private readonly ayudaHandler: AyudaHandler,
