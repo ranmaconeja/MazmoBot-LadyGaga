@@ -2,6 +2,20 @@ import { HttpService, Injectable, Logger } from '@nestjs/common';
 import { AxiosRequestConfig } from 'axios';
 import { AnyDict, RoomReplyMessage, SadesAsk, UserData, UserNotify } from '../types';
 
+/**
+ * URL base de la API de Mazmo.
+ *
+ * 28/10/2026: prod.mazmoapi.net (152.53.165.41) dejó de responder desde Vercel
+ * (connect ETIMEDOUT en todos los envíos). Revisando el tráfico real de
+ * mazmo.net, la web ahora manda los mensajes a api.mazmo.net (detrás de
+ * Cloudflare) con 200 OK, así que se pasó a ese dominio.
+ *
+ * Se puede pisar con la variable de entorno MAZMO_API_BASE (sin barra final)
+ * si Mazmo vuelve a mudarse — así no hace falta tocar código, solo la variable
+ * en Vercel + redeploy.
+ */
+const MAZMO_API_BASE = (process.env.MAZMO_API_BASE || 'https://api.mazmo.net').replace(/\/+$/, '');
+
 @Injectable()
 export class BotService {
     private readonly logger = new Logger('OutgoingRequest');
@@ -35,7 +49,7 @@ export class BotService {
      * @param string replyPayload Especificar en rawContent el mensaje a enviar a la sala, otras propiedades son opcionales y dependen del tipo de mensaje a enviar
      */
     private async sendMessageToChannel(replyKey: string, channelId: string, replyPayload: RoomReplyMessage) {
-        const postbackUrl = `https://prod.mazmoapi.net/chat/channels/${channelId}/messages`
+        const postbackUrl = `${MAZMO_API_BASE}/chat/channels/${channelId}/messages`
         const config: AxiosRequestConfig = {
             method: 'POST',
             headers: this.authHeaders(),
@@ -62,7 +76,7 @@ export class BotService {
      * lo rechaza, por si todavía hace falta ese permiso aparte.
      */
     async banUser(replyKey: string, channelId: string, bannedUserId: number, reason?: string): Promise<boolean> {
-        const url = `https://prod.mazmoapi.net/chat/channels/${channelId}/bans`
+        const url = `${MAZMO_API_BASE}/chat/channels/${channelId}/bans`
         const config: AxiosRequestConfig = {
             method: 'POST',
             headers: this.authHeaders(),
@@ -109,7 +123,7 @@ export class BotService {
     private async fetchUser(identifier: string | number): Promise<UserData> {
         // encodeURIComponent evita que un identificador con caracteres como /, ?, & o espacios
         // rompa la URL o inyecte parámetros de query propios en la llamada a la API de Mazmo
-        const url = `https://prod.mazmoapi.net/users/${encodeURIComponent(String(identifier))}?relationships=true&subscriptions=true&view=true`
+        const url = `${MAZMO_API_BASE}/users/${encodeURIComponent(String(identifier))}?relationships=true&subscriptions=true&view=true`
         const res = await this.httpService.get(url).toPromise().catch(e => {
             this.logger.error(`FALLÓ fetchUser("${identifier}"): status ${e?.response?.status}, body: ${JSON.stringify(e?.response?.data)}, mensaje: ${e?.message}, url: ${url}`);
             return null
@@ -134,7 +148,7 @@ export class BotService {
         const config: AxiosRequestConfig = {
             headers: this.authHeaders(),
         }
-        const { data: { balance } } = await this.httpService.get('https://prod.mazmoapi.net/bank/boxes/balance', config).toPromise().catch(e => { return { data: {balance: 0} } })
+        const { data: { balance } } = await this.httpService.get(`${MAZMO_API_BASE}/bank/boxes/balance`, config).toPromise().catch(e => { return { data: {balance: 0} } })
         return balance ?? 0
     }
 
@@ -192,7 +206,7 @@ export class BotService {
             amount,
             data: {},
         }
-        await this.httpService.post('https://prod.mazmoapi.net/bank/transactions', payload, config).toPromise().catch(e => true)
+        await this.httpService.post(`${MAZMO_API_BASE}/bank/transactions`, payload, config).toPromise().catch(e => true)
     }
 
     /**
