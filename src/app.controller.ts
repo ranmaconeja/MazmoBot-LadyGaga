@@ -13,7 +13,9 @@ import { HangmanService } from './services/hangman.service';
 import { PointsService } from './services/points.service';
 import { stripHtml } from './util/sanitize';
 import { BanStatsRepository } from './database/ban-stats.repository';
+import { ModeratorsService } from './services/moderators.service';
 import { formatPejelagartos } from './util/pejelagartos';
+import { collectIdFields, describeIdFields, findBannedUserId, findBannerId } from './util/ban-payload';
 
 @Controller()
 export class AppController {
@@ -31,6 +33,7 @@ export class AppController {
         private hangmanService: HangmanService,
         private pointsService: PointsService,
         private banStatsRepository: BanStatsRepository,
+        private moderatorsService: ModeratorsService,
     ) {
     }
 
@@ -295,6 +298,25 @@ export class AppController {
     }
 
     /**
+     * Busca entre el owner y los mods (config/moderadores.txt) al que tenga
+     * ese nombre visible o username. Son pocos, así que se consultan todos.
+     */
+    private async findModByName(name: string): Promise<string | undefined> {
+        const wanted = this.normalizeName(name);
+        if (!wanted) {
+            return undefined;
+        }
+        const ids = Array.from(new Set([process.env.OWNER_ID, ...this.moderatorsService.getModeratorIds()].filter(Boolean)));
+        const users = await Promise.all(ids.map(id => this.botService.getUserData(Number(id)).catch(() => null)));
+        const found = users.find(u => u && (this.normalizeName(u.displayname) === wanted || this.normalizeName(u.username) === wanted));
+        return found ? String(found.id) : undefined;
+    }
+
+    private normalizeName(name: string): string {
+        return String(name ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/\s+/g, ' ').trim().toLowerCase();
+    }
+
+    /**
      *  Endpoint ejecutado al banear un usuario en la sala.
      *
      *  ⚠️ La forma exacta de ESTE evento puntual (channel.ban) todavía no se
@@ -324,31 +346,25 @@ export class AppController {
                 return;
             }
 
-            // usuario expulsado
-            const bannedUserId = p.bannedUserId
-                ?? p.ban?.bannedUserId
-                ?? p.bannedUser?.id
-                ?? p.ban?.bannedUser?.id
-                ?? p.ban?.userId
-                ?? p.userId
-                ?? p.user?.id
-                ?? body?.bannedUserId;
+            // 07/11/2026: channel.ban trae payload.message (el cartel "X ha sido
+            // expulsado por Y") con forma todavía no confirmada del todo, así que
+            // se recorren TODOS los campos de ID del payload (ver util/ban-payload.ts)
+            // y se loguean en una sola línea legible para poder confirmarla.
+            const idFields = collectIdFields(p);
+            this.logger.log(`onNewBan: IDs encontrados → ${describeIdFields(idFields)}`);
+            this.logger.log(`onNewBan: tipo de mensaje="${p.message?.type}", contenido="${String(p.message?.payload?.rawContent ?? p.message?.payload?.content ?? '').slice(0, 150)}"`);
 
-            // ⚠️ forma NO confirmada: se prueban varias rutas para el mod que baneó
-            let bannerId = p.bannedById
-                ?? p.bannedBy?.id
-                ?? (typeof p.bannedBy === 'number' || typeof p.bannedBy === 'string' ? p.bannedBy : undefined)
-                ?? p.ban?.bannedById
-                ?? p.ban?.bannedBy?.id
-                ?? p.ban?.authorId
-                ?? p.ban?.moderatorId
-                ?? p.authorId
-                ?? p.author?.id
-                ?? p.moderatorId
-                ?? p.moderator?.id
-                ?? p.actorId
-                ?? p.actor?.id
-                ?? body?.authorId;
+            const orgId = process.env.MAZMO_ORG_ID;
+
+            // usuario expulsado
+            const bannedUserId: string | undefined = (p.bannedUserId ?? p.ban?.bannedUserId ?? p.bannedUser?.id)?.toString()
+                ?? findBannedUserId(idFields);
+
+            // mod que expulsó
+            let bannerId: string | undefined = (p.bannedById ?? p.bannedBy?.id ?? p.ban?.bannedById)?.toString()
+                ?? findBannerId(idFields, bannedUserId, orgId);
+
+            this.logger.log(`onNewBan: expulsado=${bannedUserId ?? '?'}, baneado por=${bannerId ?? '?'}`);
 
             // reintento del mismo webhook (Mazmo reenvía si tardamos): no repetir GIF ni sumar
             if (bannedUserId !== undefined && bannedUserId !== null) {
@@ -361,13 +377,23 @@ export class AppController {
             }
 
             // si lo hizo la organización (o no vino el dato), es un !ban: buscar quién lo pidió
-            const orgId = process.env.MAZMO_ORG_ID;
             // si "el que baneó" coincide con el baneado, la ruta adivinada era otra cosa
             if (bannerId && bannedUserId && String(bannerId) === String(bannedUserId)) {
                 bannerId = undefined;
             }
             if ((!bannerId || (orgId && String(bannerId) === String(orgId))) && bannedUserId) {
                 bannerId = (await this.banStatsRepository.takePending(String(bannedUserId))) ?? undefined;
+            }
+
+            // último recurso: el cartel dice "X ha sido expulsado por <nombre>";
+            // se compara ese nombre con el de cada mod/owner
+            if (!bannerId) {
+                const content = stripHtml(String(p.message?.payload?.rawContent ?? p.message?.payload?.content ?? ''));
+                const match = content.match(/expulsad[oa]\s+por\s+(.+?)\s*$/i);
+                if (match) {
+                    bannerId = await this.findModByName(match[1]);
+                    this.logger.log(`onNewBan: nombre en el cartel "${match[1]}" → mod ${bannerId ?? 'no encontrado'}`);
+                }
             }
 
             const gif = this.expulsionGifService.getRandomGif();
