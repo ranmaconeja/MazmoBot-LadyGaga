@@ -66,6 +66,8 @@ import { HoroscopoHandler } from './commands/horoscopo';
 import { MusicaHandler } from './commands/musica';
 import { DiaHandler } from './commands/dia';
 import { DatoHandler } from './commands/dato';
+import { BanRankingHandler } from './commands/banranking';
+import { BanStatsRepository } from './database/ban-stats.repository';
 
 @Module({
     imports: [
@@ -98,6 +100,7 @@ import { DatoHandler } from './commands/dato';
         HangmanRepository,
         TarotRepository,
         CooldownRepository,
+        BanStatsRepository,
         PointsService,
         CooldownService,
 
@@ -143,6 +146,7 @@ import { DatoHandler } from './commands/dato';
         MusicaHandler,
         DiaHandler,
         DatoHandler,
+        BanRankingHandler,
     ],
 })
 export class AppModule implements NestModule {

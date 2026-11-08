@@ -26,6 +26,7 @@ import { HoroscopoHandler } from '../commands/horoscopo';
 import { MusicaHandler } from '../commands/musica';
 import { DiaHandler } from '../commands/dia';
 import { DatoHandler } from '../commands/dato';
+import { BanRankingHandler } from '../commands/banranking';
 import { PointsService } from './points.service';
 import { BotService } from './bot.service';
 import { MessagesService } from './messages.service';
@@ -59,7 +60,7 @@ export class CommandService {
      * así que cobrarle puntos a un usuario común que los intenta usar (y que de
      * todos modos va a ser rechazado con "no tenés permisos") no tendría sentido.
      */
-    private readonly freeCommands = new Set(['!puntos', '!ayuda', '!puntosextra', '!lazotest', '!ayudamods', '!ban', '!nombre', '!reglas']);
+    private readonly freeCommands = new Set(['!puntos', '!ayuda', '!puntosextra', '!lazotest', '!ayudamods', '!ban', '!nombre', '!reglas', '!banranking']);
 
     constructor(
         private readonly ayudaHandler: AyudaHandler,
@@ -87,6 +88,7 @@ export class CommandService {
         private readonly musicaHandler: MusicaHandler,
         private readonly diaHandler: DiaHandler,
         private readonly datoHandler: DatoHandler,
+        private readonly banRankingHandler: BanRankingHandler,
         private readonly pointsService: PointsService,
         private readonly botService: BotService,
         private readonly messagesService: MessagesService,
@@ -116,6 +118,7 @@ export class CommandService {
         this.registerHandler(musicaHandler)
         this.registerHandler(diaHandler)
         this.registerHandler(datoHandler)
+        this.registerHandler(banRankingHandler)
     }
 
     /**

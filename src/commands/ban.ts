@@ -4,6 +4,7 @@ import { Injectable } from '@nestjs/common';
 import { BotService } from '../services/bot.service';
 import { MessagesService } from '../services/messages.service';
 import { ModeratorsService } from '../services/moderators.service';
+import { BanStatsRepository } from '../database/ban-stats.repository';
 
 /**
  * Uso: !ban @usuario [motivo opcional]
@@ -20,6 +21,7 @@ export class BanHandler implements CommandHandler {
         private readonly botService: BotService,
         private readonly messagesService: MessagesService,
         private readonly moderatorsService: ModeratorsService,
+        private readonly banStatsRepository: BanStatsRepository,
     ) {
     }
 
@@ -84,10 +86,16 @@ export class BanHandler implements CommandHandler {
             return;
         }
 
+        // se anota quién pidió el ban ANTES de ejecutarlo: el webhook channel.ban
+        // puede llegar antes de que vuelva la respuesta de la API, y como el ban
+        // lo hace la organización, así /new_ban sabe a qué mod sumárselo
+        await this.banStatsRepository.savePending(String(targetUser.id), String(authorId));
+
         const success = await this.botService.banUser(body.key, channelId, targetUser.id, reason || undefined);
         const username = targetUser.username ?? String(targetUser.id);
 
         if (!success) {
+            await this.banStatsRepository.deletePending(String(targetUser.id));
             await this.botService.notifyUser(body.key, channelId, authorId, this.messagesService.get('BAN_FALLIDO', { USERNAME: username }));
             return;
         }

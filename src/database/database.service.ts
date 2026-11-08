@@ -95,6 +95,26 @@ export class DatabaseService implements OnModuleInit {
                 createdAt TEXT NOT NULL,
                 PRIMARY KEY (userId, date)
             )`,
+            // contador de bans por moderador (ver ban-stats.repository.ts)
+            `CREATE TABLE IF NOT EXISTS ban_stats (
+                modId TEXT PRIMARY KEY,
+                username TEXT,
+                count INTEGER NOT NULL DEFAULT 0,
+                updatedAt TEXT NOT NULL
+            )`,
+            // quién pidió cada !ban, para atribuirlo cuando el webhook de
+            // channel.ban llega con la organización como autora del ban
+            `CREATE TABLE IF NOT EXISTS pending_bans (
+                bannedUserId TEXT PRIMARY KEY,
+                modId TEXT NOT NULL,
+                createdAt TEXT NOT NULL
+            )`,
+            // último ban procesado por usuario baneado, para no contar dos
+            // veces cuando Mazmo reintenta el mismo webhook
+            `CREATE TABLE IF NOT EXISTS ban_events (
+                bannedUserId TEXT PRIMARY KEY,
+                processedAt TEXT NOT NULL
+            )`,
         ], 'write');
     }
 

@@ -12,6 +12,7 @@
 !Dato - Un dato curioso sobre el mundo Femdom/BDSM
 !Tarot - Tirada diaria de 2 cartas del Tarot (Arcanos Mayores)
 !Suspension - Arranca una partida del juego de adivinar letras
+!BanRanking - Ranking de moderadores por cantidad de bans
 
 ATENCION: El bot no reconoce acentos (Cuidado con el autocorrector), y tampoco lee ediciones del texto, cualquier cosita escribí el comando de nuevo.
 
@@ -36,6 +37,7 @@ ATENCION: El bot no reconoce acentos (Cuidado con el autocorrector), y tampoco l
 !Dato - Un dato curioso sobre el mundo Femdom/BDSM
 !Tarot - Tirada diaria de 2 cartas del Tarot (Arcanos Mayores)
 !Suspension - Arranca una partida del juego de adivinar letras
+!BanRanking - Ranking de moderadores por cantidad de bans
 M!p <link de YouTube> - Encola una canción para el reproductor
 !PuntosExtra @usuario cantidad - Suma puntos manualmente a un usuario
 !ban @usuario [motivo] - Expulsa a un usuario del canal
@@ -228,6 +230,11 @@ No pude encontrar a ese usuario.
 {TEXTO}
 ![patada]({GIF_URL})
 
+[EXPULSION_GIF_CONTADOR]
+{TEXTO}
+![patada]({GIF_URL})
+🔨 @{USERNAME} baneó {PEJELAGARTOS}.
+
 [QUIEN_RESPUESTA]
 🎲 Yo digo que fue @{USERNAME}
 
@@ -307,3 +314,10 @@ _Recordá que cada carta puede salir al derecho o al revés, y el significado ca
 
 [REGLAS_USUARIO_NO_ENCONTRADO]
 😕 No pude encontrar a ese usuario.
+
+[BAN_RANKING]
+🏆 Ranking de Bans de {CHANNEL_NAME}:
+{RANKING}
+
+[BAN_RANKING_VACIO]
+🏆 Todavía no hay bans registrados en el ranking.

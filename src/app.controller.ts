@@ -12,6 +12,8 @@ import { RandomMentionService } from './services/random-mention.service';
 import { HangmanService } from './services/hangman.service';
 import { PointsService } from './services/points.service';
 import { stripHtml } from './util/sanitize';
+import { BanStatsRepository } from './database/ban-stats.repository';
+import { formatPejelagartos } from './util/pejelagartos';
 
 @Controller()
 export class AppController {
@@ -28,6 +30,7 @@ export class AppController {
         private randomMentionService: RandomMentionService,
         private hangmanService: HangmanService,
         private pointsService: PointsService,
+        private banStatsRepository: BanStatsRepository,
     ) {
     }
 
@@ -302,11 +305,15 @@ export class AppController {
      */
     @Post('new_ban')
     async onNewBan(@Body() body: AnyDict, @Req() req: Request, @Res() res: Response) {
-        this.logger.debug(`onNewBan: body crudo recibido: ${JSON.stringify(body)}`);
+        // 07/11/2026: pasado de debug a log para confirmar la forma real de
+        // channel.ban (de dónde sale el mod que baneó) con el primer ban real
+        this.logger.log(`onNewBan: body crudo recibido: ${JSON.stringify(body)}`);
 
         try {
-            const channelId = body?.payload?.channelId
-                ?? body?.payload?.message?.channel?.id
+            const p = body?.payload ?? {};
+            const channelId = p.channelId
+                ?? p.message?.channel?.id
+                ?? p.channel?.id
                 ?? body?.message?.channel?.id
                 ?? body?.channel?.id
                 ?? body?.channelId;
@@ -317,6 +324,52 @@ export class AppController {
                 return;
             }
 
+            // usuario expulsado
+            const bannedUserId = p.bannedUserId
+                ?? p.ban?.bannedUserId
+                ?? p.bannedUser?.id
+                ?? p.ban?.bannedUser?.id
+                ?? p.ban?.userId
+                ?? p.userId
+                ?? p.user?.id
+                ?? body?.bannedUserId;
+
+            // ⚠️ forma NO confirmada: se prueban varias rutas para el mod que baneó
+            let bannerId = p.bannedById
+                ?? p.bannedBy?.id
+                ?? (typeof p.bannedBy === 'number' || typeof p.bannedBy === 'string' ? p.bannedBy : undefined)
+                ?? p.ban?.bannedById
+                ?? p.ban?.bannedBy?.id
+                ?? p.ban?.authorId
+                ?? p.ban?.moderatorId
+                ?? p.authorId
+                ?? p.author?.id
+                ?? p.moderatorId
+                ?? p.moderator?.id
+                ?? p.actorId
+                ?? p.actor?.id
+                ?? body?.authorId;
+
+            // reintento del mismo webhook (Mazmo reenvía si tardamos): no repetir GIF ni sumar
+            if (bannedUserId !== undefined && bannedUserId !== null) {
+                const isNew = await this.banStatsRepository.markProcessed(String(bannedUserId));
+                if (!isNew) {
+                    this.logger.log(`onNewBan: ban de ${bannedUserId} ya procesado hace instantes, se ignora el reintento`);
+                    res.status(200).send('OK');
+                    return;
+                }
+            }
+
+            // si lo hizo la organización (o no vino el dato), es un !ban: buscar quién lo pidió
+            const orgId = process.env.MAZMO_ORG_ID;
+            // si "el que baneó" coincide con el baneado, la ruta adivinada era otra cosa
+            if (bannerId && bannedUserId && String(bannerId) === String(bannedUserId)) {
+                bannerId = undefined;
+            }
+            if ((!bannerId || (orgId && String(bannerId) === String(orgId))) && bannedUserId) {
+                bannerId = (await this.banStatsRepository.takePending(String(bannedUserId))) ?? undefined;
+            }
+
             const gif = this.expulsionGifService.getRandomGif();
             if (!gif) {
                 this.logger.warn('onNewBan: no hay GIFs configurados en config/gifs-expulsion.json');
@@ -324,7 +377,28 @@ export class AppController {
                 return;
             }
 
-            const text = this.messagesService.get('EXPULSION_GIF', { GIF_URL: gif.url, TEXTO: gif.texto });
+            let text: string;
+            if (bannerId) {
+                let username: string | null = null;
+                try {
+                    const mod = await this.botService.getUserData(Number(bannerId));
+                    username = mod?.username ?? null;
+                } catch (e) {
+                    this.logger.warn(`onNewBan: no se pudo obtener el username del mod ${bannerId}: ${e.message}`);
+                }
+                const total = await this.banStatsRepository.increment(String(bannerId), username);
+                this.logger.log(`onNewBan: ban de ${bannedUserId} atribuido a ${username ?? bannerId}, total ${total}`);
+                text = this.messagesService.get('EXPULSION_GIF_CONTADOR', {
+                    GIF_URL: gif.url,
+                    TEXTO: gif.texto,
+                    USERNAME: username ?? String(bannerId),
+                    PEJELAGARTOS: formatPejelagartos(total),
+                });
+            } else {
+                this.logger.warn('onNewBan: no se pudo saber qué mod baneó, se publica el GIF sin contador — revisar el log "body crudo recibido"');
+                text = this.messagesService.get('EXPULSION_GIF', { GIF_URL: gif.url, TEXTO: gif.texto });
+            }
+
             // replyKey vacío: ya no se usa para autenticar (ver bot.service.ts, MAZMO_ORG_TOKEN)
             await this.botService.sendReply('', channelId, text);
         } catch (e) {
