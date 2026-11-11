@@ -41,12 +41,14 @@ const BANNER_HINT = /(by|actor|moderator|mod|admin|executor|banner|issuer|reques
  * (bannedUserId, target...), si no, el autor del mensaje del cartel
  * (que en Mazmo muestra la foto del expulsado).
  */
-export function findBannedUserId(fields: IdField[]): string | undefined {
-    const explicit = fields.find(f => BANNED_HINT.test(f.path.split('.').slice(-2).join('.')) && !BANNER_HINT.test(f.key));
+export function findBannedUserId(fields: IdField[], orgId?: string): string | undefined {
+    const usable = fields.filter(f => f.value !== orgId);
+    const explicit = usable.find(f => BANNED_HINT.test(f.path.split('.').slice(-2).join('.')) && !BANNER_HINT.test(f.key));
     if (explicit) {
         return explicit.value;
     }
-    const author = fields.find(f => /message\.(authorId|author\.id)$/.test(f.path));
+    // con !ban el autor del cartel puede ser la propia organización: ese no es el expulsado
+    const author = usable.find(f => /message\.(authorId|author\.id)$/.test(f.path));
     return author?.value;
 }
 

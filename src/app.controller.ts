@@ -358,7 +358,7 @@ export class AppController {
 
             // usuario expulsado
             const bannedUserId: string | undefined = (p.bannedUserId ?? p.ban?.bannedUserId ?? p.bannedUser?.id)?.toString()
-                ?? findBannedUserId(idFields);
+                ?? findBannedUserId(idFields, orgId);
 
             // mod que expulsó
             let bannerId: string | undefined = (p.bannedById ?? p.bannedBy?.id ?? p.ban?.bannedById)?.toString()
@@ -383,6 +383,15 @@ export class AppController {
             }
             if ((!bannerId || (orgId && String(bannerId) === String(orgId))) && bannedUserId) {
                 bannerId = (await this.banStatsRepository.takePending(String(bannedUserId))) ?? undefined;
+            }
+            // si el ID del expulsado no coincidió con lo anotado por !ban (forma del
+            // webhook todavía no confirmada), se usa el !ban más reciente (últimos 2 min)
+            if (!bannerId || (orgId && String(bannerId) === String(orgId))) {
+                const latest = await this.banStatsRepository.takeLatestPending();
+                if (latest) {
+                    this.logger.log(`onNewBan: se usa el !ban más reciente: ${latest.modId} pidió banear a ${latest.bannedUserId}`);
+                    bannerId = latest.modId;
+                }
             }
 
             // último recurso: el cartel dice "X ha sido expulsado por <nombre>";

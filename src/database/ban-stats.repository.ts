@@ -91,6 +91,22 @@ export class BanStatsRepository {
         return age <= this.PENDING_MAX_AGE_MS ? String(row.modId) : null;
     }
 
+    /** Devuelve (y borra) el !ban pendiente más reciente, si tiene menos de 2 minutos. */
+    async takeLatestPending(): Promise<{ bannedUserId: string, modId: string } | null> {
+        const client = this.databaseService.getClient();
+        const result = await client.execute('SELECT bannedUserId, modId, createdAt FROM pending_bans ORDER BY createdAt DESC LIMIT 1');
+        const row = result.rows[0] as any;
+        if (!row) {
+            return null;
+        }
+        const age = Date.now() - new Date(String(row.createdAt)).getTime();
+        if (age > 2 * 60 * 1000) {
+            return null;
+        }
+        await this.deletePending(String(row.bannedUserId));
+        return { bannedUserId: String(row.bannedUserId), modId: String(row.modId) };
+    }
+
     /**
      * Marca el ban de ese usuario como procesado. Devuelve false si ya se
      * había procesado hace menos de DUPLICATE_WINDOW_MS (webhook repetido).
